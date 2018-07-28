@@ -11,7 +11,6 @@
 	#include "WProgram.h"
 #endif
 
-#include <Servo.h>
 #include "config.h"
 
 // Stany silnikow
@@ -22,10 +21,6 @@
 class MotorsClass
 {
  public:
-	Servo mTL;   // Top left
-	Servo mTR;   // Top right
-	Servo mBL;   // Back left
-	Servo mBR;   // Back right
 	
 // === FUNKCJE ===
  public:
@@ -38,6 +33,7 @@ class MotorsClass
 	void setOnTR(int16_t _val);    // parametr od 0 do 1000
 	void setOnBL(int16_t _val);    // parametr od 0 do 1000
 	void setOnBR(int16_t _val);    // parametr od 0 do 1000
+	void executeMotorsNow();       // Reset timer 4 and generate pulses. IF THIS is NOT used (can be) cause 200Hz pulse
 	
 // === ZMIENNE ===
  public:

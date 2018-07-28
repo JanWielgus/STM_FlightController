@@ -53,6 +53,8 @@ void setup()
 
 void loop()
 {
+	static unsigned long loopStartTime = micros();
+	
 	updateCommunication();
 	stabilize();
 	
@@ -66,10 +68,14 @@ void loop()
 	Serial.println(sensors.headnigGyroMagn);
 	*/
 	
+	
+	
+	while ((loopStartTime+4000) > micros()); // 250Hz
+	/*
 	static unsigned long lastt;
 	unsigned long tnow = micros();
 	Serial.println(1000000.0/(tnow-lastt));
-	lastt = tnow;
+	lastt = tnow;*/
 }
 
 
@@ -135,6 +141,7 @@ inline void stabilize()
 	motors.setOnTR(com.pilot.throttle + pidX + pidY + pidHead);
 	motors.setOnBR(com.pilot.throttle - pidX + pidY - pidHead);
 	motors.setOnBL(com.pilot.throttle - pidX - pidY + pidHead);
+	motors.executeMotorsNow();
 }
 
 

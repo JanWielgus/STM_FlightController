@@ -77,10 +77,10 @@
 
 //<<<<<<<<<=====================     MOTORS     =====================>>>>>>>>>
 
-	#define TLmotorPin 5      // Top left
-	#define TRmotorPin 6      // Top right
-	#define BRmotorPin 9      // Back left
-	#define BLmotorPin 10     // Back right
+	#define TLmotorPin PB6      // Top left
+	#define TRmotorPin PB8      // Top right
+	#define BRmotorPin PB9      // Back left
+	#define BLmotorPin PB7      // Back right
 	
 	#define MOTOR_MIN 1000    // Minimum value on the motor
 	#define MOTOR_MAX 2000    // Maximum value on the motor
