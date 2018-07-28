@@ -18,10 +18,10 @@
 	
 	//      ===  TYLKO TABLICE O WYMIARACH TAKICH JAK RAMKA, NIE WIÊKSZE !!!  ===
 	
-	#define serialPort 0	           //Serial: 0, Serial1: 1, Serial2: 2, Serial3: 3
+	#define serialPort 2	           //Serial: 0, Serial1: 1, Serial2: 2, Serial3: 3 ( !!! W STM Serial - 0, Serial3 - 2)
 	#define BAUD_RATE 9600
 	#define COMMUNICATION_PER_SECOND 20     // Iloœæ wywo³ania funkcji komunikacji w ci¹gu sekundy
-	#define MAX_SEND_SIZE 25           // Wielkosæ najwiêkszej ramki
+	#define MAX_SEND_SIZE 45           // Wielkosæ najwiêkszej ramki
 
 	// Szablon: nadawca_RAMKA_nazwa_SIZE/TYPE
 	

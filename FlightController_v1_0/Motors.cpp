@@ -125,7 +125,7 @@ void MotorsClass::setOnBR(int16_t _val)
 
 
 
-void executeMotorsNow()
+void MotorsClass::executeMotorsNow()
 {
 	TIMER4_BASE->CNT = 5000; // This will reset timer 4 and cause creating pulses
 }
