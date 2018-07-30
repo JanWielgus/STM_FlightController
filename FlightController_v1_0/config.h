@@ -66,7 +66,7 @@
 	#define PITCH_OFFSET 0   // Offset osi x
 	#define ROLL_OFFSET  0   // Offset osi y
 	
-	#define INTERRUPT_PIN 2  // use pin 2 on Arduino Uno & most boards
+	#define INTERRUPT_PIN PA8  // use pin 2 on Arduino Uno & most boards
 	
 	#define MAG_X_OFFSET -41
 	#define MAG_Y_OFFSET -105
