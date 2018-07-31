@@ -46,8 +46,10 @@ CommunicationClass::CommunicationClass()
 
 void CommunicationClass::init()
 {
+	Serial1.begin(BAUD_RATE);
 	pSerial.setPacketHandler(_protezaOdbierz);
-	pSerial.begin(BAUD_RATE, serialPort);
+	//pSerial.begin(BAUD_RATE, serialPort);
+	pSerial.begin(&Serial1);
 	
 	pinMode(M0pin, OUTPUT);
 	pinMode(M1pin, OUTPUT);
