@@ -99,6 +99,11 @@
 	
 	#define COMMUNICATION_WAIT_TIME (int(1000/COMMUNICATION_PER_SECOND)-2)
 	
+	
+	
+	#define redDiodePin PB15
+	#define blueDiodePin PB14
+	
 
 
 #endif /* CONFIG_H_ */

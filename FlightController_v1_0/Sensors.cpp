@@ -111,6 +111,7 @@ void SensorsClass::readAngles()
 	if ((mpuIntStatus & 0x10) || fifoCount == 1024)
 	{
 		mpu.resetFIFO();
+		//Serial.println("OVERFLOW !!");
 	}
 	else if (mpuIntStatus & 0x02)
 	{

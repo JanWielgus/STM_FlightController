@@ -35,47 +35,53 @@ PID levelX_PID;
 PID levelY_PID;
 PID heading_PID;
 
-
+unsigned long lastLoopTime=0;
 
 
 
 void setup()
 {
+	pinMode(redDiodePin, OUTPUT);
+	pinMode(blueDiodePin, OUTPUT);
+	digitalWrite(redDiodePin, HIGH);
+	digitalWrite(blueDiodePin, LOW);
+	
 	com.init();                  // inicjalizacja komunikacji
 	sensors.init();              // inicjalizacja wszystkich czujników
 	motors.init();               // inicjalizacja silników
 
 	updatePIDParams(); // ustawia takie parametry PID jakie sa ustawione w konstruktorze klasy komunikacji
-	Serial.begin(9600);
-	delay(100);
+	//Serial.begin(115200);
+	
+	// Blink
+	delay(200);
+	digitalWrite(redDiodePin, LOW);
+	digitalWrite(blueDiodePin, HIGH);
+	delay(200);
+	digitalWrite(blueDiodePin, LOW);
 }
 
 
 void loop()
 {
-	static unsigned long loopStartTime = micros();
+	if (micros()-lastLoopTime >= 4000) // 250Hz
+	{
+		//Serial.println(1000000.0/(micros()-lastLoopTime)); // Ilosc razy na sekunde
+		updateCommunication();
+		stabilize();
 	
-	updateCommunication();
-	stabilize();
-	
-	/*
-	sensors.readAngles();
-	sensors.readCompass();
-	Serial.print(sensors.angle.pitch);
-	Serial.print("\t");
-	Serial.print(sensors.angle.roll);
-	Serial.print("\t");
-	Serial.println(sensors.headnigGyroMagn);
-	*/
-	
-	
-	
-	while ((loopStartTime+4000) > micros()); // 250Hz
-	/*
-	static unsigned long lastt;
-	unsigned long tnow = micros();
-	Serial.println(1000000.0/(tnow-lastt));
-	lastt = tnow;*/
+		/*
+		sensors.readAngles();
+		sensors.readCompass();
+		Serial.print(sensors.angle.pitch);
+		Serial.print("\t");
+		Serial.print(sensors.angle.roll);
+		Serial.print("\t");
+		Serial.println(sensors.headnigGyroMagn);
+		*/
+		
+		lastLoopTime = micros();
+	}
 }
 
 
