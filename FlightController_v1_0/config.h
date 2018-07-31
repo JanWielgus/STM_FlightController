@@ -18,7 +18,7 @@
 	
 	//      ===  TYLKO TABLICE O WYMIARACH TAKICH JAK RAMKA, NIE WIÊKSZE !!!  ===
 	
-	#define serialPort 2	           //Serial: 0, Serial1: 1, Serial2: 2, Serial3: 3 ( !!! W STM Serial - 0, Serial3 - 2)
+	#define serialPort 1	           //Serial: 0, Serial1: 1, Serial2: 2, Serial3: 3 ( !!! W STM Serial - 0, Serial3 - 2)
 	#define BAUD_RATE 9600
 	#define COMMUNICATION_PER_SECOND 20     // Iloœæ wywo³ania funkcji komunikacji w ci¹gu sekundy
 	#define MAX_SEND_SIZE 45           // Wielkosæ najwiêkszej ramki
@@ -59,6 +59,9 @@
 	#define DBM14 3  // 14dBm
 	#define DBM8 2  // 8dBm
 	#define DBM2 1  // 2dBm
+	
+	#define M0pin PA1
+	#define M1pin PA0
 
 
 //<<<<<<<<<=====================     SENSORS     =====================>>>>>>>>>
@@ -77,10 +80,10 @@
 
 //<<<<<<<<<=====================     MOTORS     =====================>>>>>>>>>
 
-	#define TLmotorPin PB6      // Top left
-	#define TRmotorPin PB8      // Top right
-	#define BRmotorPin PB9      // Back left
-	#define BLmotorPin PB7      // Back right
+	#define TLmotorPin PA6      // Top left
+	#define TRmotorPin PA7      // Top right
+	#define BRmotorPin PB0      // Back left
+	#define BLmotorPin PB1      // Back right
 	
 	#define MOTOR_MIN 1000    // Minimum value on the motor
 	#define MOTOR_MAX 2000    // Maximum value on the motor
