@@ -15,8 +15,8 @@ class PID
 {
 // Statyczne zmienne i metody
 private:
-	static uint32_t dt_ms;  // [ms]
-	static float dt_sec;    // [s]
+	static uint32_t dt_us;  // [us]
+	static double dt_sec;    // [s]
 	
 public:
 	static void updateDeltaTime(); // Aktualizacja dt dla wszystkich obiektow klasy PID
@@ -105,7 +105,7 @@ private:
     int16_t _imax;
 
     float _integrator;                 ///< integrator value
-    int32_t _last_error;               ///< last error for derivative
+    float _last_error;                 ///< last error for derivative
     float _last_derivative;            ///< last derivative for low-pass filter
 
     int32_t         _get_pid(int32_t error, uint16_t dt, float scaler);

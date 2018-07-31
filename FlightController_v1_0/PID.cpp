@@ -19,11 +19,11 @@ PID::get_pid(float error)
 	output += pro;
 
     // Compute derivative component if time has elapsed
-    if (dt_ms > 0) // NIE WIEM CZY POTRZEBNE BO I TAK TO SIE WYKONUJE STOSUNKOWO RZADKO !!!
+    if (dt_us > 0) // NIE WIEM CZY POTRZEBNE BO I TAK TO SIE WYKONUJE STOSUNKOWO RZADKO !!!
 	{
         float derivative;
 
-		derivative = (error - _last_error) / dt_sec;
+		derivative = double(error - _last_error) / dt_sec;
 
         // discrete low pass filter, cuts out the
         // high frequency noise that can drive the controller crazy
@@ -40,7 +40,7 @@ PID::get_pid(float error)
         output += der;
 
     // Compute integral component
-        _integrator += (error * _ki) * dt_sec;
+        _integrator += double(error * _ki) * dt_sec;
 		
 		// anti wind-up
 		_integrator = constrain(_integrator, -_imax, _imax);
@@ -62,17 +62,17 @@ PID::reset_I()
 }
 
 
-uint32_t PID::dt_ms = 0;
-float PID::dt_sec = 0;
+uint32_t PID::dt_us = 0;
+double PID::dt_sec = 0;
 
 
 void PID::updateDeltaTime()
 {
 	static uint32_t _last_t;
 	static uint32_t tnow;
-	tnow = millis();
-	dt_ms = tnow - _last_t;
+	tnow = micros();
+	dt_us = tnow - _last_t;
 	_last_t = tnow;
-	dt_sec = (float)dt_ms * 0.001;
+	dt_sec = (double)dt_us * 0.000001;
 }
 
