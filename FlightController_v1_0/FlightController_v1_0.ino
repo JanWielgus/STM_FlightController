@@ -35,7 +35,7 @@ PID levelX_PID;
 PID levelY_PID;
 PID heading_PID;
 
-unsigned long lastLoopTime=0;
+uint32_t lastLoopTime=0;
 
 
 
@@ -107,13 +107,12 @@ inline void updateCommunication()
 			}
 			else motors.setMotors(ARMED); // silniki uzbrojone
 		}
-		else
+		else // ZAWSZE rozbrajaj jesli nie ma polaczenia !!!
 		{
 			motors.setMotors(IDLE);
 		}
 		
-		//kom.zmiennaTestowa1.value = 1723.5;
-		//kom.wyslij(DRON_RAMKA_TEST_TYPE);
+		com.wyslij(DRON_RAMKA_VER1_TYPE);
 		
 		
 		last_loop_time = millis();
@@ -147,7 +146,7 @@ inline void stabilize()
 	motors.setOnTR(com.pilot.throttle + pidX + pidY + pidHead);
 	motors.setOnBR(com.pilot.throttle - pidX + pidY - pidHead);
 	motors.setOnBL(com.pilot.throttle - pidX - pidY + pidHead);
-	motors.executeMotorsNow();
+	//motors.executeMotorsNow();
 }
 
 
