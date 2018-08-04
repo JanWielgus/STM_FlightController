@@ -79,6 +79,10 @@ void loop()
 		Serial.print("\t");
 		Serial.println(sensors.headnigGyroMagn);
 		*/
+		if (com.connectionState())
+			digitalWrite(redDiodePin, HIGH);
+		else
+			digitalWrite(redDiodePin, LOW);
 		
 		lastLoopTime = micros();
 	}
