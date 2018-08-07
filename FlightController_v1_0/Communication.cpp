@@ -53,6 +53,7 @@ void CommunicationClass::init()
 	
 	pinMode(M0pin, OUTPUT);
 	pinMode(M1pin, OUTPUT);
+	pinMode(AUXpin, INPUT);
 	// set default M0 & M1 pins states
 	digitalWrite(M0pin, LOW);
 	digitalWrite(M1pin, LOW);

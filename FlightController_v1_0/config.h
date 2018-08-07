@@ -62,7 +62,7 @@
 	
 	#define M0pin PA1
 	#define M1pin PA0
-
+	#define AUXpin PB5
 
 //<<<<<<<<<=====================     SENSORS     =====================>>>>>>>>>
 
