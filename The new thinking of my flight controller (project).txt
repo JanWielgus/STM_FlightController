@@ -1,0 +1,79 @@
+
+
+The structure of the program:
+	
+	Classes interfaces: ( (out) - should be in arduino library folder)
+		
+		- (out) Tasker class - program that handle all tasks in the drone
+			Public methods:
+				- add function
+					parameters:
+						- pointer to the void function
+						- approximate run time (or max)
+				- run tasker function (or runned by hardware timer automatically)
+		
+		
+		- Motors handling class - program that handle motors eg. arming...
+			Public methods:
+				- setMotorsArmed: parameters(bool: true - armed; false - disarmed)
+				- set on each motors (4x for each motor)
+		
+		
+		- (out) Communication Base class (virtual) if possible inherit from PacketSerial library and implement all required methods (except data packets - receive and send - which will be implemented in derivate class)
+			This class should be wrote in PacketSerial file (create new upgraded PacketSerial library file)
+			Public methods:
+				- isAvailable: check if there are some data waiting to receive
+				- get serial pointer (or it's reference)
+		
+		- (out) Radio Module Cover class (virtual) - inherit from Communication Base class (this class is between Communication Base and Ground Communication Packet Handling classes if communication is using the radio module;
+		                                                                              for just serial communication inherit only from Communication Base class)
+			Public methods:
+				- set
+					- OTA speed (1:.., 2:.., 3:..)
+					- baud rate (1:.., 2:.., 3:.., 4:..)
+					- transmission power (1, 2, 3, 4, auto)
+				- send params to device
+		
+		
+		- Communication Packet Handling class - program that will handle receiving and sending data packets (contain comunication protocol
+						and all communication variables in one structure that can be passed by reference to the rest of the program) - inherit form Communication Base class
+			Public methods:
+				- send: parameters (int: data packet type)
+				- receive: store received data in certain variables (after checking if data is available)
+		
+		
+		- Sensors class - all sensors handling
+			Public methods
+				- get:
+					- acceleration x, y, z
+					- rotation x, y, z
+					- angle x, y
+					- heading
+					- pressure (should not be used for flight purposes, only to know pressure)
+					- height (further would be combined with accelerometer or sonar or sth similar)
+					- optionally sonar reading
+					- temterature
+				- run compass
+				- run accelerometer
+				- run barometer
+				- optionally run sonar
+				
+		
+		
+		- 
+		
+		
+		
+		
+		
+Communication inheritance explanation:
+	
+	It could be the following:
+		- PacketSerial - Communication Base class - Communication Packet Handling class  --->  To use just serial (like arduino-arduino communication)
+		- PacketSerial - Communication Base class - Radio Module Cover class - Communication Packet Handling class  --->  To use
+	
+	
+	
+	
+	
+	
