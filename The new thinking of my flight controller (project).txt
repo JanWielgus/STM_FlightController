@@ -1,4 +1,6 @@
-
+There should be one main function that operate the whole vehicle depending on the following class interface.
+Should not be situation where new method in class is created becouse main program or other classes need something additional.
+Should be possible to upgrade or make some changes to the certain class without causing damage of other program parts (according to the interface).
 
 The structure of the program:
 	
@@ -23,7 +25,8 @@ The structure of the program:
 			This class should be wrote in PacketSerial file (create new upgraded PacketSerial library file)
 			Public methods:
 				- isAvailable: check if there are some data waiting to receive
-				- get serial pointer (or it's reference)
+				- get serial pointer (or it's reference) - for derivate classes purposes
+				- ...
 		
 		- (out) Radio Module Cover class (virtual) - inherit from Communication Base class (this class is between Communication Base and Ground Communication Packet Handling classes if communication is using the radio module;
 		                                                                              for just serial communication inherit only from Communication Base class)
@@ -33,9 +36,10 @@ The structure of the program:
 					- baud rate (1:.., 2:.., 3:.., 4:..)
 					- transmission power (1, 2, 3, 4, auto)
 				- send params to device
+				- ...
 		
 		
-		- Communication Packet Handling class - program that will handle receiving and sending data packets (contain comunication protocol
+		- Communication Packet Handling class (name depends on a purpose, could be several classes with different protocols) - program that will handle receiving and sending data packets (contain comunication protocol
 						and all communication variables in one structure that can be passed by reference to the rest of the program) - inherit form Communication Base class
 			Public methods:
 				- send: parameters (int: data packet type)
@@ -51,16 +55,19 @@ The structure of the program:
 					- heading
 					- pressure (should not be used for flight purposes, only to know pressure)
 					- height (further would be combined with accelerometer or sonar or sth similar)
+					- gpsLong
+					- gpsLat
+					- gps speed
 					- optionally sonar reading
 					- temterature
+					- battery voltage
 				- run compass
 				- run accelerometer
 				- run barometer
 				- optionally run sonar
 				
 		
-		
-		- 
+		- (out) PID class - class for pid claculations
 		
 		
 		
@@ -70,7 +77,7 @@ Communication inheritance explanation:
 	
 	It could be the following:
 		- PacketSerial - Communication Base class - Communication Packet Handling class  --->  To use just serial (like arduino-arduino communication)
-		- PacketSerial - Communication Base class - Radio Module Cover class - Communication Packet Handling class  --->  To use
+		- PacketSerial - Communication Base class - Radio Module Cover class - Communication Packet Handling class  --->  To connect using radio module that needs some special methods to change module parameters
 	
 	
 	
