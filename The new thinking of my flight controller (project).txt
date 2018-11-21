@@ -37,6 +37,11 @@ The structure of the program:
 					- transmission power (1, 2, 3, 4, auto)
 				- send params to device
 				- ...
+				
+			Public constans:
+				- enum OTASpeeds: ....list of possible speeds.....
+				- enum baudRates: 1200, 2600, 4800, 9600, ....., 19200, ..., 115200
+				- enum transmissionPowers: XXdBi, XXdBi, XXdBi
 		
 		
 		- Communication Packet Handling class (name depends on a purpose, could be several classes with different protocols) - program that will handle receiving and sending data packets (contain comunication protocol
@@ -44,6 +49,12 @@ The structure of the program:
 			Public methods:
 				- send: parameters (int: data packet type)
 				- receive: store received data in certain variables (after checking if data is available)
+		
+		
+		- Serial Debugger class - inherit form Communication Base class. Used to check program activity on the computer via USB and desktop app (or maybe android also)
+			Public methods:
+				- Send debug data
+				- Receive debug data (if I find a reason for that function)
 		
 		
 		- Sensors class - all sensors handling
@@ -68,6 +79,39 @@ The structure of the program:
 				
 		
 		- (out) PID class - class for pid claculations
+		
+		
+		- (out) Advanced Diode class - to light the diode with some patterns (also using PWM) without using delay (time calculations, so have to be runned every constant time)
+				In drome it should be run every constant time but could provide a way to automatically calculate the time
+			Public methods:
+				- set(... provide Paterns enum ...)
+				- usePwm (true - use, false - just HIGH or LOW)
+				
+			Public constans:
+				- enum Patterns: HIGH=1, LOW=0, BLINK (second argument is interval), FADE (interval)=0, IGNITE (interval)=1  (HIGH and IGNITE is the same)
+				
+		
+		- (out) EVA Filter class - Exponentially Weighted Averages filter used to filter values
+			Public methods:
+				- init (filter beta)
+				- updateFilter (new data)
+				- change filter beta (new beta)
+				
+		
+		- Timing Info class - will provide the info about method duration, catch overtiming problems, free time (sum of waiting time in one loop)
+					By now I don't know how to connect this class and tasket becouse tasker have running functions info.
+					!Maybe takser should inherit from that class!
+			Public methods:
+				- set function start time - save time before function is called (to calculate duration)
+				- set function end time - runned when function ends
+				- function duration
+				- setOneLoopDuration(one loop duration) - used to calculate CPU load and waiting time
+				- cpu load - return uint8 0-100
+				- get waiting time
+			
+				
+				
+		- Flight Modes class - it is a concept, I don't know if it is better to make flight modes in a special class or in the main program
 		
 		
 		
