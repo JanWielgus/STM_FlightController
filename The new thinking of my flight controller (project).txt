@@ -1,23 +1,26 @@
 There should be one main function that operate the whole vehicle depending on the following class interface.
-Should not be situation where new method in class is created becouse main program or other classes need something additional.
+Should not be situation where new method in class is created because main program or other classes need something additional.
 Should be possible to upgrade or make some changes to the certain class without causing damage of other program parts (according to the interface).
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 The structure of the program:
 	
-	Classes interfaces: ( (out) - should be in arduino library folder)
+	Classes interfaces: ( (out) - should be in Arduino library folder)
 		
-		- (out) Tasker class - program that handle all tasks in the drone
+		- (out) Tasker (scheduler) class - program that handle all tasks in the drone
 			Public methods:
 				- add function
 					parameters:
 						- pointer to the void function
 						- approximate run time (or max)
-				- run tasker function (or runned by hardware timer automatically)
+				- run tasker function (or run by hardware timer automatically)
+				- schedule tasks - run only in the setup, figure out the order. According to that order tasks will be called
 		
 		
 		- Motors handling class - program that handle motors eg. arming...
 			Public methods:
-				- setMotorsArmed: parameters(bool: true - armed; false - disarmed)
+				- setMotorsEnabled: (enable because arming will be in the main program, arming should cause reset of certain values) parameters(bool: true - armed; false - disarmed)
 				- set on each motors (4x for each motor)
 		
 		
@@ -35,13 +38,13 @@ The structure of the program:
 					- OTA speed (1:.., 2:.., 3:..)
 					- baud rate (1:.., 2:.., 3:.., 4:..)
 					- transmission power (1, 2, 3, 4, auto)
-				- send params to device
+				- send parameters to device
 				- ...
 				
-			Public constans:
+			Public constants:
 				- enum OTASpeeds: ....list of possible speeds.....
 				- enum baudRates: 1200, 2600, 4800, 9600, ....., 19200, ..., 115200
-				- enum transmissionPowers: XXdBi, XXdBi, XXdBi
+				- enum transmissionPowers: XX dBi, XX dBi, XX dBi
 		
 		
 		- Communication Packet Handling class (name depends on a purpose, could be several classes with different protocols) - program that will handle receiving and sending data packets (contain comunication protocol
@@ -68,9 +71,9 @@ The structure of the program:
 					- height (further would be combined with accelerometer or sonar or sth similar)
 					- gpsLong
 					- gpsLat
-					- gps speed
+					- GPS speed
 					- optionally sonar reading
-					- temterature
+					- temperature
 					- battery voltage
 				- run compass
 				- run accelerometer
@@ -78,16 +81,21 @@ The structure of the program:
 				- optionally run sonar
 				
 		
-		- (out) PID class - class for pid claculations
+		- (out) PID class - class for PID calculations
+			Public methods:
+				- set: kp, ki, kd
+				- get: kp, ki, kd
+				- update controller(new value)
+				- set interval
 		
 		
 		- (out) Advanced Diode class - to light the diode with some patterns (also using PWM) without using delay (time calculations, so have to be runned every constant time)
-				In drome it should be run every constant time but could provide a way to automatically calculate the time
+				In drone it should be run every constant time but could provide a way to automatically calculate the time
 			Public methods:
-				- set(... provide Paterns enum ...)
+				- set(... provide Patterns enum ...)
 				- usePwm (true - use, false - just HIGH or LOW)
 				
-			Public constans:
+			Public constants:
 				- enum Patterns: HIGH=1, LOW=0, BLINK (second argument is interval), FADE (interval)=0, IGNITE (interval)=1  (HIGH and IGNITE is the same)
 				
 		
@@ -99,15 +107,20 @@ The structure of the program:
 				
 		
 		- Timing Info class - will provide the info about method duration, catch overtiming problems, free time (sum of waiting time in one loop)
-					By now I don't know how to connect this class and tasket becouse tasker have running functions info.
-					!Maybe takser should inherit from that class!
+					By now I don't know how to connect this class and tasker because tasker have running functions info.
+					!Maybe tasker should inherit from that class!
 			Public methods:
 				- set function start time - save time before function is called (to calculate duration)
-				- set function end time - runned when function ends
+				- set function end time - run when function ends
 				- function duration
 				- setOneLoopDuration(one loop duration) - used to calculate CPU load and waiting time
-				- cpu load - return uint8 0-100
+				- CPU load - return uint8 0-100
 				- get waiting time
+				- get system unstable flag - if at least one time will happen a overload, this function return true, else false
+				- get working state - return one of working states enum
+				
+			Public constants:
+				- enum Working states: NOMINAL (all good), SYSTEM UNSTABLE (sometimes overloaded), OVERLOAD (all the time overloaded)
 			
 				
 				
@@ -120,8 +133,92 @@ The structure of the program:
 Communication inheritance explanation:
 	
 	It could be the following:
-		- PacketSerial - Communication Base class - Communication Packet Handling class  --->  To use just serial (like arduino-arduino communication)
+		- PacketSerial - Communication Base class - Communication Packet Handling class  --->  To use just serial (like Arduino-Arduino communication)
 		- PacketSerial - Communication Base class - Radio Module Cover class - Communication Packet Handling class  --->  To connect using radio module that needs some special methods to change module parameters
+		
+		
+		
+
+		
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Main program structure design:
+
+	Objects:
+		- Ground Communication (from Communication Packet Handling for Ground class)
+		- Tasker (from tasker)
+		- angleXPID (from PID)
+		- angleYPID (from PID)
+		
+	
+	Functions:
+		- manage the FlightMode: execute proper flight mode functions
+		- change the FlightMode (FlightModes enum)
+		- arm the motors: reset values which could cause sth bad (eg. altitude error), set the proper FlightMode and then enable the motors using motors object.
+		
+	constants:
+		- enum FlightModes: STABILIZE, ALT_HOLD, GPS_HOLD, RETURN_TO_HOME, RETURN_TO_PILOT, LAND
+		
+	
+	
+	
+	FlightModes specification:
+				FlightModes should be constructed in separate functions to reuse the code (eg. in AltHold firstly height error is calculated and power to eliminate the error and then Stabilize function, but
+																							don't call <in this example> Stabilize function in AltHold function but in the main function that manage FlightModes)
+		- Stabilize:
+			Hold the level and heading
+		
+		- AltHold:
+			Same as Stabilize + altitude holding based on barometer reading of further sonar and accelerometer.
+			Influence on throttle value (simulate a pilot)
+		
+		- GPSHold:
+			AltHold + position holding
+			Influence on pilot pitch and roll value (simulate a pilot): Firstly calculate the error in lat and long. Based on error, using PID controller and filter (to be smooth) add filtered PID output to pitch or roll
+		
+		- ReturnTo:
+			- Home
+				Return to the launch place.
+				Steps:
+					- Step 1:
+						Gaining a height.
+						When reach that height change to Step 2.
+					- Step 2:
+						Flying to the place above home position.
+						When reached, change the current FlightMode to the Land mode.
+			- Pilot
+				Return to the place, were the pilot is when FlightMode changed.
+				Steps:
+					- Step 1:
+						Gaining a height.
+						When reach that height change to Step 2.
+					- Step 2:
+						Flying to the place above the pilot's position.
+						When reached, change the current FlightMode to the Land mode.
+		
+		- Land
+			Land in the current position
+			Steps:
+				- Step 1:
+					Calculate the descending rate and keep it at the set value (in cm/s) using the PID controller (use also filter before PID).
+					Keep descending until reach one meter (or sth constant) (then limit the value if is higher to make the final approach to the ground).
+					When touchdown is detected (descending rate is around 0 for longer time), change to Step 2.
+				- Step 2:
+					Set the throttle to 0 and then disarm the motors.
+					
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
