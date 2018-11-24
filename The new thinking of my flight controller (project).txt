@@ -9,37 +9,37 @@ The structure of the program:
 	Classes interfaces: ( (out) - should be in Arduino library folder)
 		
 		- (out) Tasker (scheduler) class - program that handle all tasks in the drone
+				(!Maybe tasker should inherit from Timing Info class!)
 			Public methods:
-				- add function
-					parameters:
-						- pointer to the void function
-						- approximate run time (or max)
-				- run tasker function (or run by hardware timer automatically)
-				- schedule tasks - run only in the setup, figure out the order. According to that order tasks will be called
+				- (void) add function (pointer to the void function, interval [in micros], max run time)
+				- (void) add main function (pointer to the void function, interval [in micros], max run time) - add the main function (called only once)
+				- (void) schedule tasks - (rethink if it is necessary or just run method can handle that) run only in the setup just after adding all functions, figure out the order. According to that order tasks will be called
+				- (void) run tasker function (should be the only function run in the loop) checks if Timer set the flag and if so, execute proper functions.
+						It have to check if system is not overload (like in GoodTasker) and execute functions one by one (not all at one time)
 		
 		
 		- Motors handling class - program that handle motors eg. arming...
 			Public methods:
-				- setMotorsEnabled: (enable because arming will be in the main program, arming should cause reset of certain values) parameters(bool: true - armed; false - disarmed)
-				- set on each motors (4x for each motor)
+				- (void) setMotorsEnabled: (enable because arming will be in the main program, arming should cause reset of certain values) parameters(bool: true - enabled; false - disabled)
+				- (void) set on each motors (4x for each motor)
 		
 		
 		- (out) Communication Base class (virtual) if possible inherit from PacketSerial library and implement all required methods (except data packets - receive and send - which will be implemented in derivate class)
 			This class should be wrote in PacketSerial file (create new upgraded PacketSerial library file)
 			Public methods:
-				- isAvailable: check if there are some data waiting to receive
-				- get serial pointer (or it's reference) - for derivate classes purposes
+				- (bool) isAvailable: check if there are some data waiting to receive
+				- (*Serial) get serial pointer (or it's reference) - for derivate classes purposes
 				- ...
 		
 		- (out) Radio Module Cover class (virtual) - inherit from Communication Base class (this class is between Communication Base and Ground Communication Packet Handling classes if communication is using the radio module;
 		                                                                              for just serial communication inherit only from Communication Base class)
 			Public methods:
-				- set
+				- (void) set - remember to send data to the transceiver after setting
 					- OTA speed (1:.., 2:.., 3:..)
 					- baud rate (1:.., 2:.., 3:.., 4:..)
 					- transmission power (1, 2, 3, 4, auto)
 				- send parameters to device
-				- ...
+				- read parameters from device
 				
 			Public constants:
 				- enum OTASpeeds: ....list of possible speeds.....
@@ -50,9 +50,10 @@ The structure of the program:
 		- Communication Packet Handling class (name depends on a purpose, could be several classes with different protocols) - program that will handle receiving and sending data packets (contain comunication protocol
 						and all communication variables in one structure that can be passed by reference to the rest of the program) - inherit form Communication Base class
 			Public methods:
+				- init
 				- send: parameters (int: data packet type)
-				- receive: store received data in certain variables (after checking if data is available)
-		
+				- manageReceiving: store received data in certain variables if available, else update availability
+	
 		
 		- Serial Debugger class - inherit form Communication Base class. Used to check program activity on the computer via USB and desktop app (or maybe android also)
 			Public methods:
@@ -63,8 +64,8 @@ The structure of the program:
 		- Sensors class - all sensors handling
 			Public methods
 				- get:
-					- acceleration x, y, z
-					- rotation x, y, z
+					- () acceleration x, y, z
+					- () rotation x, y, z
 					- angle x, y
 					- heading
 					- pressure (should not be used for flight purposes, only to know pressure)
@@ -75,18 +76,23 @@ The structure of the program:
 					- optionally sonar reading
 					- temperature
 					- battery voltage
-				- run compass
-				- run accelerometer
-				- run barometer
-				- optionally run sonar
+				- (void) run compass
+				- (void) run accelerometer
+				- (void) run barometer
+				- (void) run ground height sensor
+				- (void) run GPS
+				- (void) read voltage
+				- calibrate accelerometer - calculate offsets for the MPU6050 DMP (like in MPU, not just subtraction to be 0), long process
 				
 		
 		- (out) PID class - class for PID calculations
 			Public methods:
-				- set: kp, ki, kd
-				- get: kp, ki, kd
+				- set: kp, ki, kd, imax, all parameters
+				- get: kp, ki, kd, imax
 				- update controller(new value)
 				- set interval
+				- get interval
+				- reset controller
 		
 		
 		- (out) Advanced Diode class - to light the diode with some patterns (also using PWM) without using delay (time calculations, so have to be runned every constant time)
@@ -167,7 +173,7 @@ Main program structure design:
 				FlightModes should be constructed in separate functions to reuse the code (eg. in AltHold firstly height error is calculated and power to eliminate the error and then Stabilize function, but
 																							don't call <in this example> Stabilize function in AltHold function but in the main function that manage FlightModes)
 		- Stabilize:
-			Hold the level and heading
+			Hold the level and heading using PID library
 		
 		- AltHold:
 			Same as Stabilize + altitude holding based on barometer reading of further sonar and accelerometer.
