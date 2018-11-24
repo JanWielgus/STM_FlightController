@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Atmel Studio Solution File, Format Version 11.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "FC_Tasker_example", "FC_Tasker_example.cppproj", "{5B1BFA07-6849-4305-8B8D-5160CE77A58D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B1BFA07-6849-4305-8B8D-5160CE77A58D}.Debug|AVR.ActiveCfg = Debug|AVR
+		{5B1BFA07-6849-4305-8B8D-5160CE77A58D}.Debug|AVR.Build.0 = Debug|AVR
+		{5B1BFA07-6849-4305-8B8D-5160CE77A58D}.Release|AVR.ActiveCfg = Release|AVR
+		{5B1BFA07-6849-4305-8B8D-5160CE77A58D}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
