@@ -6,19 +6,21 @@
 
 
 volatile bool FC_Tasker::baseLoopFlag = false;
-volatile uint32_t FC_Tasker::baseLoopCounter = 0;
-volatile uint32_t FC_Tasker::mainLoopCounter = 0;
+
+// Now do not used
+//volatile uint32_t FC_Tasker::baseLoopCounter = 0;
+//volatile uint32_t FC_Tasker::mainLoopCounter = 0;
 
 
 void baseLoopTimerHandler()
 {
-	//FC_Tasker::baseLoopFlag = true;  // idk if it will be used if there is baseLoopCounter
-	FC_Tasker::baseLoopCounter++; // increment the counter
-	if ((FC_Tasker::baseLoopCounter % 4) == 0) FC_Tasker::mainLoopCounter++; // ONLY IF MAIN LOOP IS 250Hz AND BASE_INTERVAL IS 500 !!!!!!!!!!! - this part have to be implemented in a better way 
+	FC_Tasker::baseLoopFlag = true;
+	//FC_Tasker::baseLoopCounter++; // increment the counter
+	//if ((FC_Tasker::baseLoopCounter % 4) == 0) FC_Tasker::mainLoopCounter++; // ONLY IF MAIN LOOP IS 250Hz AND BASE_INTERVAL IS 500 !!!!!!!!!!! - this part have to be implemented in a better way 
 }
 
 
-FC_Tasker::FC_Tasker(uint16_t base_interval) : BASE_INTERVAL(base_interval)
+FC_Tasker::FC_Tasker( void (*mainFuncPointer)(), long interv, uint16_t maxDur ) : BASE_INTERVAL(interv);
 {
 	Timer2.setMode(TIMER_CH1, TIMER_OUTPUTCOMPARE);
 	Timer2.setPeriod(BASE_INTERVAL); // in microseconds
@@ -50,10 +52,11 @@ void FC_Tasker::addFunction( void (*funcPointer)(), long interv, uint16_t maxDur
 	newTaskList[numberOfTasks-1].functionPointer = funcPointer;
 	newTaskList[numberOfTasks-1].interval = interv;
 	newTaskList[numberOfTasks-1].maxDuration = maxDur;
+	newTaskList[numberOfTasks-1].lastExecuteTime = 0;
 	taskList = newTaskList;
 }
 
-
+/* - now in the constructor
 // Executed once. Add the main task
 void FC_Tasker::addMainFunction( void (*mainFuncPointer)(), long interv, uint16_t maxDur )
 {
@@ -61,12 +64,35 @@ void FC_Tasker::addMainFunction( void (*mainFuncPointer)(), long interv, uint16_
 	mainTask.interval = interv;
 	mainTask.maxDuration = maxDur;
 }
-
+*/
 
 void FC_Tasker::runTasker()
 {
-	//....
-	// if (baseLoopCounter == ...) then execute main function, at the end check if counter rised and if so, it means that system is unstable
+	if (baseLoopFlag)
+	{
+		mainTask.lastExecuteTime = micros();
+		
+		// execute the main task
+		(*mainTask.functionPointer)();
+		
+		mainTaskDuration = micros() - mainTask.lastExecuteTime;
+		
+		// If this flag will be true -> that means system is overloaded
+		if (baseLoopFlag)
+		{
+			flag.systemOverloaded = true;
+			flag.systemUnstable = true;
+		}
+		else flag.systemOverloaded = true;
+	}
+	
+	
+	// Running other tasks
+	//.......
+	//......
+	/*
+		Reszte zadan ma byc wywolywane na podstawie czasu jaki uplynal od ostatniego wykonania, uzywajac micros()
+	*/
 }
 
 
