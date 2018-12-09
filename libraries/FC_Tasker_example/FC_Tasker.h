@@ -31,7 +31,8 @@ class FC_Tasker
 	const uint16_t BASE_INTERVAL; // in milliseconds, loop run by Timer2 to set baseLoopFlag. It is like a executing resolution
 	
 	static volatile bool baseLoopFlag; // Timer change this variable to true if base loop have to be executed
-	static volatile uint16_t baseLoopCounter; // Timer increment it. It is reset by runTasker() when reach main function
+	static volatile uint32_t baseLoopCounter; // Timer increment it. It is reset by runTasker() when reach main function
+	static volatile uint32_t mainLoopCounter;
 	bool systemOverloadedFlag = false; // true when function doesn't finished when Timer ticked again
 	bool systemUnstableFlag = false; // true forever when at least once systemOverloadedFlag will be true
 	
@@ -42,7 +43,7 @@ class FC_Tasker
 		uint16_t maxDuration; // in milliseconds
 	};
 
-	Task * mainTask; // pointer to the main task
+	Task mainTask; // the main task
 	Task * taskList; // dynamically created, list of tasks, except main task (it is in other pointer)
 	uint8_t numberOfTasks = 0;
 	
@@ -52,4 +53,12 @@ class FC_Tasker
 
 
 #endif
+
+
+
+/*
+	To do:
+		- try to automatically calculate the base_interval after adding all functions for the best results
+		- decide if use or not the baseLoopFlag (there is baseLoopCounter which can be used instead) 
+*/
 

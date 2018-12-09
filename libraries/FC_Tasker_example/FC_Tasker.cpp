@@ -6,13 +6,15 @@
 
 
 volatile bool FC_Tasker::baseLoopFlag = false;
-volatile uint16_t FC_Tasker::baseLoopCounter = 0;
+volatile uint32_t FC_Tasker::baseLoopCounter = 0;
+volatile uint32_t FC_Tasker::mainLoopCounter = 0;
 
 
 void baseLoopTimerHandler()
 {
-	FC_Tasker::baseLoopFlag = true;
+	//FC_Tasker::baseLoopFlag = true;  // idk if it will be used if there is baseLoopCounter
 	FC_Tasker::baseLoopCounter++; // increment the counter
+	if ((FC_Tasker::baseLoopCounter % 4) == 0) FC_Tasker::mainLoopCounter++; // ONLY IF MAIN LOOP IS 250Hz AND BASE_INTERVAL IS 500 !!!!!!!!!!! - this part have to be implemented in a better way 
 }
 
 
@@ -28,10 +30,7 @@ FC_Tasker::FC_Tasker(uint16_t base_interval) : BASE_INTERVAL(base_interval)
 FC_Tasker::~FC_Tasker()
 {
 	if (numberOfTasks > 0)
-	{
 		delete [] taskList;
-		delete mainTask;
-	}
 }
 
 
@@ -55,13 +54,12 @@ void FC_Tasker::addFunction( void (*funcPointer)(), long interv, uint16_t maxDur
 }
 
 
-// Executed once. Dynamically add the main task
+// Executed once. Add the main task
 void FC_Tasker::addMainFunction( void (*mainFuncPointer)(), long interv, uint16_t maxDur )
 {
-	mainTask = new Task;
-	mainTask->functionPointer = mainFuncPointer;
-	mainTask->interval = interv;
-	mainTask->maxDuration = maxDur;
+	mainTask.functionPointer = mainFuncPointer;
+	mainTask.interval = interv;
+	mainTask.maxDuration = maxDur;
 }
 
 
