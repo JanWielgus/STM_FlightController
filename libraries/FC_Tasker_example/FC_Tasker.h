@@ -23,7 +23,7 @@ class FC_Tasker
 	~FC_Tasker();
 	void addFunction( void (*funcPointer)(), long interv, uint16_t maxDur );
 	//void addMainFunction( void (*mainFuncPointer)(), long interv, uint16_t maxDur ); // - now in the constructor
-	//void scheduleTasks() // to rethink if it is necessary
+	void scheduleTasks(); // plan the tasks shifts
 	void runTasker(); // should be the only function in loop. Execute tasks in intelligent way, not everything at one time
 	
 
@@ -49,12 +49,13 @@ class FC_Tasker
 		void (*functionPointer)(); // pointer to the function
 		long interval; // in milliseconds
 		uint16_t maxDuration; // in milliseconds - input by user
-		uint32_t lastExecuteTime; // in microseconds. Time when this function was lately called
+		uint32_t lastExecuteTime; // in microseconds, time when this function was lately called
+		uint8_t shift; // in microseconds, to avoid running in the same moment several tasks with the same interval
 	};
 
 	Task mainTask; // the main task
 	Task * taskList = nullptr; // dynamically created, list of tasks, except main task (it is in other pointer)
-	uint8_t numberOfTasks = 0;
+	uint8_t amtOfTasks = 0;
 	
 	void copyTaskList(Task *from, Task *to, uint8_t amount);
 	friend void baseLoopTimerHandler(); // executed by Timer every BASE_INTERVAL

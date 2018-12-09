@@ -5,7 +5,7 @@
     <ProjectVersion>7.0</ProjectVersion>
     <ToolchainName>com.Atmel.AVRGCC8.CPP</ToolchainName>
     <ProjectGuid>{5b1bfa07-6849-4305-8b8d-5160ce77a58d}</ProjectGuid>
-    <avrdevice>atmega328p</avrdevice>
+    <avrdevice>ATmega2560</avrdevice>
     <avrdeviceseries>none</avrdeviceseries>
     <OutputType>Executable</OutputType>
     <Language>CPP</Language>
@@ -53,22 +53,28 @@
   <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
   <avrgcc.compiler.symbols.DefSymbols>
     <ListValues>
-      <Value>__AVR_ATmega328p__</Value>
-      <Value>__AVR_ATmega328P__</Value>
       <Value>ARDUINO=10807</Value>
       <Value>ARDUINO_MAIN</Value>
-      <Value>F_CPU=16000000L</Value>
-      <Value>__AVR__</Value>
-      <Value>ARDUINO_AVR_UNO</Value>
-      <Value>ARDUINO_ARCH_AVR</Value>
+      <Value>F_CPU=72000000L</Value>
+      <Value>printf=iprintf</Value>
+      <Value>__STM32F1__</Value>
+      <Value>DEBUG_LEVEL=DEBUG_NONE</Value>
+      <Value>BOARD_generic_stm32f103c</Value>
+      <Value>VECT_TAB_ADDR=0x8000000</Value>
+      <Value>ERROR_LED_PORT=GPIOC</Value>
+      <Value>ERROR_LED_PIN=13</Value>
+      <Value>ARDUINO_GENERIC_STM32F103C</Value>
+      <Value>ARDUINO_ARCH_STM32F1</Value>
+      <Value>CONFIG_MAPLE_MINI_NO_DISABLE_DEBUG</Value>
+      <Value>MCU_STM32F103CB</Value>
     </ListValues>
   </avrgcc.compiler.symbols.DefSymbols>
   <avrgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_Tasker_example</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
-      <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple</Value>
@@ -92,22 +98,28 @@
   <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
   <avrgcccpp.compiler.symbols.DefSymbols>
     <ListValues>
-      <Value>__AVR_ATmega328p__</Value>
-      <Value>__AVR_ATmega328P__</Value>
       <Value>ARDUINO=10807</Value>
       <Value>ARDUINO_MAIN</Value>
-      <Value>F_CPU=16000000L</Value>
-      <Value>__AVR__</Value>
-      <Value>ARDUINO_AVR_UNO</Value>
-      <Value>ARDUINO_ARCH_AVR</Value>
+      <Value>F_CPU=72000000L</Value>
+      <Value>printf=iprintf</Value>
+      <Value>__STM32F1__</Value>
+      <Value>DEBUG_LEVEL=DEBUG_NONE</Value>
+      <Value>BOARD_generic_stm32f103c</Value>
+      <Value>VECT_TAB_ADDR=0x8000000</Value>
+      <Value>ERROR_LED_PORT=GPIOC</Value>
+      <Value>ERROR_LED_PIN=13</Value>
+      <Value>ARDUINO_GENERIC_STM32F103C</Value>
+      <Value>ARDUINO_ARCH_STM32F1</Value>
+      <Value>CONFIG_MAPLE_MINI_NO_DISABLE_DEBUG</Value>
+      <Value>MCU_STM32F103CB</Value>
     </ListValues>
   </avrgcccpp.compiler.symbols.DefSymbols>
   <avrgcccpp.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_Tasker_example</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
-      <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple</Value>
@@ -143,22 +155,28 @@
   <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
   <avrgcc.compiler.symbols.DefSymbols>
     <ListValues>
-      <Value>__AVR_ATmega328p__</Value>
-      <Value>__AVR_ATmega328P__</Value>
       <Value>ARDUINO=10807</Value>
       <Value>ARDUINO_MAIN</Value>
-      <Value>F_CPU=16000000L</Value>
-      <Value>__AVR__</Value>
-      <Value>ARDUINO_AVR_UNO</Value>
-      <Value>ARDUINO_ARCH_AVR</Value>
+      <Value>F_CPU=72000000L</Value>
+      <Value>printf=iprintf</Value>
+      <Value>__STM32F1__</Value>
+      <Value>DEBUG_LEVEL=DEBUG_NONE</Value>
+      <Value>BOARD_generic_stm32f103c</Value>
+      <Value>VECT_TAB_ADDR=0x8000000</Value>
+      <Value>ERROR_LED_PORT=GPIOC</Value>
+      <Value>ERROR_LED_PIN=13</Value>
+      <Value>ARDUINO_GENERIC_STM32F103C</Value>
+      <Value>ARDUINO_ARCH_STM32F1</Value>
+      <Value>CONFIG_MAPLE_MINI_NO_DISABLE_DEBUG</Value>
+      <Value>MCU_STM32F103CB</Value>
     </ListValues>
   </avrgcc.compiler.symbols.DefSymbols>
   <avrgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_Tasker_example</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
-      <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple</Value>
@@ -182,22 +200,28 @@
   <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
   <avrgcccpp.compiler.symbols.DefSymbols>
     <ListValues>
-      <Value>__AVR_ATmega328p__</Value>
-      <Value>__AVR_ATmega328P__</Value>
       <Value>ARDUINO=10807</Value>
       <Value>ARDUINO_MAIN</Value>
-      <Value>F_CPU=16000000L</Value>
-      <Value>__AVR__</Value>
-      <Value>ARDUINO_AVR_UNO</Value>
-      <Value>ARDUINO_ARCH_AVR</Value>
+      <Value>F_CPU=72000000L</Value>
+      <Value>printf=iprintf</Value>
+      <Value>__STM32F1__</Value>
+      <Value>DEBUG_LEVEL=DEBUG_NONE</Value>
+      <Value>BOARD_generic_stm32f103c</Value>
+      <Value>VECT_TAB_ADDR=0x8000000</Value>
+      <Value>ERROR_LED_PORT=GPIOC</Value>
+      <Value>ERROR_LED_PIN=13</Value>
+      <Value>ARDUINO_GENERIC_STM32F103C</Value>
+      <Value>ARDUINO_ARCH_STM32F1</Value>
+      <Value>CONFIG_MAPLE_MINI_NO_DISABLE_DEBUG</Value>
+      <Value>MCU_STM32F103CB</Value>
     </ListValues>
   </avrgcccpp.compiler.symbols.DefSymbols>
   <avrgcccpp.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_Tasker_example</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
-      <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple</Value>

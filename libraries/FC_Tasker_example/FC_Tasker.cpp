@@ -31,7 +31,7 @@ FC_Tasker::FC_Tasker( void (*mainFuncPointer)(), long interv, uint16_t maxDur ) 
 
 FC_Tasker::~FC_Tasker()
 {
-	if (numberOfTasks > 0)
+	if (amtOfTasks > 0)
 		delete [] taskList;
 }
 
@@ -39,20 +39,21 @@ FC_Tasker::~FC_Tasker()
 // Add a new task at the end of dynamically created array
 void FC_Tasker::addFunction( void (*funcPointer)(), long interv, uint16_t maxDur )
 {
-	numberOfTasks++;
+	amtOfTasks++;
 	
 	// create new tasks container
-	Task * newTaskList = new Task[numberOfTasks];
+	Task * newTaskList = new Task[amtOfTasks];
 
 	// copy old tasks to the new container and delete old one
-	copyTaskList(taskList, newTaskList, numberOfTasks-1);
+	copyTaskList(taskList, newTaskList, amtOfTasks-1);
 	delete [] taskList;
 	
 	// add new task at the end
-	newTaskList[numberOfTasks-1].functionPointer = funcPointer;
-	newTaskList[numberOfTasks-1].interval = interv;
-	newTaskList[numberOfTasks-1].maxDuration = maxDur;
-	newTaskList[numberOfTasks-1].lastExecuteTime = 0;
+	newTaskList[amtOfTasks-1].functionPointer = funcPointer;
+	newTaskList[amtOfTasks-1].interval = interv;
+	newTaskList[amtOfTasks-1].maxDuration = maxDur;
+	newTaskList[amtOfTasks-1].lastExecuteTime = 0;
+	newTaskList[amtOfTasks-1].shift = 0;
 	taskList = newTaskList;
 }
 
@@ -65,6 +66,40 @@ void FC_Tasker::addMainFunction( void (*mainFuncPointer)(), long interv, uint16_
 	mainTask.maxDuration = maxDur;
 }
 */
+
+void FC_Tasker::scheduleTasks()
+{
+	/*
+		Trzeba sprawdzic kazde z kazdym i zobaczyc czy interval nie jest wielokrotnoscia (czyli czy % == 0)
+	*/
+	for (int i=0; i<amtOfTasks; i++)
+	{
+		for (int j=i+1; j<amtOfTasks; j++)
+		{
+			// Bigger and smaller interval
+			int smallerInt = min(taskList[i].interval, taskList[j].interval);
+			int biggerInt = max(taskList[i].interval, taskList[j].interval);
+			
+			if (biggerInt % smallerInt == 0) // If is divisible
+			{
+				// ...................
+				// there calculate the shift base and if following ifs are true -> set them shifts
+				// be aware of that shifts might be set before for the given interval so u have to do sth
+				if (taskList[i].shift == 0) // if it hasn't had any shift yet
+				{
+					
+				}
+				
+				if (taskList[j].shift == 0) // if it hasn't had any shift yet
+				{
+					
+				}
+				
+			}
+		}
+	}
+}
+
 
 void FC_Tasker::runTasker()
 {
@@ -93,6 +128,11 @@ void FC_Tasker::runTasker()
 	/*
 		Reszte zadan ma byc wywolywane na podstawie czasu jaki uplynal od ostatniego wykonania, uzywajac micros()
 	*/
+	
+	for (uint8_t i=0; i<amtOfTasks; i++)
+	{
+		if ()
+	}
 }
 
 
@@ -104,6 +144,8 @@ void FC_Tasker::copyTaskList(Task *from, Task *to, uint8_t amount)
 		to->functionPointer = from->functionPointer;
 		to->interval = from->interval;
 		to->maxDuration = from->maxDuration;
+		to->lastExecuteTime = from->lastExecuteTime;
+		to->shift = from->shift;
 	}
 }
 
