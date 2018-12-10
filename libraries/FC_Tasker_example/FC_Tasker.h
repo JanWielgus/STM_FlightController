@@ -29,6 +29,7 @@ class FC_Tasker
 
  private:
 	const uint16_t BASE_INTERVAL; // in milliseconds, loop run by Timer2 to set baseLoopFlag. Now it is just interval of the main function
+	const uint8_t MAX_AMT_OF_TASKS = 250;
 	
 	static volatile bool baseLoopFlag; // Timer change this variable to true if base loop have to be executed
 	
@@ -50,7 +51,7 @@ class FC_Tasker
 		long interval; // in milliseconds
 		uint16_t maxDuration; // in milliseconds - input by user
 		uint32_t lastExecuteTime; // in microseconds, time when this function was lately called
-		uint8_t shift; // in microseconds, to avoid running in the same moment several tasks with the same interval
+		uint16_t shift; // in microseconds, to avoid running in the same moment several tasks with the same interval
 	};
 
 	Task mainTask; // the main task
@@ -59,6 +60,7 @@ class FC_Tasker
 	
 	void copyTaskList(Task *from, Task *to, uint8_t amount);
 	friend void baseLoopTimerHandler(); // executed by Timer every BASE_INTERVAL
+	friend void checkIfContain(Task* source, int amt, Task* toCheck); // checking if in the array source is toCheck
 };
 
 

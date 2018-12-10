@@ -6,17 +6,21 @@
 
 #include "FC_Tasker.h"
 
-FC_Tasker Tasker; // or Tasker( base interval )
-// ! Base interval is something like Tasker time resolution !
-
 void func1(); // main
 void func2();
+
+FC_Tasker Tasker(func1, 4000L, 15); // main function
+// ! Base interval is something like Tasker time resolution !
+
 
 
 void setup()
 {
-	Tasker.addMainFunction(func1, 4000L, 10); // 250 Hz
+	//Tasker.addMainFunction(func1, 4000L, 10); // 250 Hz - ! NOW in the constructor
 	Tasker.addFunction(func2, 500000L, 15); // 2 Hz
+	// add other functions
+	
+	Tasker.scheduleTasks();
 }
 
 

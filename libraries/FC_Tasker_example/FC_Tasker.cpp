@@ -39,6 +39,10 @@ FC_Tasker::~FC_Tasker()
 // Add a new task at the end of dynamically created array
 void FC_Tasker::addFunction( void (*funcPointer)(), long interv, uint16_t maxDur )
 {
+	// check if there is too much tasks
+	if (amtOfTasks+1 > MAX_AMT_OF_TASKS)
+		return;
+		
 	amtOfTasks++;
 	
 	// create new tasks container
@@ -72,32 +76,65 @@ void FC_Tasker::scheduleTasks()
 	/*
 		Trzeba sprawdzic kazde z kazdym i zobaczyc czy interval nie jest wielokrotnoscia (czyli czy % == 0)
 	*/
+	
+	// create array of bools to know if for certain task shift have been already set
+	bool isShiftSet = new bool[amtOfTasks]; // true - shift is set for that function and other with the same interval
+	for (int i=0; i<amtOfTasks; i++) isShiftSet = false;
+	
 	for (int i=0; i<amtOfTasks; i++)
 	{
+		// if shift for that interval have been already set -> skip
+		if (isShiftSet[i] == true)
+			continue;
+			
+		int smallerInt; // created there to use in the next for loop
+		
+		// array of pointers to the tasks with the same interval
+		Task** sameIntTasks = new Task*[amtOfTasks];
+		int amtOfSameIntTasks = 0;
+		
+		// look for and add to the sameIntTasks array tasks which have the same interval
 		for (int j=i+1; j<amtOfTasks; j++)
 		{
+			// if shift for that interval have been already set -> skip
+			if (isShiftSet[j] == true)
+				continue;
+			
 			// Bigger and smaller interval
-			int smallerInt = min(taskList[i].interval, taskList[j].interval);
+			smallerInt = min(taskList[i].interval, taskList[j].interval);
 			int biggerInt = max(taskList[i].interval, taskList[j].interval);
 			
 			if (biggerInt % smallerInt == 0) // If is divisible
 			{
-				// ...................
-				// there calculate the shift base and if following ifs are true -> set them shifts
-				// be aware of that shifts might be set before for the given interval so u have to do sth
-				if (taskList[i].shift == 0) // if it hasn't had any shift yet
-				{
+				// if not contain then add
+				if (checkIfContain(sameIntTasks, amtOfSameIntTasks, &taskList[i]) == false)
+					sameIntTasks[amtOfSameIntTasks++] = &taskList[i];
+				if (checkIfContain(sameIntTasks, amtOfSameIntTasks, &taskList[j]) == false)
+					sameIntTasks[amtOfSameIntTasks++] = &taskList[j];
 					
-				}
-				
-				if (taskList[j].shift == 0) // if it hasn't had any shift yet
-				{
-					
-				}
-				
+				isShiftSet[i] = true;
+				isShiftSet[j] = true;
 			}
 		}
+		
+		// if there were zero tasks with the same interval -> skip
+		if(amtOfSameIntTasks < 2)
+		{
+			isShiftSet[i] = true;
+			continue;
+		}
+		
+		//calculate the shift for tasks with the same interval
+		float baseShift = float(smallerInt)/amtOfSameIntTasks; // eg.: =5 then shift1=5, shift2=10, shift3=15...
+		for (int q=1; q<amtOfSameIntTasks; q++)
+		{
+			(*sameIntTasks[q]).shift = uint16_t(q * baseShift); // calculate the next shifts
+		}
+		
+		delete [] sameIntTasks;
 	}
+	
+	delete [] isShiftSet;
 }
 
 
@@ -123,15 +160,20 @@ void FC_Tasker::runTasker()
 	
 	
 	// Running other tasks
-	//.......
-	//......
 	/*
-		Reszte zadan ma byc wywolywane na podstawie czasu jaki uplynal od ostatniego wykonania, uzywajac micros()
+		Reszte zadan ma byc wywolywane na podstawie czasu jaki uplynal od ostatniego wykonania, uzywajac micros() i dodajac shift
 	*/
 	
 	for (uint8_t i=0; i<amtOfTasks; i++)
 	{
-		if ()
+		static uint32_t tnow = micros();
+		
+		//if time has elapsed -> execute the task
+		if (tnow < (taskList[i].lastExecuteTime + taskList[i].interval + taskList[i].shift))
+		{
+			taskList[i].lastExecuteTime = tnow;
+			(*taskList[i].functionPointer)();
+		}
 	}
 }
 
@@ -147,6 +189,17 @@ void FC_Tasker::copyTaskList(Task *from, Task *to, uint8_t amount)
 		to->lastExecuteTime = from->lastExecuteTime;
 		to->shift = from->shift;
 	}
+}
+
+
+void checkIfContain(Task* source, int amt, Task* toCheck)
+{
+	for (int i=0; i<amt; i++)
+	{
+		if (source[i].functionPointer == (*toCheck).functionPointer)
+			return true;
+	}
+	return false;
 }
 
 
