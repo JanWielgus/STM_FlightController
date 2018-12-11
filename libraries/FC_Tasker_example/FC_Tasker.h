@@ -59,7 +59,7 @@ class FC_Tasker
 	uint8_t amtOfTasks = 0;
 	
 	void copyTaskList(Task *from, Task *to, uint8_t amount);
-	bool checkIfContain(Task** source, int amt, Task* toCheck); // checking if in the array source is toCheck
+	bool checkIfContain(Task** source, int amt, Task* toCheck); // checking if in the array of pointers 'source' is 'toCheck'
 	friend void baseLoopTimerHandler(); // executed by Timer every BASE_INTERVAL
 };
 

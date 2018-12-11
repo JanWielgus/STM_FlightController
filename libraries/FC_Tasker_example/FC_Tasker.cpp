@@ -90,7 +90,7 @@ void FC_Tasker::scheduleTasks()
 		int smallerInt; // created there to use in the next for loop
 		
 		// array of pointers to the tasks with the same interval
-		Task* sameIntTasks = new Task*[amtOfTasks];
+		Task** sameIntTasks = new Task*[amtOfTasks];
 		int amtOfSameIntTasks = 0;
 		
 		// look for and add to the sameIntTasks array tasks which have the same interval
@@ -196,7 +196,7 @@ bool FC_Tasker::checkIfContain(Task** source, int amt, Task* toCheck)
 {
 	for (int i=0; i<amt; i++)
 	{
-		if (*source[i]->functionPointer == toCheck->functionPointer)
+		if (source[i]->functionPointer == toCheck->functionPointer)
 			return true;
 	}
 	return false;
