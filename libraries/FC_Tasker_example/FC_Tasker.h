@@ -59,8 +59,8 @@ class FC_Tasker
 	uint8_t amtOfTasks = 0;
 	
 	void copyTaskList(Task *from, Task *to, uint8_t amount);
+	bool checkIfContain(Task** source, int amt, Task* toCheck); // checking if in the array source is toCheck
 	friend void baseLoopTimerHandler(); // executed by Timer every BASE_INTERVAL
-	friend void checkIfContain(Task* source, int amt, Task* toCheck); // checking if in the array source is toCheck
 };
 
 
@@ -70,7 +70,6 @@ class FC_Tasker
 
 /*
 	To do:
-		- try to automatically calculate the base_interval after adding all functions for the best results
-		- decide if use or not the baseLoopFlag (there is baseLoopCounter which can be used instead) 
+		- 
 */
 

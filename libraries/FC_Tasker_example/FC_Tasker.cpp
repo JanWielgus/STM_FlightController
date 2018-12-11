@@ -20,7 +20,7 @@ void baseLoopTimerHandler()
 }
 
 
-FC_Tasker::FC_Tasker( void (*mainFuncPointer)(), long interv, uint16_t maxDur ) : BASE_INTERVAL(interv);
+FC_Tasker::FC_Tasker( void (*mainFuncPointer)(), long interv, uint16_t maxDur ) : BASE_INTERVAL(interv)
 {
 	Timer2.setMode(TIMER_CH1, TIMER_OUTPUTCOMPARE);
 	Timer2.setPeriod(BASE_INTERVAL); // in microseconds
@@ -78,7 +78,7 @@ void FC_Tasker::scheduleTasks()
 	*/
 	
 	// create array of bools to know if for certain task shift have been already set
-	bool isShiftSet = new bool[amtOfTasks]; // true - shift is set for that function and other with the same interval
+	bool* isShiftSet = new bool[amtOfTasks]; // true - shift is set for that function and other with the same interval
 	for (int i=0; i<amtOfTasks; i++) isShiftSet = false;
 	
 	for (int i=0; i<amtOfTasks; i++)
@@ -90,7 +90,7 @@ void FC_Tasker::scheduleTasks()
 		int smallerInt; // created there to use in the next for loop
 		
 		// array of pointers to the tasks with the same interval
-		Task** sameIntTasks = new Task*[amtOfTasks];
+		Task* sameIntTasks = new Task*[amtOfTasks];
 		int amtOfSameIntTasks = 0;
 		
 		// look for and add to the sameIntTasks array tasks which have the same interval
@@ -107,9 +107,9 @@ void FC_Tasker::scheduleTasks()
 			if (biggerInt % smallerInt == 0) // If is divisible
 			{
 				// if not contain then add
-				if (checkIfContain(sameIntTasks, amtOfSameIntTasks, &taskList[i]) == false)
+				if (checkIfContain(sameIntTasks, amtOfSameIntTasks, &(taskList[i])) == false)
 					sameIntTasks[amtOfSameIntTasks++] = &taskList[i];
-				if (checkIfContain(sameIntTasks, amtOfSameIntTasks, &taskList[j]) == false)
+				if (checkIfContain(sameIntTasks, amtOfSameIntTasks, &(taskList[j])) == false)
 					sameIntTasks[amtOfSameIntTasks++] = &taskList[j];
 					
 				isShiftSet[i] = true;
@@ -166,12 +166,12 @@ void FC_Tasker::runTasker()
 	
 	for (uint8_t i=0; i<amtOfTasks; i++)
 	{
-		static uint32_t tnow = micros();
+		static uint32_t curTime = 0; // time now
 		
 		//if time has elapsed -> execute the task
-		if (tnow < (taskList[i].lastExecuteTime + taskList[i].interval + taskList[i].shift))
+		if ((curTime=micros()) < (taskList[i].lastExecuteTime + taskList[i].interval + taskList[i].shift))
 		{
-			taskList[i].lastExecuteTime = tnow;
+			taskList[i].lastExecuteTime = curTime;
 			(*taskList[i].functionPointer)();
 		}
 	}
@@ -192,11 +192,11 @@ void FC_Tasker::copyTaskList(Task *from, Task *to, uint8_t amount)
 }
 
 
-void checkIfContain(Task* source, int amt, Task* toCheck)
+bool FC_Tasker::checkIfContain(Task** source, int amt, Task* toCheck)
 {
 	for (int i=0; i<amt; i++)
 	{
-		if (source[i].functionPointer == (*toCheck).functionPointer)
+		if (*source[i]->functionPointer == toCheck->functionPointer)
 			return true;
 	}
 	return false;
