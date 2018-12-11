@@ -28,7 +28,9 @@ class FC_Tasker
 	
 
  private:
-	const uint16_t BASE_INTERVAL; // in milliseconds, loop run by Timer2 to set baseLoopFlag. Now it is just interval of the main function
+	HardwareTimer* timer2;
+	
+	const uint32_t BASE_INTERVAL; // in milliseconds, loop run by Timer2 to set baseLoopFlag. Now it is just interval of the main function
 	const uint8_t MAX_AMT_OF_TASKS = 250;
 	
 	static volatile bool baseLoopFlag; // Timer change this variable to true if base loop have to be executed

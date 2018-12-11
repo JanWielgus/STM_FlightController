@@ -22,10 +22,21 @@ void baseLoopTimerHandler()
 
 FC_Tasker::FC_Tasker( void (*mainFuncPointer)(), long interv, uint16_t maxDur ) : BASE_INTERVAL(interv)
 {
+	/*
 	Timer2.setMode(TIMER_CH1, TIMER_OUTPUTCOMPARE);
 	Timer2.setPeriod(BASE_INTERVAL); // in microseconds
 	Timer2.setCompare(TIMER_CH1, 1);      // overflow might be small ???
 	Timer2.attachInterrupt(TIMER_CH1, baseLoopTimerHandler);
+	*/
+	
+	timer2 = new HardwareTimer(2);
+	timer2->pause();
+	timer2->setPeriod(BASE_INTERVAL);
+	timer2->setChannel1Mode(TIMER_OUTPUT_COMPARE);
+	timer2->setCompare(TIMER_CH1, 1);
+	timer2->attachCompare1Interrupt(baseLoopTimerHandler);
+	timer2->refresh();
+	timer2->resume();
 }
 
 
