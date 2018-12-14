@@ -60,7 +60,7 @@ void FC_Tasker::addFunction( void (*funcPointer)(), long interv, uint16_t maxDur
 	Task * newTaskList = new Task[amtOfTasks];
 
 	// copy old tasks to the new container and delete old one
-	copyTaskList(taskList, newTaskList, amtOfTasks-1);
+	copyTaskList(taskList, newTaskList, amtOfTasks);
 	delete [] taskList;
 	
 	// add new task at the end
@@ -117,16 +117,22 @@ void FC_Tasker::scheduleTasks()
 			
 			if (biggerInt % smallerInt == 0) // If is divisible
 			{
+				/* checking this is meaningless because 'i' is always different than 'j', and in one i iteration there can't be the same two functions. isShiftSet array is checked at the beginning of the both 'i' and 'j'
 				// if not contain then add
 				if (checkIfContain(sameIntTasks, amtOfSameIntTasks, &(taskList[i])) == false)
 					sameIntTasks[amtOfSameIntTasks++] = &taskList[i];
 				if (checkIfContain(sameIntTasks, amtOfSameIntTasks, &(taskList[j])) == false)
 					sameIntTasks[amtOfSameIntTasks++] = &taskList[j];
+				*/
+				if (!isShiftSet[i]) // 'i' is the same for one 'j' loop so it must be checked to to avoid duplicates
+					sameIntTasks[amtOfSameIntTasks++] = &taskList[i];
+				sameIntTasks[amtOfSameIntTasks++] = &taskList[j]; // 'j' is always new
 					
 				isShiftSet[i] = true;
 				isShiftSet[j] = true;
 			}
 		}
+		
 		
 		// if there were zero tasks with the same interval -> skip
 		if(amtOfSameIntTasks < 2)
@@ -139,7 +145,7 @@ void FC_Tasker::scheduleTasks()
 		float baseShift = float(smallerInt)/amtOfSameIntTasks; // eg.: =5 then shift1=5, shift2=10, shift3=15...
 		for (int q=1; q<amtOfSameIntTasks; q++)
 		{
-			(*sameIntTasks[q]).shift = uint16_t(q * baseShift); // calculate the next shifts
+			sameIntTasks[q]->shift = uint16_t(q * baseShift); // calculate the next shifts
 		}
 		
 		delete [] sameIntTasks;
@@ -202,7 +208,7 @@ void FC_Tasker::copyTaskList(Task *from, Task *to, uint8_t amount)
 	}
 }
 
-
+/*
 bool FC_Tasker::checkIfContain(Task** source, int amt, Task* toCheck)
 {
 	for (int i=0; i<amt; i++)
@@ -212,5 +218,5 @@ bool FC_Tasker::checkIfContain(Task** source, int amt, Task* toCheck)
 	}
 	return false;
 }
-
+*/
 
