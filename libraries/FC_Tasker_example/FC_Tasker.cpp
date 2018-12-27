@@ -185,8 +185,10 @@ void FC_Tasker::runTasker()
 	{
 		static uint32_t curTime = 0; // time now
 		
+		curTime = micros();
+		
 		//if time has elapsed -> execute the task
-		if ((curTime=micros()) < (taskList[i].lastExecuteTime + taskList[i].interval + taskList[i].shift))
+		if (curTime > (taskList[i].lastExecuteTime + taskList[i].interval + taskList[i].shift))
 		{
 			taskList[i].lastExecuteTime = curTime;
 			(*taskList[i].functionPointer)();
