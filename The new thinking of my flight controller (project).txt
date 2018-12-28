@@ -7,14 +7,19 @@ Should be possible to upgrade or make some changes to the certain class without 
 The structure of the program:
 	
 	Classes interfaces: ( (out) - should be in Arduino library folder)
-		
-		- (out) Tasker (scheduler) class - program that handle all tasks in the drone
-				(!Maybe tasker should inherit from Timing Info class!)
+	
+		- (out) SimpleTasker (scheduler) class - program that handle function calling without using Timers, only using micros() and elapsed time
 			Public methods:
 				- (void) add function (pointer to the void function, interval [in micros], max run time)
+				- (void) schedule tasks - run only in the setup just after adding all functions, figure out the order (if certain tasks have the same interval or its multiple, then add time shift - duration). Tasks will be called using time shift.
+				- (virtual void) run tasker function (should be the only function run in the loop) checks if time has elapsed since last execution and if so, execute proper function.
+						It have to check if system is not overload (like in GoodTasker) and execute functions one by one (not all at one time) (time shift)
+		
+		- (out) Tasker (scheduler) class - program that handle all tasks in the drone, inherits from SimpleTasker. Expand SimpleTasker with hardware Timer handlinding one main task and other tasks like in SimpleTasker
+				(!Maybe tasker should also inherit from Timing Info class!)
+			Public methods:
 				- (void) add main function (pointer to the void function, interval [in micros], max run time) - add the main function (called only once)
-				- (void) schedule tasks - (rethink if it is necessary or just run method can handle that) run only in the setup just after adding all functions, figure out the order. According to that order tasks will be called
-				- (void) run tasker function (should be the only function run in the loop) checks if Timer set the flag and if so, execute proper functions.
+				- (virtual void) run tasker function (should be the only function run in the loop) checks if Timer set the flag and if so, execute proper functions. (main function executed using Timer, other like in SimpleTasker)
 						It have to check if system is not overload (like in GoodTasker) and execute functions one by one (not all at one time)
 		
 		
