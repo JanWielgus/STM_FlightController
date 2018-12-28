@@ -9,24 +9,26 @@
 void func1(); // main
 void func2();
 
-FC_Tasker Tasker(func1, 4000L, 15); // main function
-// ! Base interval is something like Tasker time resolution !
+
+// !WARNING! Only one: FC_SimpleTasker or FC_Tasker can be used at the same time !!!
+//FC_SimpleTasker() sTasker;
+FC_Tasker tasker(func1, 4000L, 15); // main function
 
 
 
 void setup()
 {
 	//Tasker.addMainFunction(func1, 4000L, 10); // 250 Hz - ! NOW in the constructor
-	Tasker.addFunction(func2, 500000L, 15); // 2 Hz
+	tasker.addFunction(func2, 500000L, 15); // 2 Hz
 	// add other functions
 	
-	Tasker.scheduleTasks();
+	tasker.scheduleTasks();
 }
 
 
 void loop()
 {
-	Tasker.runTasker();
+	tasker.runTasker();
 }
 
 
