@@ -43,7 +43,7 @@ void FC_SimpleTasker::addFunction( void (*funcPointer)(), long interv, uint16_t 
 	newTaskList[amtOfTasks-1].interval = interv;
 	newTaskList[amtOfTasks-1].maxDuration = maxDur;
 	newTaskList[amtOfTasks-1].lastExecuteTime = 0;
-	newTaskList[amtOfTasks-1].shift = 0;
+	newTaskList[amtOfTasks-1].timeShift = 0;
 	taskList = newTaskList;
 }
 
@@ -54,11 +54,11 @@ void FC_SimpleTasker::scheduleTasks()
 	{
 		for (int j=i+1; j<amtOfTasks; j++)
 		{
-			int bigger = max(taskList[i].interval+taskList[i].shift, taskList[j].interval+taskList[j].shift);
-			int smaller = min(taskList[i].interval+taskList[i].shift, taskList[j].interval+taskList[j].shift);
+			int bigger = max(taskList[i].interval+taskList[i].timeShift, taskList[j].interval+taskList[j].timeShift);
+			int smaller = min(taskList[i].interval+taskList[i].timeShift, taskList[j].interval+taskList[j].timeShift);
 			
 			if (bigger % smaller == 0) // is divisible
-				taskList[j].shift += taskList[i].maxDuration + TIME_SHIFT_BASE; // calculate new shift for second task
+				taskList[j].timeShift += taskList[i].maxDuration + TIME_SHIFT_BASE; // calculate new shift for second task
 		}
 	}
 }
@@ -73,7 +73,7 @@ void FC_SimpleTasker::runTasker()
 		curTime = micros();
 		
 		//if time has elapsed -> execute the task
-		if (curTime > (taskList[i].lastExecuteTime + taskList[i].interval + taskList[i].shift))
+		if (curTime > (taskList[i].lastExecuteTime + taskList[i].interval + taskList[i].timeShift))
 		{
 			taskList[i].lastExecuteTime = curTime;
 			(*taskList[i].functionPointer)();
@@ -91,7 +91,7 @@ void FC_SimpleTasker::copyTaskList(Task *from, Task *to, uint8_t amount)
 		to->interval = from->interval;
 		to->maxDuration = from->maxDuration;
 		to->lastExecuteTime = from->lastExecuteTime;
-		to->shift = from->shift;
+		to->timeShift = from->timeShift;
 	}
 }
 

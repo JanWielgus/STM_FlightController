@@ -34,7 +34,7 @@ class FC_SimpleTasker
 		long interval; // in milliseconds
 		uint16_t maxDuration; // in milliseconds - input by user
 		uint32_t lastExecuteTime; // in microseconds, time when this function was lately called
-		uint16_t shift; // in microseconds, to avoid running in the same moment several tasks with the same interval
+		uint16_t timeShift; // in microseconds, to avoid running in the same moment several tasks with the same interval
 	};
 
 
