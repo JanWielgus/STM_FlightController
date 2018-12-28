@@ -72,7 +72,6 @@
   <avrgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_Tasker_example</Value>
-      <Value>C:/Users/janwi/Documents/Arduino/libraries/TimerOne</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -114,7 +113,6 @@
   <avrgcccpp.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_Tasker_example</Value>
-      <Value>C:/Users/janwi/Documents/Arduino/libraries/TimerOne</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -168,7 +166,6 @@
   <avrgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_Tasker_example</Value>
-      <Value>C:/Users/janwi/Documents/Arduino/libraries/TimerOne</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -210,7 +207,6 @@
   <avrgcccpp.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_Tasker_example</Value>
-      <Value>C:/Users/janwi/Documents/Arduino/libraries/TimerOne</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -242,6 +238,12 @@
     <Folder Include="__vm\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FC_SimpleTasker.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FC_SimpleTasker.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="FC_Tasker.cpp">
       <SubType>compile</SubType>
     </Compile>
