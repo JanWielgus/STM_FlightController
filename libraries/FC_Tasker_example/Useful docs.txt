@@ -1,0 +1,9 @@
+http://docs.leaflabs.com/static.leaflabs.com/pub/leaflabs/maple-docs/0.0.12/libmaple/api/timer.html#libmaple-timer
+
+https://github.com/rogerclarkmelbourne/Arduino_STM32/wiki/Libmaple-interrupt-handlers
+
+https://github.com/rogerclarkmelbourne/Arduino_STM32
+
+http://stm32duino.com/viewtopic.php?t=2748
+
+https://github.com/leaflabs/libmaple/tree/master/notes
