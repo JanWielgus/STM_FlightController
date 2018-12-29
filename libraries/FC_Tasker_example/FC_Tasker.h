@@ -40,7 +40,7 @@ class FC_SimpleTasker
 
  private:
 	const uint8_t MAX_AMT_OF_TASKS = 250;
-	const uint8_t TIME_SHIFT_BASE = 31; // used to calculate time shift
+	const uint8_t TIME_SHIFT_BASE = 239; // used to calculate time shift
 	
 	Task * taskList = nullptr; // dynamically created, list of tasks, except main task (it is in other pointer)
 	uint8_t amtOfTasks = 0;

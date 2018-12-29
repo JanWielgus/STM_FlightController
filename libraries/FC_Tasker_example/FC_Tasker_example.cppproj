@@ -238,12 +238,6 @@
     <Folder Include="__vm\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FC_SimpleTasker.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="FC_SimpleTasker.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="FC_Tasker.cpp">
       <SubType>compile</SubType>
     </Compile>

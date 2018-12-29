@@ -58,7 +58,7 @@ void FC_SimpleTasker::scheduleTasks()
 			int smaller = min(taskList[i].interval+taskList[i].timeShift, taskList[j].interval+taskList[j].timeShift);
 			
 			if (bigger % smaller == 0) // is divisible
-				taskList[j].timeShift += int(taskList[i].interval/3) taskList[i].maxDuration + TIME_SHIFT_BASE; // calculate new shift for second task
+				taskList[j].timeShift += int(taskList[i].interval/3) + taskList[i].maxDuration + TIME_SHIFT_BASE; // calculate new shift for second task, it's not ideal, but works
 		}
 	}
 }
@@ -186,6 +186,8 @@ void FC_Tasker::runTasker()
 			flag.systemUnstable = true;
 		}
 		else flag.systemOverloaded = true;
+		
+		baseLoopFlag = false;
 	}
 	
 	
