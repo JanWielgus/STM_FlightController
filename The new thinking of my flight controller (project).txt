@@ -25,7 +25,7 @@ The structure of the program:
 		
 		- Motors handling class - program that handle motors eg. arming...
 			Public methods:
-				- (void) setMotorsEnabled: (enable because arming will be in the main program, arming should cause reset of certain values) parameters(bool: true - enabled; false - disabled)
+				- (void) setMotorsState: (enabled/disabled because arming will be in the main program, arming should cause reset of certain values) parameters(bool: true - enabled; false - disabled)
 				- (void) set on each motors (4x for each motor)
 		
 		
@@ -115,7 +115,7 @@ The structure of the program:
 			Public methods:
 				- init (filter beta)
 				- updateFilter (new data)
-				- change filter beta (new beta)
+				- set filter beta (new beta)
 				
 		
 		- Timing Info class - will provide the info about method duration, catch overtiming problems, free time (sum of waiting time in one loop)
