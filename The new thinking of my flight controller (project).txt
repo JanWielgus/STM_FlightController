@@ -113,7 +113,7 @@ The structure of the program:
 		
 		- (out) EVA Filter class - Exponentially Weighted Averages filter used to filter values
 			Public methods:
-				- init (filter beta)
+				- constructor (filter beta)
 				- updateFilter (new data)
 				- set filter beta (new beta)
 				

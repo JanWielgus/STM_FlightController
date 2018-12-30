@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Atmel Studio Solution File, Format Version 11.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "FC_EVA_Filter_example", "FC_EVA_Filter_example.cppproj", "{06577BE9-4EFA-4A35-8E6B-F6351F8C1260}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{06577BE9-4EFA-4A35-8E6B-F6351F8C1260}.Debug|AVR.ActiveCfg = Debug|AVR
+		{06577BE9-4EFA-4A35-8E6B-F6351F8C1260}.Debug|AVR.Build.0 = Debug|AVR
+		{06577BE9-4EFA-4A35-8E6B-F6351F8C1260}.Release|AVR.ActiveCfg = Release|AVR
+		{06577BE9-4EFA-4A35-8E6B-F6351F8C1260}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
