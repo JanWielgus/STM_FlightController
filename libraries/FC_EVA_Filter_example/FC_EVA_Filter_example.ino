@@ -24,6 +24,6 @@ void loop() {
 	Serial.print("Value: ");
 	Serial.print(newValue);
 	Serial.print("Filtered: ");
-	Serial.println(filter.updateFilter(newValue));
+	Serial.println(filter.updateFilter((float&)newValue));
 	delay(10);
 }

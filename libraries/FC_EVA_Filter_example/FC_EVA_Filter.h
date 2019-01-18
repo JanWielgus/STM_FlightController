@@ -18,11 +18,11 @@
 class FC_EVA_Filter
 {
  private:
-	const float DefBeta = 0.5f; // default filter Beta
+	static const float DefBeta; // default filter Beta
 	
  public:
 	FC_EVA_Filter(float filterBeta = DefBeta);
-	float updateFilter(float newData); // returns new calculated value based on newData
+	const float& updateFilter(float& newData); // returns new calculated value based on newData
 	bool setFilterBeta(float filterBeta); // change filter Beta filter uses
 	
  private:

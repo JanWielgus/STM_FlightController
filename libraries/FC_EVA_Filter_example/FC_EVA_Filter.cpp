@@ -5,6 +5,9 @@
 #include "FC_EVA_Filter.h"
 
 
+const float FC_EVA_Filter::DefBeta = 0.5f;
+
+
 FC_EVA_Filter::FC_EVA_Filter(float filterBeta)
 {
 	if (filterBeta >= 0 && filterBeta < 1)
@@ -16,7 +19,7 @@ FC_EVA_Filter::FC_EVA_Filter(float filterBeta)
 }
 
 
-float FC_EVA_Filter::updateFilter(float newData)
+const float& FC_EVA_Filter::updateFilter(float& newData)
 {
 	lastFilteredValue = lastFilteredValue*(fBeta) + newData*(1-fBeta);
 	return lastFilteredValue;
