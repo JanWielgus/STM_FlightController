@@ -219,6 +219,20 @@ Main program structure design:
 				- Step 2:
 					Set the throttle to 0 and then disarm the motors.
 					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+IMPORTANT IDEAS:
+	
+	- ALWAYS when there are lots of or big-sized variables, create getter which return const reference to this variable/es  ( const double & getVal() const {return var;} )
+					
 
 	
 	
