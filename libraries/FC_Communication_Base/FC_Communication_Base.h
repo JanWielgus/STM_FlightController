@@ -13,33 +13,44 @@
 	#include "WProgram.h"
 #endif
 
-#include <PacketSerial.h>
+#include <Arduino.h>
+#include "Encoding/COBS.h"
+//#include "Encoding/SLIP.h" // alternative
+
+
+const size_t BufferSize = 100; // MAX: 256
 
 
 
 class FC_Communication_Base
 {
  public:
+	typedef void (*PacketHandlerFunction)(const uint8_t* buffer, size_t size);
+	struct dataPacket
+	{
+		uint8_t* buffer;
+		size_t size;
+	};
+
 	FC_Communication_Base(Stream* serial);
-	virtual void sendData(uint8_t pcktType) = 0;
-	void receiveData();
-	bool comState();
+	
+	void sendData(dataPacket packet);
+	bool receiveData(dataPacket* packet); // return false if there are no data
+	//bool isAvailable(); // receiveData() return true if was available and false if not
 	void setMaxLostPackets(uint8_t maxLost);
 	
 
  protected:
-	virtual void handleReceivedData(const uint8_t* buf, size_t size) = 0; // prev odbierzPriv()
-	PacketSerial pSerial;
-	Stream* comSerial;
-	bool checkChecksum(const uint8_t* buf, size_t packerSize); // xor'owanie
-	uint8_t calcChecksum(const uint8_t* buf, size_t packerSize);
+	bool checkChecksum(const uint8_t* buffer, size_t packerSize); // xor'owanie
+	uint8_t calcChecksum(const uint8_t* buffer, size_t packerSize);
 	
 
  private:
-	uint8_t MaxLostPackets=0;
-	bool dataHandledFlag; // to check if it was changed on true in handleReceivedData (if any data packet have been decoded)
-	uint16_t missedPackets = 0;
-	
+	uint8_t receiveBuffer[BufferSize];
+	uint8_t decodeBuffer[BufferSize];
+	size_t receiveBufferIndex = 0;
+	uint8_t PacketMarker = 0;
+	Stream* serial;
 };
 
 #endif
