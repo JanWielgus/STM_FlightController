@@ -70,32 +70,24 @@ bool FC_Communication_Base::receiveData(dataPacket* packet)
 
 
 
-// update max amt of lost packets to change comState to false
-void FC_Communication_Base::setMaxLostPackets(uint8_t maxLost)
+bool FC_Communication_Base::checkChecksum(dataPacket& dp)
 {
-	MaxLostPackets = maxLost;
-}
-
-
-
-bool FC_Communication_Base::checkChecksum(const uint8_t* buffer, size_t packerSize)
-{
-	uint8_t checksum = buffer[1];
-	for (int i=2; i<packerSize; i++)
-		checksum ^= buffer[i]; // xor'owanie kolejnych bajtow
+	uint8_t checksum = dp.buffer[1];
+	for (int i=2; i<dp.size; i++)
+		checksum ^= dp.buffer[i]; // xor'owanie kolejnych bajtow
 		
-	if (checksum == buffer[0])
+	if (checksum == dp.buffer[0])
 		return true;
 	return false;
 }
 
 
 
-uint8_t FC_Communication_Base::calcChecksum(const uint8_t* buffer, size_t packerSize)
+uint8_t FC_Communication_Base::calcChecksum(dataPacket& dp)
 {
-	uint8_t checksum = buffer[1];
-	for (int i=2; i<packerSize; i++)
-		checksum ^= buffer[i]; // xor'owanie kolejnych bajtow
+	uint8_t checksum = dp.buffer[1];
+	for (int i=2; i<dp.size; i++)
+		checksum ^= dp.buffer[i]; // xor'owanie kolejnych bajtow
 	
 	return checksum;
 }
