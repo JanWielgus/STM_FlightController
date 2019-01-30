@@ -5,41 +5,35 @@
 #include "FC_Communication_Base.h"
 
 
-FC_Communication_Base::FC_Communication_Base(Stream* serial)
+FC_Communication_Base::FC_Communication_Base(Stream* serial, uint8_t bufSize): BufferSize(bufSize)
 {
 	this->serial = serial;
+	
+	// packet to prepare is used outside the class to pack there data to send
+	dpToSend->buffer = new uint8_t[bufSize];
+}
+
+FC_Communication_Base::~FC_Communication_Base()
+{
+	delete [] dpToSend->buffer;
 }
 
 
-void FC_Communication_Base::sendData(dataPacket packet)
+// send data from dpToSend filled before outside the com class
+void FC_Communication_Base::sendData()
 {
-	if (packet.buffer==0 || packet.size==0)
+	if (dpToSend->buffer==0 || dpToSend->size==0)
 		return;
 	
-	uint8_t* encodeBuffer = new uint8_t[COBS::getEncodedBufferSize(packet.size)];
+	uint8_t* encodeBuffer = new uint8_t[COBS::getEncodedBufferSize(dpToSend->size)];
 	
-	size_t numEncoded = COBS::encode(packet.buffer, packet.size, encodeBuffer);
+	size_t numEncoded = COBS::encode(dpToSend->buffer, dpToSend->size, encodeBuffer);
 	
 	serial->write(encodeBuffer, numEncoded);
 	serial->write(PacketMarker);
 	
 	delete encodeBuffer;
 }
-
-
-/*
-// Trigger pSerial.update() and check if packet have been missed
-void FC_Communication_Base::receiveData()
-{
-	dataHandledFlag = false;
-	
-	pSerial.update(); // dataHandledFlag will be changed there if have been packer
-	
-	if (dataHandledFlag)
-		missedPackets=0;
-	else
-		missedPackets++;
-}*/
 
 
 

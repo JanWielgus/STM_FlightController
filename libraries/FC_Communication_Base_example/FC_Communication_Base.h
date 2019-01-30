@@ -17,27 +17,38 @@
 #include "Encoding/COBS.h"
 //#include "Encoding/SLIP.h" // alternative
 
+/*
+typedef uint8 uint8_t;
+typedef uint16 uint16_t;
+typedef uint8 size_t;
+*/
 
-const size_t BufferSize = 100; // MAX: 256
+
+
+
+struct dataPacket
+{
+	uint8_t* buffer;
+	size_t size;
+};
 
 
 
 class FC_Communication_Base
 {
  public:
-	typedef void (*PacketHandlerFunction)(const uint8_t* buffer, size_t size);
-	struct dataPacket
-	{
-		uint8_t* buffer;
-		size_t size;
-	};
+	const size_t BufferSize; // MAX: 256
+	//typedef void (*PacketHandlerFunction)(const uint8_t* buffer, size_t size);
 
-	FC_Communication_Base(Stream* serial);
+	FC_Communication_Base(Stream* serial, uint8_t bufSize=255); // serial, packetToPrepare - packet used outside to send data (there memory is allocated), bufSize - max buffer size
+	~FC_Communication_Base();
 	
-	void sendData(dataPacket packet);
+	void sendData(); // data to send packet before to dpToSend
 	bool receiveData(dataPacket* packet); // return false if there are no data
 	//bool isAvailable(); // receiveData() return true if was available and false if not
 	void setMaxLostPackets(uint8_t maxLost);
+	
+	dataPacket* dpToSend; // pointer on data packet used to send data (filled outside)
 	
 
  protected:
