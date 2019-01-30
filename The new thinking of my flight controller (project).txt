@@ -34,6 +34,10 @@ The structure of the program:
 			Public methods:
 				- (bool) isAvailable: check if there are some data waiting to receive
 				- (*Serial) get serial pointer (or it's reference) - for derivate classes purposes
+				- calcTestSum
+				- checkTestSum
+				- sendData
+				- receiveData
 				- ...
 		
 		- (out) Radio Module Cover class (virtual) - inherit from Communication Base class (this class is between Communication Base and Ground Communication Packet Handling classes if communication is using the radio module;
