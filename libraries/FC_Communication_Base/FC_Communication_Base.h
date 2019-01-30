@@ -28,11 +28,11 @@ class FC_Communication_Base
 	
 
  protected:
-	virtual void handleReceivedData() = 0; // prev odbierzPriv()
+	virtual void handleReceivedData(const uint8_t* buf, size_t size) = 0; // prev odbierzPriv()
 	PacketSerial pSerial;
 	Stream* comSerial;
 	bool checkChecksum(const uint8_t* buf, size_t packerSize); // xor'owanie
-	uint8_t calcChecksum(const uint8_t buf, size_t packerSize);
+	uint8_t calcChecksum(const uint8_t* buf, size_t packerSize);
 	
 
  private:

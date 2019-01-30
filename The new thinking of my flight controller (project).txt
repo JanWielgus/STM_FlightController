@@ -29,7 +29,7 @@ The structure of the program:
 				- (void) set on each motors (4x for each motor)
 		
 		
-		- (out) Communication Base class (virtual) if possible inherit from PacketSerial library and implement all required methods (except data packets - receive and send - which will be implemented in derivate class)
+		- (out) Communication Base class (virtual) contain PacketSerial library object and implement all required methods (except for data packets - receive and send (there as virtual) - which will be implemented in derivate class)
 			This class should be wrote in PacketSerial file (create new upgraded PacketSerial library file)
 			Public methods:
 				- (bool) isAvailable: check if there are some data waiting to receive
