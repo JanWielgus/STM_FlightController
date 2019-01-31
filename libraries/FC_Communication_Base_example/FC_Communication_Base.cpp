@@ -11,6 +11,7 @@ FC_Communication_Base::FC_Communication_Base(Stream* serial, uint8_t bufSize): B
 	
 	// packet to prepare is used outside the class to pack there data to send
 	dpToSend.buffer = new uint8_t[bufSize];
+	dpReceived.buffer = nullptr; // pointer to this array is set after successful receiving
 	
 	// allocate memory for receive and decode buffer
 	receiveBuffer = new uint8_t[BufferSize];
