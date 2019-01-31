@@ -77,24 +77,24 @@ bool FC_Communication_Base::receiveData()
 
 
 
-bool FC_Communication_Base::checkChecksum(dataPacket& dp)
+bool FC_Communication_Base::checkChecksum()
 {
-	uint8_t checksum = dp.buffer[1];
-	for (int i=2; i<dp.size; i++)
-		checksum ^= dp.buffer[i]; // xor'owanie kolejnych bajtow
+	uint8_t checksum = dpReceived.buffer[1];
+	for (int i=2; i<dpReceived.size; i++)
+		checksum ^= dpReceived.buffer[i]; // xor'owanie kolejnych bajtow
 		
-	if (checksum == dp.buffer[0])
+	if (checksum == dpReceived.buffer[0])
 		return true;
 	return false;
 }
 
 
 
-uint8_t FC_Communication_Base::calcChecksum(dataPacket& dp)
+uint8_t FC_Communication_Base::calcChecksum()
 {
-	uint8_t checksum = dp.buffer[1];
-	for (int i=2; i<dp.size; i++)
-		checksum ^= dp.buffer[i]; // xor'owanie kolejnych bajtow
+	uint8_t checksum = dpToSend.buffer[1];
+	for (int i=2; i<dpToSend.size; i++)
+		checksum ^= dpToSend.buffer[i]; // xor'owanie kolejnych bajtow
 	
 	return checksum;
 }

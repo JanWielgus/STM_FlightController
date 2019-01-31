@@ -49,6 +49,8 @@ void receive()
 		
 		// you can also use com.dpReceived.size in loop as counter to unpack data
 		
+		// there are also checksum methods to check if data were received properly
+		
 		receivedDataFlag = true;
 	}
 	
@@ -73,6 +75,8 @@ void send()
 	// at most MAX_PACKET_SIZE
 	
 	com.dpToSend.size = 2; // IMPORTANT !
+	
+	// there are also checksum methods to check if data were received properly
 	
 	com.sendData();
 }

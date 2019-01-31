@@ -51,8 +51,8 @@ class FC_Communication_Base
 	dataPacket dpToSend; // data packet used to send data (filled outside)
 	dataPacket dpReceived; // data packet with received data (used outside to unpack data)
 
-	bool checkChecksum(dataPacket& dp); // xor'owanie
-	uint8_t calcChecksum(dataPacket& dp);
+	bool checkChecksum(); // xor'owanie
+	uint8_t calcChecksum();
 	
 
  private:
