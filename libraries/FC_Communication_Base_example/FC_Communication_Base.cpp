@@ -11,11 +11,17 @@ FC_Communication_Base::FC_Communication_Base(Stream* serial, uint8_t bufSize): B
 	
 	// packet to prepare is used outside the class to pack there data to send
 	dpToSend->buffer = new uint8_t[bufSize];
+	
+	// allocate memory for receive and decode buffer
+	receiveBuffer = new uint8_t[BufferSize];
+	decodeBuffer = new uint8_t[BufferSize];
 }
 
 FC_Communication_Base::~FC_Communication_Base()
 {
 	delete [] dpToSend->buffer;
+	delete [] receiveBuffer;
+	delete [] decodeBuffer;
 }
 
 
@@ -32,7 +38,7 @@ void FC_Communication_Base::sendData()
 	serial->write(encodeBuffer, numEncoded);
 	serial->write(PacketMarker);
 	
-	delete encodeBuffer;
+	delete [] encodeBuffer;
 }
 
 

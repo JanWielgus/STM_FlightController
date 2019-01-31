@@ -37,7 +37,7 @@ struct dataPacket
 class FC_Communication_Base
 {
  public:
-	static const size_t BufferSize; // MAX: 256
+	const size_t BufferSize; // MAX: 256
 	//typedef void (*PacketHandlerFunction)(const uint8_t* buffer, size_t size);
 
 	FC_Communication_Base(Stream* serial, uint8_t bufSize=255); // serial, packetToPrepare - packet used outside to send data (there memory is allocated), bufSize - max buffer size
@@ -56,12 +56,11 @@ class FC_Communication_Base
 	
 
  private:
-	uint8_t receiveBuffer[BufferSize];
-	uint8_t decodeBuffer[BufferSize];
+	uint8_t* receiveBuffer;
+	uint8_t* decodeBuffer;
 	size_t receiveBufferIndex = 0;
 	uint8_t PacketMarker = 0;
 	Stream* serial;
 };
 
 #endif
-
