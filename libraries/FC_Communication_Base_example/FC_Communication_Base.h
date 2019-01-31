@@ -44,13 +44,13 @@ class FC_Communication_Base
 	~FC_Communication_Base();
 	
 	void sendData(); // data to send packet before to dpToSend
-	bool receiveData(dataPacket* packet); // return false if there are no data
+	bool receiveData(); // return false if there are no data
 	//bool isAvailable(); // receiveData() return true if was available and false if not
 	
-	dataPacket* dpToSend; // pointer on data packet used to send data (filled outside)
-	
+	// dataPackets to transfer data between class and outside
+	dataPacket dpToSend; // data packet used to send data (filled outside)
+	dataPacket dpReceived; // data packet with received data (used outside to unpack data)
 
- protected:
 	bool checkChecksum(dataPacket& dp); // xor'owanie
 	uint8_t calcChecksum(dataPacket& dp);
 	

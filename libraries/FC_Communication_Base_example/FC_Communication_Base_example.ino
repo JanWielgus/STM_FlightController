@@ -7,12 +7,12 @@
 void receive();
 void send();
 
-// example variables - data to send and reveive
+// example variables - data to send and receive
 uint8_t var1;
 uint8_t var2;
 
 const uint16_t MAX_MISSED_PACKETS = 5;
-const uint8_t MAX_PACKET_SIZE = 50;
+const uint8_t MAX_PACKET_SIZE = 25;
 uint16_t missedPackets = 0;
 bool comState = false;
 
@@ -40,12 +40,15 @@ void loop()
 void receive()
 {
 	bool receivedDataFlag = false;
-	dataPacket dp;
-	// jesli jest gotowa ramka to przekopiuj do zmiennych
-	if (com.receiveData(&dp))
+	// if packet is ready, then copy data to proper variables
+	if (com.receiveData())
 	{
-		var1 = dp.buffer[0];
-		var2 = dp.buffer[1];
+		var1 = com.dpReceived.buffer[0];
+		var2 = com.dpReceived.buffer[1];
+		// at most MAX_PACKET_SIZE
+		
+		// you can also use com.dpReceived.size in loop as counter to unpack data
+		
 		receivedDataFlag = true;
 	}
 	
@@ -65,10 +68,11 @@ void receive()
 
 void send()
 {
-	com.dpToSend->buffer[0] = var1;
-	com.dpToSend->buffer[1] = var2;
+	com.dpToSend.buffer[0] = var1;
+	com.dpToSend.buffer[1] = var2;
+	// at most MAX_PACKET_SIZE
 	
-	com.dpToSend->size = 2; // IMPORTANT !
+	com.dpToSend.size = 2; // IMPORTANT !
 	
 	com.sendData();
 }

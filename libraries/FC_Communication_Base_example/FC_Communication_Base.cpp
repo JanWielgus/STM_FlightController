@@ -10,7 +10,7 @@ FC_Communication_Base::FC_Communication_Base(Stream* serial, uint8_t bufSize): B
 	this->serial = serial;
 	
 	// packet to prepare is used outside the class to pack there data to send
-	dpToSend->buffer = new uint8_t[bufSize];
+	dpToSend.buffer = new uint8_t[bufSize];
 	
 	// allocate memory for receive and decode buffer
 	receiveBuffer = new uint8_t[BufferSize];
@@ -19,7 +19,7 @@ FC_Communication_Base::FC_Communication_Base(Stream* serial, uint8_t bufSize): B
 
 FC_Communication_Base::~FC_Communication_Base()
 {
-	delete [] dpToSend->buffer;
+	delete [] dpToSend.buffer;
 	delete [] receiveBuffer;
 	delete [] decodeBuffer;
 }
@@ -28,12 +28,12 @@ FC_Communication_Base::~FC_Communication_Base()
 // send data from dpToSend filled before outside the com class
 void FC_Communication_Base::sendData()
 {
-	if (dpToSend->buffer==0 || dpToSend->size==0)
+	if (dpToSend.buffer==0 || dpToSend.size==0)
 		return;
 	
-	uint8_t* encodeBuffer = new uint8_t[COBS::getEncodedBufferSize(dpToSend->size)];
+	uint8_t* encodeBuffer = new uint8_t[COBS::getEncodedBufferSize(dpToSend.size)];
 	
-	size_t numEncoded = COBS::encode(dpToSend->buffer, dpToSend->size, encodeBuffer);
+	size_t numEncoded = COBS::encode(dpToSend.buffer, dpToSend.size, encodeBuffer);
 	
 	serial->write(encodeBuffer, numEncoded);
 	serial->write(PacketMarker);
@@ -43,7 +43,7 @@ void FC_Communication_Base::sendData()
 
 
 
-bool FC_Communication_Base::receiveData(dataPacket* packet)
+bool FC_Communication_Base::receiveData()
 {
 	bool receivedDataFlag = false;
 	while (serial->available() > 0)
@@ -54,8 +54,8 @@ bool FC_Communication_Base::receiveData(dataPacket* packet)
 		{
 			size_t numDecoded = COBS::decode(receiveBuffer, receiveBufferIndex, decodeBuffer);
 			
-			packet->buffer = decodeBuffer;
-			packet->size = numDecoded;
+			dpReceived.buffer = decodeBuffer;
+			dpReceived.size = numDecoded;
 			receivedDataFlag = true;
 			
 			receiveBufferIndex = 0;
