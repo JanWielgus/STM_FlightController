@@ -29,10 +29,9 @@ void setup()
 
 void loop()
 {
-	receive();
-	delay(500);
 	send();
-	delay(500);
+	receive();
+	delay(1000);
 }
 
 
