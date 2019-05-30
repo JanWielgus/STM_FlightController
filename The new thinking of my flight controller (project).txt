@@ -27,6 +27,7 @@ The structure of the program:
 			Public methods:
 				- (void) setMotorsState: (enabled/disabled because arming will be in the main program, arming should cause reset of certain values) parameters(bool: true - enabled; false - disabled)
 				- (void) set on each motors (4x for each motor)
+				- (void) force motors execution (reset Timer and generate pulses; if is not used cause 200Hz pulse)
 		
 		
 		- (out) Communication Base class (virtual) contain PacketSerial library object and implement all required methods (except for data packets - receive and send (there as virtual) - which will be implemented in derivate class)
