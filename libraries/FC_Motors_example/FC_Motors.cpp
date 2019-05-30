@@ -8,6 +8,8 @@
 
 FC_Motors::FC_Motors()
 {
+	motorsState = false;
+	
 	TIMER3_BASE->CR1 = TIMER_CR1_CEN | TIMER_CR1_ARPE;
 	TIMER3_BASE->CR2 = 0;
 	TIMER3_BASE->SMCR = 0;
@@ -48,6 +50,7 @@ void FC_Motors::setMotorState(bool state)
 		setOnBL(IDLE);
 		setOnBR(IDLE);
 	}
+	
 	this->motorsState = state;
 }
 

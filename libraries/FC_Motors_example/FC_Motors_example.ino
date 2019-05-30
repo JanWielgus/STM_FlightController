@@ -17,6 +17,7 @@ void setup()
 	motors.setOnBR(0);
 	
 	delay(5000);
+	motors.setMotorState(true);
 }
 
 
