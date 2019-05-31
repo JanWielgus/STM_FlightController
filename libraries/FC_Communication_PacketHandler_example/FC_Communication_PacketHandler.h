@@ -16,7 +16,7 @@
 class FC_Communication_PacketHandler : public FC_Communication_Base
 {
  public:
-	FC_Communication_PacketHandler::FC_Communication_PacketHandler(Stream* serial, uint8_t bufSize);
+	FC_Communication_PacketHandler(Stream* serial, uint8_t bufSize);
  
 	struct receivedGardenData
 	{
@@ -39,14 +39,32 @@ class FC_Communication_PacketHandler : public FC_Communication_Base
 	
 	// metody: odbieranie, wysylanie, sprawdzanie stanu polaczenia (moze to dac do podstawowej??!), przekazanie spakowanej paczki do wyslania
 	
-	void getReceivedData(receivedGardenData&); // returns reference to the structure of data to save time
+	//void getReceivedData(receivedGardenData&); // returns reference to the structure of data to save time
+	// UWAGA!! Mo¿liwe, ze nie bedzie potrzeba tych zmiennych, wystarczy zrobic publiczne referencje do prywatnych struktur w programie, odpowiednia oznaczona const
 	
+	
+	/*
+	// 
+	typedef const gardenDataToSend& dataToSendType;
+	typedef const receivedGardenData& receivedDataType;
+	*/
 	
 	
  private:
 	
-	receivedGardenData receivedData; // this example data is private for this class and can be accessed through the getData() method
-	gardenDataToSend dataToSend; // powrorz sobie jak zrobic, zeby odebrane dane byly read-only dla outside a w dataToSend dalo sie wpisac dane przez jakas metode (przeslac gotowa paczke przez referencje)
+	struct
+	{
+		receivedGardenData received; // this example data is private for this class and can be accessed through the getData() method
+		gardenDataToSend toSend; // powrorz sobie jak zrobic, zeby odebrane dane byly read-only dla outside a w dataToSend dalo sie wpisac dane przez jakas metode (przeslac gotowa paczke przez referencje)
+	} data;
+	
+	
+ public:
+
+	// This is to access data from outside the class. 
+	
+	gardenDataToSend& toSend = data.toSend;
+	const receivedGardenData& received = data.received;
 };
 
 

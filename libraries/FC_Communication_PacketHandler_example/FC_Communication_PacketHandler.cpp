@@ -12,11 +12,11 @@ FC_Communication_PacketHandler::FC_Communication_PacketHandler(Stream* serial, u
 }
 
 
-
+/*
 void FC_Communication_PacketHandler::getReceivedData(receivedGardenData& dataContainer)
 {
 	dataContainer = allData;
 }
-
+*/
 
 
