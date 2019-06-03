@@ -53,7 +53,7 @@ class uint16Byte
 	}data;
 
  public:
-	floatByte(uint16_t v=0)
+	uint16Byte(uint16_t v=0)
 	{
 		data.value = v;
 	}
@@ -81,7 +81,7 @@ class int16Byte
 	}data;
 
  public:
-	floatByte(int16_t v=0)
+	int16Byte(int16_t v=0)
 	{
 		data.value = v;
 	}
