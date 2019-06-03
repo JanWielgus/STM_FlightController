@@ -274,9 +274,6 @@
     <Folder Include="__vm\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FC_CustomDataTypes.cpp">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="FC_CustomDataTypes.h">
       <SubType>compile</SubType>
     </Compile>

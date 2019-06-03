@@ -14,11 +14,98 @@
 #endif
 
 
-class FC_CustomDataTypesClass
+class floatByte
 {
+ private:
+	union
+	{
+		float value;
+		uint8_t byte[4];
+	}data;
+
  public:
-	
+	floatByte(float v=0)
+	{
+		data.value = v;
+	}
+
+	operator float()
+	{
+		return data.value;
+	}
+
+	uint8_t* byteArr()
+	{
+		return data.byte;
+	}
+
 };
+
+
+
+class uint16Byte
+{
+ private:
+	union
+	{
+		uint16_t value;
+		uint8_t byte[2];
+	}data;
+
+ public:
+	floatByte(uint16_t v=0)
+	{
+		data.value = v;
+	}
+
+	operator uint16_t()
+	{
+		return data.value;
+	}
+
+	uint8_t* byteArr()
+	{
+		return data.byte;
+	}
+};
+
+
+
+class int16Byte
+{
+ private:
+	union
+	{
+		int16_t value;
+		uint8_t byte[2];
+	}data;
+
+ public:
+	floatByte(int16_t v=0)
+	{
+		data.value = v;
+	}
+
+	operator int16_t()
+	{
+		return data.value;
+	}
+
+	uint8_t* byteArr()
+	{
+		return data.byte;
+	}
+};
+
+
+
+union bitByte
+{
+	bool value[8];
+	uint8_t byte;
+};
+
+
 
 
 
