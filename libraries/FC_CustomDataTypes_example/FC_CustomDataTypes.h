@@ -43,6 +43,64 @@ class floatByte
 
 
 
+class uint32Byte
+{
+ private:
+	union
+	{
+		uint32_t value;
+		uint8_t byte[4];
+	}data;
+
+ public:
+	uint32Byte(uint32_t v=0)
+	{
+		data.value = v;
+	}
+
+	operator uint32_t()
+	{
+		return data.value;
+	}
+
+	uint8_t* byteArr()
+	{
+		return data.byte;
+	}
+
+};
+
+
+
+class int32Byte
+{
+ private:
+	union
+	{
+		int32_t value;
+		uint8_t byte[4];
+	}data;
+
+ public:
+	int32Byte(int32_t v=0)
+	{
+		data.value = v;
+	}
+
+	operator int32_t()
+	{
+		return data.value;
+	}
+
+	uint8_t* byteArr()
+	{
+		return data.byte;
+	}
+
+};
+
+
+
 class uint16Byte
 {
  private:
