@@ -152,6 +152,11 @@
 </ArmGccCpp>
     </ToolchainSettings>
     <VMSETTING_IncludePaths>../../../FC_CustomDataTypes_example;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;</VMSETTING_IncludePaths>
+    <VisualMicroSettings>
+      <VisualMicroSettings xmlns="">
+        <arduino.upload.port>COM4</arduino.upload.port>
+      </VisualMicroSettings>
+    </VisualMicroSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -264,6 +269,11 @@
 </ArmGccCpp>
     </ToolchainSettings>
     <VMSETTING_IncludePaths>../../../FC_CustomDataTypes_example;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;</VMSETTING_IncludePaths>
+    <VisualMicroSettings>
+      <VisualMicroSettings xmlns="">
+        <arduino.upload.port>COM4</arduino.upload.port>
+      </VisualMicroSettings>
+    </VisualMicroSettings>
   </PropertyGroup>
   <ItemGroup>
     <None Include="FC_CustomDataTypes_example.ino">
