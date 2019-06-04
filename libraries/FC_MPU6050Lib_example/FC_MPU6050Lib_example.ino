@@ -7,15 +7,45 @@
 #include "FC_MPU6050Lib.h"
 
 
+FC_MPU6050Lib mpu;
+
+FC_MPU6050Lib::vector3 data;
 
 
 void setup()
 {
+	Serial.begin(115200);
+	Serial.println("Program has just started!");
 	
+	delay(3000);
+	
+	
+	mpu.setFastClock();
+	
+	while (!mpu.initialize()) // While mpu is not initialized
+	{
+		// If program is there, some problems occured
+		Serial.println("MPU6050 is cannot be initialized!");
+		delay(500);
+	}
+	
+	/* GYRO CALIBRATION !
+	Serial.println("Started calibrating the gyro");
+	mpu.calibrateGyro();
+	Serial.println("Gyro calibration has finished");
+	*/
 }
 
 
 void loop()
 {
+	mpu.read6AxisMotion();
 	
+	data = mpu.getAcceleration();
+	Serial.print("X: ");
+	Serial.print(data.x);
+	Serial.println();
+	
+	
+	delay(4); // 250Hz loop
 }

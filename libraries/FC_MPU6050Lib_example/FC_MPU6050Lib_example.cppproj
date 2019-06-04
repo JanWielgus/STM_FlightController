@@ -5,7 +5,7 @@
     <ProjectVersion>7.0</ProjectVersion>
     <ToolchainName>com.Atmel.ARMGCC.CPP</ToolchainName>
     <ProjectGuid>{d485892a-236d-46e3-b295-bc99dbf6ffec}</ProjectGuid>
-    <avrdevice>ATSAM3X8E</avrdevice>
+    <avrdevice>AT90CAN128</avrdevice>
     <avrdeviceseries>none</avrdeviceseries>
     <OutputType>Executable</OutputType>
     <Language>CPP</Language>
