@@ -70,6 +70,7 @@
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_MPU6050Lib_example</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries/Wire</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -110,6 +111,7 @@
   <armgcccpp.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_MPU6050Lib_example</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries/Wire</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -151,7 +153,12 @@
   </armgcccpp.preprocessingassembler.general.IncludePaths>
 </ArmGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>../../../FC_MPU6050Lib_example;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>../../../FC_MPU6050Lib_example;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries/Wire;</VMSETTING_IncludePaths>
+    <VisualMicroSettings>
+      <VisualMicroSettings xmlns="">
+        <arduino.upload.port>COM4</arduino.upload.port>
+      </VisualMicroSettings>
+    </VisualMicroSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -182,6 +189,7 @@
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_MPU6050Lib_example</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries/Wire</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -222,6 +230,7 @@
   <armgcccpp.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_MPU6050Lib_example</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries/Wire</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -263,7 +272,12 @@
   </armgcccpp.preprocessingassembler.general.IncludePaths>
 </ArmGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>../../../FC_MPU6050Lib_example;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>../../../FC_MPU6050Lib_example;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries/Wire;</VMSETTING_IncludePaths>
+    <VisualMicroSettings>
+      <VisualMicroSettings xmlns="">
+        <arduino.upload.port>COM4</arduino.upload.port>
+      </VisualMicroSettings>
+    </VisualMicroSettings>
   </PropertyGroup>
   <ItemGroup>
     <None Include="FC_MPU6050Lib_example.ino">
