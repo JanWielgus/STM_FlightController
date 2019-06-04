@@ -11,13 +11,13 @@
 
 FC_MPU6050Lib::FC_MPU6050Lib()
 {
-	acceleration.x = 0;
-	acceleration.y = 0;
-	acceleration.z = 0;
+	rawAcceleration.x = 0;
+	rawAcceleration.y = 0;
+	rawAcceleration.z = 0;
 	
-	rotation.x = 0;
-	rotation.y = 0;
-	rotation.z = 0;
+	rawRotation.x = 0;
+	rawRotation.y = 0;
+	rawRotation.z = 0;
 	
 	gyroCalVal.xPitch = 0;
 	gyroCalVal.yRoll = 0;
@@ -78,22 +78,22 @@ void FC_MPU6050Lib::read6AxisMotion()
 	Wire.endTransmission();
 	
 	Wire.requestFrom(MPU6050_Address, 14);
-	acceleration.y = Wire.read() << 8 | Wire.read();
-	acceleration.x = Wire.read() << 8 | Wire.read();
-	acceleration.z = Wire.read() << 8 | Wire.read();
+	rawAcceleration.x = Wire.read() << 8 | Wire.read();
+	rawAcceleration.y = Wire.read() << 8 | Wire.read();
+	rawAcceleration.z = Wire.read() << 8 | Wire.read();
 	temperature = Wire.read() << 8 | Wire.read();
-	rotation.y = Wire.read() << 8 | Wire.read();
-	rotation.x = Wire.read() << 8 | Wire.read();
-	rotation.z = Wire.read() << 8 | Wire.read();
+	rawRotation.x = Wire.read() << 8 | Wire.read();
+	rawRotation.y = Wire.read() << 8 | Wire.read();
+	rawRotation.z = Wire.read() << 8 | Wire.read();
 	
 	// Invert the direction
-	rotation.x *= -1;
-	rotation.y *= -1;
+	rawRotation.x *= -1;
+	rawRotation.y *= -1;
 	
 	// Use the calibration data
-	rotation.x -= gyroCalVal.xPitch;
-	rotation.y -= gyroCalVal.yRoll;
-	rotation.z -= gyroCalVal.zYaw;
+	rawRotation.x -= gyroCalVal.xPitch;
+	rawRotation.y -= gyroCalVal.yRoll;
+	rawRotation.z -= gyroCalVal.zYaw;
 }
 
 
@@ -112,9 +112,9 @@ void FC_MPU6050Lib::calibrateGyro()
 	{
 		read6AxisMotion();
 		
-		sumX += rotation.x;
-		sumY += rotation.y;
-		sumZ += rotation.z;
+		sumX += rawRotation.x;
+		sumY += rawRotation.y;
+		sumZ += rawRotation.z;
 		
 		delay(4); // simulate 250Hz loop
 	}
@@ -125,21 +125,85 @@ void FC_MPU6050Lib::calibrateGyro()
 }
 
 
-FC_MPU6050Lib::vector3& FC_MPU6050Lib::getAcceleration()
+void FC_MPU6050Lib::setGyroFusionMultiplier(float mpr)
 {
-	return acceleration;
+	GyroFusionMultiplier = mpr;
+	AccFusionMultiplier = 1.0-mpr;
 }
 
 
-FC_MPU6050Lib::vector3& FC_MPU6050Lib::getRotation()
+FC_MPU6050Lib::vector3Int& FC_MPU6050Lib::getRawAcceleration()
 {
-	return rotation;
+	return rawAcceleration;
+}
+
+
+FC_MPU6050Lib::vector3Int& FC_MPU6050Lib::getRawRotation()
+{
+	return rawRotation;
 }
 
 
 int16_t FC_MPU6050Lib::getTemperature()
 {
 	return temperature;
+}
+
+
+FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getAccAngles()
+{
+	static int32_t accTotalVector;
+	
+	accTotalVector = sqrt((rawAcceleration.x * rawAcceleration.x) +
+							(rawAcceleration.y * rawAcceleration.y) +
+							(rawAcceleration.z * rawAcceleration.z));
+	
+	if (abs(rawAcceleration.x) < accTotalVector)
+	{
+		accAngle.x = asin((float)rawAcceleration.x / accTotalVector) * 57.296;
+	}
+	
+	if (abs(rawAcceleration.y) < accTotalVector)
+	{
+		accAngle.y = asin((float)rawAcceleration.y / accTotalVector) * 57.296;
+	}
+	
+	return accAngle;
+}
+
+
+FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getFusedAngles(uint16_t freq, float compass)
+{
+	//Gyro angle calculations
+	//0.0000611 = 1 / (250Hz / 65.5)
+	// !!!!! ONLY AT 250Hz   !!!!
+	
+	if (freq == 250)
+	{
+		// X & Y axis
+		fusedAngle.x += (float)rawRotation.x * 0.0000611;
+		fusedAngle.y += (float)rawRotation.y * 0.0000611;
+		
+		// Z axis
+		fusedAngle.z += (float)rawRotation.z * 0.0000611;
+		if(fusedAngle.z < 0.0)
+			fusedAngle.z += 360.0;
+		else if (fusedAngle.z >= 360.0)
+			fusedAngle.z -= 360.0;
+		// USE COMPASS DATA IF PROVIDED (if not, compass is == -1)  !!!!   <<<-----
+	}
+	else // frequency is different than 250
+	{
+		// formula is at the beginning
+	}
+	
+	getAccAngles();
+	
+	// Make fusion with accelerometer data
+	fusedAngle.x = fusedAngle.x * GyroFusionMultiplier + accAngle.x * AccFusionMultiplier;
+	fusedAngle.y = fusedAngle.y * GyroFusionMultiplier + accAngle.y * AccFusionMultiplier;
+	
+	return fusedAngle;
 }
 
 

@@ -22,29 +22,44 @@
 class FC_MPU6050Lib
 {
  public:
-	struct vector3
+	struct vector3Int
 	{              // IN GYRO
 		int16_t x; // pitch
 		int16_t y; // roll
 		int16_t z; // yaw
 	};
 	
+	struct vector3Float
+	{            // IN GYRO
+		float x; // pitch
+		float y; // roll
+		float z; // yaw
+	};
+	
 	FC_MPU6050Lib();
 	bool initialize();
 	void setFastClock();
 	void read6AxisMotion();
-	vector3& getAcceleration();
-	vector3& getRotation();
+	vector3Int& getRawAcceleration();
+	vector3Int& getRawRotation();
 	int16_t getTemperature();
-	void calibrateGyro();             // Whole process last about 8 seconds!!
+	vector3Float& getAccAngles();                                        // angles calculated from the accelerometer
+	//vector3& getGyroAngles();                                          // (useless) angles calculated from the gyro (rotation)
+	vector3Float& getFusedAngles(uint16_t freq=250, float compass=-1);   // 
+	void calibrateGyro();                                                // Whole process last about 8 seconds!!
+	void setFusionMultiplier(float);
 	
 	
  private:
 	static const uint8_t MPU6050_Address = 0x68;
+	float GyroFusionMultiplier = 0.9996; // default gyro fusion multiplier
+	float AccFusionMultiplier = 0.0004;  // default accelerometer fusion multiplier
 	 
-	vector3 acceleration;
-	vector3 rotation;
+	vector3Int rawAcceleration;
+	vector3Int rawRotation;
 	int16_t temperature;
+	vector3Float accAngle;       // angles only form the accelerometer
+	vector3Float fusedAngle;
 	 
 	// calibration data
 	struct

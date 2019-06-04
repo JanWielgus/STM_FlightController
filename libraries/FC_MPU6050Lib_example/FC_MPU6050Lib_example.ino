@@ -9,7 +9,7 @@
 
 FC_MPU6050Lib mpu;
 
-FC_MPU6050Lib::vector3 data;
+FC_MPU6050Lib::vector3Int rawData;
 
 
 void setup()
@@ -41,7 +41,7 @@ void loop()
 {
 	mpu.read6AxisMotion();
 	
-	data = mpu.getAcceleration();
+	data = mpu.getRawAcceleration();
 	Serial.print("X: ");
 	Serial.print(data.x);
 	Serial.println();
