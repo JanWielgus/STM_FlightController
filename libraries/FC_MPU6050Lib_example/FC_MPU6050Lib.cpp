@@ -181,9 +181,6 @@ FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getAccAngles()
 		accAngle.y = asin((float)rawAcceleration.y / accTotalVector) * 57.296;
 	}
 	
-	accAngle.x *= -1;
-	accAngle.y *= -1;
-	
 	return accAngle;
 }
 
@@ -221,11 +218,11 @@ FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getFusedAngles(uint16_t freq, float 
 	
 	getAccAngles();
 	
-	/*
+	
 	// Make fusion with accelerometer data
 	fusedAngle.x = fusedAngle.x * GyroFusionMultiplier + accAngle.x * AccFusionMultiplier;
 	fusedAngle.y = fusedAngle.y * GyroFusionMultiplier + accAngle.y * AccFusionMultiplier;
-	*/
+	
 	
 	return fusedAngle;
 }

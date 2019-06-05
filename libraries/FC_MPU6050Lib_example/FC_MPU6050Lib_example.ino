@@ -11,6 +11,8 @@ FC_MPU6050Lib mpu;
 
 FC_MPU6050Lib::vector3Float data;
 
+uint32_t loopStartTime;
+
 
 void setup()
 {
@@ -20,7 +22,7 @@ void setup()
 	delay(3000);
 	
 	
-	mpu.setFastClock();
+	mpu.setFastClock(); // 400 kHz clock
 	
 	while (!mpu.initialize()) // While mpu is not initialized
 	{
@@ -35,6 +37,7 @@ void setup()
 	mpu.calibrateGyro();
 	Serial.println("Gyro calibration has finished");
 	
+	loopStartTime = micros();
 }
 
 
@@ -50,5 +53,10 @@ void loop()
 	Serial.println();
 	
 	
-	delay(4); // 250Hz loop
+	//delay(4); // 250Hz loop
+	while (micros()-loopStartTime <= 4000)
+	{
+		// wait
+	}
+	loopStartTime = micros();
 }
