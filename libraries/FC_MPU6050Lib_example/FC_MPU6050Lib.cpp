@@ -95,11 +95,13 @@ void FC_MPU6050Lib::read6AxisMotion()
 	rawAcceleration.y = Wire.read() << 8 | Wire.read();
 	rawAcceleration.z = Wire.read() << 8 | Wire.read();
 	temperature = Wire.read() << 8 | Wire.read();
-	rawRotation.y = Wire.read() << 8 | Wire.read();
-	rawRotation.x = Wire.read() << 8 | Wire.read();
+	rawRotation.y = Wire.read() << 8 | Wire.read(); // roll
+	rawRotation.x = Wire.read() << 8 | Wire.read(); // pitch
 	rawRotation.z = Wire.read() << 8 | Wire.read();
 	
-	rawRotation.y *= -1; // ?????
+	
+	rawRotation.x *= -1; // pitch
+	rawRotation.z *= -1; // yaw      <---- !!! zalezy czy jest jak magnetometr
 	
 	// Use the calibration data
 	rawRotation.x -= gyroCalVal.xPitch;
@@ -108,13 +110,13 @@ void FC_MPU6050Lib::read6AxisMotion()
 }
 
 
-void FC_MPU6050Lib::calibrateGyro()
+void FC_MPU6050Lib::calibrateGyro(int spls)
 {
 	// !!!!
 	// Whole process last about 8 seconds !!
 	// !!!!
 	
-	int samples = 2000;
+	int samples = spls;
 	int32_t sumX = 0;
 	int32_t sumY = 0;
 	int32_t sumZ = 0;
@@ -179,9 +181,6 @@ FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getAccAngles()
 		accAngle.y = asin((float)rawAcceleration.y / accTotalVector) * 57.296;
 	}
 	
-	accAngle.x *= -1;
-	accAngle.y *= -1;
-	
 	return accAngle;
 }
 
@@ -200,8 +199,9 @@ FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getFusedAngles(uint16_t freq, float 
 		fusedAngle.y += (float)rawRotation.y * 0.0000611;
 		
 		//0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians and not degrees.
-		fusedAngle.x += fusedAngle.y * sin((float)rawRotation.z * 0.000001066);
-		fusedAngle.y -= fusedAngle.x * sin((float)rawRotation.z * 0.000001066);
+		float temp = fusedAngle.x;
+		fusedAngle.x -= fusedAngle.y * sin((float)rawRotation.z * 0.000001066);
+		fusedAngle.y += temp * sin((float)rawRotation.z * 0.000001066);
 		
 		// Z axis
 		fusedAngle.z += (float)rawRotation.z * 0.0000611;
