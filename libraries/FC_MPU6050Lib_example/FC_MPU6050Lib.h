@@ -47,7 +47,7 @@ class FC_MPU6050Lib
 	//vector3& getGyroAngles();                                          // (useless) angles calculated from the gyro (rotation)
 	vector3Float& getFusedAngles(uint16_t freq=250, float compass=-1);   // 
 	void calibrateGyro();                                                // Whole process last about 8 seconds!!
-	void setFusionMultiplier(float);
+	void setGyroFusionMultiplier(float);
 	
 	
  private:

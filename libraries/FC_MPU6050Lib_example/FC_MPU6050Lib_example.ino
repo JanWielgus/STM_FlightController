@@ -9,7 +9,7 @@
 
 FC_MPU6050Lib mpu;
 
-FC_MPU6050Lib::vector3Int rawData;
+FC_MPU6050Lib::vector3Float data;
 
 
 void setup()
@@ -29,11 +29,12 @@ void setup()
 		delay(500);
 	}
 	
-	/* GYRO CALIBRATION !
+	// GYRO CALIBRATION !
+	
 	Serial.println("Started calibrating the gyro");
 	mpu.calibrateGyro();
 	Serial.println("Gyro calibration has finished");
-	*/
+	
 }
 
 
@@ -41,9 +42,11 @@ void loop()
 {
 	mpu.read6AxisMotion();
 	
-	data = mpu.getRawAcceleration();
+	data = mpu.getFusedAngles();
 	Serial.print("X: ");
 	Serial.print(data.x);
+	Serial.print("\tY: ");
+	Serial.print(data.y);
 	Serial.println();
 	
 	

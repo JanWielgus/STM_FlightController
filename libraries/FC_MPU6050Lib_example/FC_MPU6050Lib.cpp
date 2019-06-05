@@ -61,6 +61,19 @@ bool FC_MPU6050Lib::initialize()
 	Wire.endTransmission();                                      //End the transmission with the gyro.
 	
 	
+	// Set start position to angles got from the gyro
+	int samples = 50;
+	for (int i=0; i<samples; i++)
+	{
+		read6AxisMotion();
+		getAccAngles();
+		fusedAngle.x += accAngle.x;
+		fusedAngle.y += accAngle.y;
+	}
+	fusedAngle.x /= samples;
+	fusedAngle.y /= samples;
+	
+	
 	return true;
 }
 
@@ -82,13 +95,11 @@ void FC_MPU6050Lib::read6AxisMotion()
 	rawAcceleration.y = Wire.read() << 8 | Wire.read();
 	rawAcceleration.z = Wire.read() << 8 | Wire.read();
 	temperature = Wire.read() << 8 | Wire.read();
-	rawRotation.x = Wire.read() << 8 | Wire.read();
 	rawRotation.y = Wire.read() << 8 | Wire.read();
+	rawRotation.x = Wire.read() << 8 | Wire.read();
 	rawRotation.z = Wire.read() << 8 | Wire.read();
 	
-	// Invert the direction
-	rawRotation.x *= -1;
-	rawRotation.y *= -1;
+	rawRotation.y *= -1; // ?????
 	
 	// Use the calibration data
 	rawRotation.x -= gyroCalVal.xPitch;
@@ -168,6 +179,9 @@ FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getAccAngles()
 		accAngle.y = asin((float)rawAcceleration.y / accTotalVector) * 57.296;
 	}
 	
+	accAngle.x *= -1;
+	accAngle.y *= -1;
+	
 	return accAngle;
 }
 
@@ -178,11 +192,16 @@ FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getFusedAngles(uint16_t freq, float 
 	//0.0000611 = 1 / (250Hz / 65.5)
 	// !!!!! ONLY AT 250Hz   !!!!
 	
+	// For 250Hz values are precalculated, so the program works faster
 	if (freq == 250)
 	{
 		// X & Y axis
 		fusedAngle.x += (float)rawRotation.x * 0.0000611;
 		fusedAngle.y += (float)rawRotation.y * 0.0000611;
+		
+		//0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians and not degrees.
+		fusedAngle.x += fusedAngle.y * sin((float)rawRotation.z * 0.000001066);
+		fusedAngle.y -= fusedAngle.x * sin((float)rawRotation.z * 0.000001066);
 		
 		// Z axis
 		fusedAngle.z += (float)rawRotation.z * 0.0000611;
@@ -199,9 +218,11 @@ FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getFusedAngles(uint16_t freq, float 
 	
 	getAccAngles();
 	
+	
 	// Make fusion with accelerometer data
 	fusedAngle.x = fusedAngle.x * GyroFusionMultiplier + accAngle.x * AccFusionMultiplier;
 	fusedAngle.y = fusedAngle.y * GyroFusionMultiplier + accAngle.y * AccFusionMultiplier;
+	
 	
 	return fusedAngle;
 }
