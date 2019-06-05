@@ -19,6 +19,12 @@ FC_MPU6050Lib::FC_MPU6050Lib()
 	rawRotation.y = 0;
 	rawRotation.z = 0;
 	
+	temperature = 0;
+	
+	accAngle.x = 0;
+	accAngle.y = 0;
+	accAngle.z = 0;
+	
 	gyroCalVal.xPitch = 0;
 	gyroCalVal.yRoll = 0;
 	gyroCalVal.zYaw = 0;
@@ -132,9 +138,9 @@ void FC_MPU6050Lib::calibrateGyro(int spls)
 		delay(4); // simulate 250Hz loop
 	}
 	
-	gyroCalVal.xPitch = sumX/samples;
-	gyroCalVal.yRoll = sumY/samples;
-	gyroCalVal.zYaw = sumZ/samples;
+	gyroCalVal.xPitch += float(sumX)/float(samples);
+	gyroCalVal.yRoll += float(sumY)/float(samples);
+	gyroCalVal.zYaw += float(sumZ)/float(samples);
 }
 
 
