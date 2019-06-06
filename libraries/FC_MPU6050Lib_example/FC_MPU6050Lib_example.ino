@@ -31,8 +31,20 @@ void setup()
 		delay(500);
 	}
 	
-	// GYRO CALIBRATION !
 	
+	// !!!
+	// If program is working in a frequency different than 250Hz
+	// This method HAVE TO BE CALLED !!!!!
+	// !!!
+	mpu.setCalculationsFrequency(250);
+	
+	
+	// You can also change gyro influence in the fusion angle
+	// by calling a method
+	//mpu.setGyroFusionMultiplier(0.996); // values between 0 and 1 (but not equal)
+	
+	
+	// GYRO CALIBRATION !
 	Serial.println("Started calibrating the gyro");
 	mpu.calibrateGyro();
 	Serial.println("Gyro calibration has finished");
@@ -45,7 +57,7 @@ void loop()
 {
 	mpu.read6AxisMotion();
 	
-	data = mpu.getFusedAngles();
+	data = mpu.getFusedAngles(); // !!! This method have to be called in a certain frequency (default 250Hz) !!!
 	Serial.print("X: ");
 	Serial.print(data.x);
 	Serial.print("\tY: ");
