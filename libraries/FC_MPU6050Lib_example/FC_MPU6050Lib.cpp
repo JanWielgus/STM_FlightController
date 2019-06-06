@@ -28,6 +28,10 @@ FC_MPU6050Lib::FC_MPU6050Lib()
 	gyroCalVal.xPitch = 0;
 	gyroCalVal.yRoll = 0;
 	gyroCalVal.zYaw = 0;
+	
+	// default gyro calculation multipliers values
+	Multiplier1 = 0.0000611;
+	Multiplier2 = 0.000001066;
 }
 
 
@@ -151,6 +155,16 @@ void FC_MPU6050Lib::setGyroFusionMultiplier(float mpr)
 }
 
 
+void FC_MPU6050Lib::setCalculationsFrequency(uint16_t freq)
+{
+	//0.0000611 = 1 / (250Hz * 65.5)
+	Multiplier1 = 1.0 / ((float)freq * 65.5);
+	
+	//0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians and not degrees.
+	Multiplier2 = radians(Multiplier1);
+}
+
+
 FC_MPU6050Lib::vector3Int& FC_MPU6050Lib::getRawAcceleration()
 {
 	return rawAcceleration;
@@ -191,39 +205,29 @@ FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getAccAngles()
 }
 
 
-FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getFusedAngles(uint16_t freq, float compass)
+FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getFusedAngles(float compass)
 {
 	//Gyro angle calculations
-	//0.0000611 = 1 / (250Hz / 65.5)
-	// !!!!! ONLY AT 250Hz   !!!!
+
+	// X & Y axis
+	fusedAngle.x += (float)rawRotation.x * Multiplier1;
+	fusedAngle.y += (float)rawRotation.y * Multiplier1;
+
+	static float temp;
+	temp = fusedAngle.x;
+	fusedAngle.x -= fusedAngle.y * sin((float)rawRotation.z * Multiplier2);
+	fusedAngle.y += temp * sin((float)rawRotation.z * Multiplier2);
+		
+	// Z axis
+	fusedAngle.z += (float)rawRotation.z * Multiplier1;
+	if(fusedAngle.z < 0.0)
+		fusedAngle.z += 360.0;
+	else if (fusedAngle.z >= 360.0)
+		fusedAngle.z -= 360.0;
+	// USE COMPASS DATA IF PROVIDED (if not, compass is == -1)  !!!!   <<<-----
 	
-	// For 250Hz values are precalculated, so the program works faster
-	if (freq == 250)
-	{
-		// X & Y axis
-		fusedAngle.x += (float)rawRotation.x * 0.0000611;
-		fusedAngle.y += (float)rawRotation.y * 0.0000611;
-		
-		//0.000001066 = 0.0000611 * (3.142(PI) / 180degr) The Arduino sin function is in radians and not degrees.
-		float temp = fusedAngle.x;
-		fusedAngle.x -= fusedAngle.y * sin((float)rawRotation.z * 0.000001066);
-		fusedAngle.y += temp * sin((float)rawRotation.z * 0.000001066);
-		
-		// Z axis
-		fusedAngle.z += (float)rawRotation.z * 0.0000611;
-		if(fusedAngle.z < 0.0)
-			fusedAngle.z += 360.0;
-		else if (fusedAngle.z >= 360.0)
-			fusedAngle.z -= 360.0;
-		// USE COMPASS DATA IF PROVIDED (if not, compass is == -1)  !!!!   <<<-----
-	}
-	else // frequency is different than 250
-	{
-		// formula is at the beginning
-	}
 	
 	getAccAngles();
-	
 	
 	// Make fusion with accelerometer data
 	fusedAngle.x = fusedAngle.x * GyroFusionMultiplier + accAngle.x * AccFusionMultiplier;

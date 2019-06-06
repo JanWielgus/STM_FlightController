@@ -45,15 +45,20 @@ class FC_MPU6050Lib
 	int16_t getTemperature();
 	vector3Float& getAccAngles();                                        // angles calculated from the accelerometer
 	//vector3& getGyroAngles();                                          // (useless) angles calculated from the gyro (rotation)
-	vector3Float& getFusedAngles(uint16_t freq=250, float compass=-1);   // 
-	void calibrateGyro(int samples = 2000);                                                // Whole process last about 8 seconds!!
+	vector3Float& getFusedAngles(float compass=-1);
+	void calibrateGyro(int samples = 2000);                              // Whole process last about 8 seconds!!
 	void setGyroFusionMultiplier(float);
+	void setCalculationsFrequency(uint16_t freq=250);
 	
 	
  private:
 	static const uint8_t MPU6050_Address = 0x68;
 	float GyroFusionMultiplier = 0.9996; // default gyro fusion multiplier
 	float AccFusionMultiplier = 0.0004;  // default accelerometer fusion multiplier
+	
+	// gyro angle calculations multipliers
+	float Multiplier1;
+	float Multiplier2;
 	 
 	vector3Int rawAcceleration;
 	vector3Int rawRotation;
