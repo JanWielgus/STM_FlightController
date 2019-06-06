@@ -3,7 +3,7 @@
     Created:	04/06/2019
     Author:     Jan Wielgus
 	
-	This program is based on the YMFC-32 made by Joop Brokking
+	Parts of this program are based on the YMFC-32 made by Joop Brokking
 	Link: http://www.brokking.net/YMFC-32_auto_downloads.html
 */
 
