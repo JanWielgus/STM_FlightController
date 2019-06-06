@@ -77,4 +77,7 @@ void loop()
 /* How to get raw data
 FC_MPU6050Lib::vector3Int rawData = mpu.getRawRotation();
 FC_MPU6050Lib::vector3Int rawData = mpu.getRawAcceleration();
+
+// Temperature:
+mpu.getTemperature();
 */

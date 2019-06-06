@@ -117,6 +117,9 @@ void FC_MPU6050Lib::read6AxisMotion()
 	rawRotation.x -= gyroCalVal.xPitch;
 	rawRotation.y -= gyroCalVal.yRoll;
 	rawRotation.z -= gyroCalVal.zYaw;
+	
+	// Temperature
+	temperature = (float)temperature/340 + 36.53;
 }
 
 
