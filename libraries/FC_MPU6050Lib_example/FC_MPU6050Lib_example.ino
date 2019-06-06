@@ -56,8 +56,8 @@ void setup()
 void loop()
 {
 	mpu.read6AxisMotion();
-	
 	data = mpu.getFusedAngles(); // !!! This method have to be called in a certain frequency (default 250Hz) !!!
+	//data = mpu.getAccAngles(); // alternative (very noisy measurement)
 	Serial.print("X: ");
 	Serial.print(data.x);
 	Serial.print("\tY: ");
@@ -72,3 +72,9 @@ void loop()
 	}
 	loopStartTime = micros();
 }
+
+
+/* How to get raw data
+FC_MPU6050Lib::vector3Int rawData = mpu.getRawRotation();
+FC_MPU6050Lib::vector3Int rawData = mpu.getRawAcceleration();
+*/
