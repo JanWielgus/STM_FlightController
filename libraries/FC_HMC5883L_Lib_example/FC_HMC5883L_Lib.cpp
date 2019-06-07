@@ -188,3 +188,63 @@ void FC_HMC5883L_Lib::setCalibrationDuration(uint8_t seconds)
 	calibrationDuration = seconds;
 }
 
+
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// To enable HMC5883L on GY-86
+
+uint8_t FC_HMC5883L_Lib::readRegister8(uint8_t reg)
+{
+	uint8_t value;
+
+	Wire.beginTransmission(MPU6050_Address);
+	Wire.write(reg);
+	Wire.endTransmission();
+
+	Wire.beginTransmission(MPU6050_Address);
+	Wire.requestFrom(MPU6050_Address, 1);
+	while (!Wire.available())
+	{};
+	value = Wire.read();
+	Wire.endTransmission();
+
+	return value;
+}
+
+
+void FC_HMC5883L_Lib::writeRegister8(uint8_t reg, uint8_t value)
+{
+	Wire.beginTransmission(MPU6050_Address);
+	Wire.write(reg);
+	Wire.write(value);
+	Wire.endTransmission();
+}
+
+
+void FC_HMC5883L_Lib::writeRegisterBit(uint8_t reg, uint8_t pos, bool state)
+{
+	uint8_t value;
+	value = readRegister8(reg);
+
+	if (state)
+		value |= (1 << pos);
+	else
+		value &= ~(1 << pos);
+
+	writeRegister8(reg, value);
+}
+
+
+void FC_HMC5883L_Lib::enableHMC_on_MPU()
+{
+	// setting I2C Master Mode disabled
+	writeRegisterBit(0x6A, 5, false);
+	
+	// setting I2C Bypass enabled
+	writeRegisterBit(0x37, 1, true);
+	
+	// setting Sleep disabled
+	writeRegisterBit(0x6B, 6, false);
+}
+

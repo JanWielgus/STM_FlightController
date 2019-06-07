@@ -41,9 +41,11 @@ class FC_HMC5883L_Lib
 	void setCalibrationValues(vector3Int& minimums, vector3Int& maximums); // instead of making a full calibration, provide values from earlier calibration
 	void setCompassDeclination(float declin);
 	void setCalibrationDuration(uint8_t seconds); // how long time will take compass calibration
+	void enableHMC_on_MPU(); // set proper bits in MPU-6050 to enable compass in GY-86 module
 	
  private:
 	static const uint8_t HMC5883L_Address = 0x1E;
+	static const uint8_t MPU6050_Address = 0x68;
 
 	vector3Int compass_raw; // raw data read from the device
 	vector3Int compass; // compass data after calculations
@@ -59,6 +61,11 @@ class FC_HMC5883L_Lib
 	// scale multipliers (don't know why without x)
 	float scale_y;
 	float scale_z;
+	
+	// To enable HMC5883L on GY-86
+	uint8_t readRegister8(uint8_t reg);
+	void writeRegister8(uint8_t reg, uint8_t value);
+	void writeRegisterBit(uint8_t reg, uint8_t pos, bool state);
 };
 
 

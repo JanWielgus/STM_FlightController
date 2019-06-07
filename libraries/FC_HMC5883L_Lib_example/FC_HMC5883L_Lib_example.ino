@@ -16,6 +16,8 @@ void setup()
 	Serial.begin(9600);
 	Serial.println("Program has just started!");
 	
+	compass.enableHMC_on_MPU(); // IMPORTANT if use GY-86. If not then comment
+	
 	while (!compass.initialize())
 	{
 		// If program is there, some problems occured
