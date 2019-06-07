@@ -13,7 +13,15 @@ FC_HMC5883L_Lib compass;
 
 void setup()
 {
-	compass.initialize();
+	Serial.begin(9600);
+	Serial.println("Program has just started!");
+	
+	while (!compass.initialize())
+	{
+		// If program is there, some problems occured
+		Serial.println("HMC5883L cannot be initialized!");
+		delay(500);
+	}
 	
 	compass.calibrateCompass();
 }
@@ -25,4 +33,6 @@ void loop()
 	Serial.print("Heading: ");
 	Serial.print(compass.getHeading());
 	Serial.println();
+	
+	delay(14); // ~75Hz
 }
