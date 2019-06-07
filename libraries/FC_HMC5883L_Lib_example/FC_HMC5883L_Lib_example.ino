@@ -7,14 +7,22 @@
 #include "FC_HMC5883L_Lib.h"
 
 
+FC_HMC5883L_Lib compass;
+
+
 
 void setup()
 {
+	compass.initialize();
 	
+	compass.calibrateCompass();
 }
 
 
 void loop()
 {
-	
+	compass.readCompassData();
+	Serial.print("Heading: ");
+	Serial.print(compass.getHeading());
+	Serial.println();
 }
