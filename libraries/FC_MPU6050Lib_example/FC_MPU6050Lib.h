@@ -37,7 +37,7 @@ class FC_MPU6050Lib
 	};
 	
 	FC_MPU6050Lib();
-	bool initialize();
+	bool initialize(bool needToBeginWire_flag = true);
 	void setFastClock();
 	void read6AxisMotion();
 	vector3Int& getRawAcceleration();

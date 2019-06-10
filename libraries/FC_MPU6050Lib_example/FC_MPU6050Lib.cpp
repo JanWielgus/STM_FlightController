@@ -35,9 +35,10 @@ FC_MPU6050Lib::FC_MPU6050Lib()
 }
 
 
-bool FC_MPU6050Lib::initialize()
+bool FC_MPU6050Lib::initialize(bool needToBeginWire_flag)
 {
-	Wire.begin();
+	if (needToBeginWire_flag)
+		Wire.begin();
 	
 	// Check if the MPU-6050 is responding
 	Wire.beginTransmission(MPU6050_Address);
