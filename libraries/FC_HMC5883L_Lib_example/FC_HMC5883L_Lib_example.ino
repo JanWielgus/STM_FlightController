@@ -5,10 +5,20 @@
 */
 
 #include "FC_HMC5883L_Lib.h"
+#include "C:\Users\janwi\Documents\GitHub\STM_FlightController\libraries\FC_MPU6050Lib_example\FC_MPU6050Lib.h"
+
+
+// !!!!!!!!!!!!!
+// This is just temporary, because when MPU library is in GitHub localization, linker don't see the cpp file.
+// When MPU library will be in the Arduino library folder it will not be necessary.
+#include "C:\Users\janwi\Documents\GitHub\STM_FlightController\libraries\FC_MPU6050Lib_example\FC_MPU6050Lib.cpp"
+
 
 
 FC_HMC5883L_Lib compass;
+FC_MPU6050Lib mpu;
 
+uint32_t loopStartTime;
 
 
 void setup()
@@ -16,30 +26,59 @@ void setup()
 	Serial.begin(115200);
 	Serial.println("Program has just started!");
 	
+	while (!mpu.initialize()) // While mpu is not initialized
+	{
+		// If program is there, some problems occured
+		Serial.println("MPU6050 is cannot be initialized!");
+		delay(500);
+	}
+	
+	mpu.setCalculationsFrequency(75);
+	mpu.calibrateGyro(700);
+	
+	
 	Serial.println("Started enabling");
-	compass.enableHMC_on_MPU(); // IMPORTANT if use GY-86. If not then comment
+	// !!!  IF MPU IS NOT USED, AS ARGUMENT THERE SHOULD BE true OR nothing  !!!
+	compass.enableHMC_on_MPU(false); // ! IMPORTANT ! if use GY-86. If not then comment !!!
 	Serial.println("ended");
 	
-	while (!compass.initialize())
+	while (!compass.initialize(false))
 	{
 		// If program is there, some problems occured
 		Serial.println("HMC5883L cannot be initialized!");
 		delay(500);
 	}
 	
-	compass.calibrateCompass();
+	//compass.calibrateCompass();
+	// Temporary and not accurate values
+	FC_HMC5883L_Lib::vector3Int minCalVal = {-503, -505, -1440};
+	FC_HMC5883L_Lib::vector3Int maxCalVal = {504, 463, -330};
+	compass.setCalibrationValues(minCalVal, maxCalVal);
 	
 	compass.setCompassDeclination(5.0);
+	
+	loopStartTime = micros();
 }
 
 
 void loop()
 {
-	compass.readCompassData(0.0, 0.0);
+	
+	mpu.read6AxisMotion();
+	FC_MPU6050Lib::vector3Float data;
+	data = mpu.getFusedAngles();
+
+	compass.readCompassData(data.y, data.x);
 	
 	Serial.print("Heading: ");
 	Serial.print(compass.getHeading());
 	Serial.println();
 	
-	delay(14); // ~75Hz
+	
+	// 75Hz
+	while (micros()-loopStartTime <= 13333)
+	{
+		// wait
+	}
+	loopStartTime = micros();
 }
