@@ -65,10 +65,10 @@ void loop()
 {
 	
 	mpu.read6AxisMotion();
-	FC_MPU6050Lib::vector3Float data;
-	data = mpu.getFusedAngles();
+	FC_MPU6050Lib::vector3Float angle;
+	angle = mpu.getFusedAngles();
 
-	compass.readCompassData(data.y, data.x);
+	compass.readCompassData(angle.y, angle.x);
 	
 	Serial.print("Heading: ");
 	Serial.print(compass.getHeading());
