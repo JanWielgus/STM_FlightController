@@ -16,7 +16,9 @@ void setup()
 	Serial.begin(9600);
 	Serial.println("Program has just started!");
 	
+	Serial.println("Started enabling");
 	compass.enableHMC_on_MPU(); // IMPORTANT if use GY-86. If not then comment
+	Serial.println("ended");
 	
 	while (!compass.initialize())
 	{
@@ -31,7 +33,7 @@ void setup()
 
 void loop()
 {
-	compass.readCompassData();
+	compass.readCompassData(0.0, 0.0);
 	Serial.print("Heading: ");
 	Serial.print(compass.getHeading());
 	Serial.println();

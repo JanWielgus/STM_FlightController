@@ -72,6 +72,12 @@ bool FC_HMC5883L_Lib::initialize(bool needToBeginWire_flag)
 }
 
 
+void FC_HMC5883L_Lib::setFastClock()
+{
+	Wire.setClock(400000L);
+}
+
+
 void FC_HMC5883L_Lib::setCalibrationValues(vector3Int& minimums, vector3Int& maximums)
 {
 	// calculate the calibration offset and scale values
@@ -86,6 +92,10 @@ void FC_HMC5883L_Lib::setCalibrationValues(vector3Int& minimums, vector3Int& max
 
 void FC_HMC5883L_Lib::calibrateCompass()
 {
+	#ifdef SERIAL_CALIBRATION_DEBUG
+		Serial.println("Compass calibration has started");
+	#endif
+	
 	uint32_t startTime = millis();
 	while (millis()-startTime < calibrationDuration*1000)
 	{
@@ -123,6 +133,10 @@ void FC_HMC5883L_Lib::calibrateCompass()
 	
 	// update scale and offset after calibration
 	setCalibrationValues(calMins, calMaxs);
+	
+	#ifdef SERIAL_CALIBRATION_DEBUG
+		Serial.println("Finished");
+	#endif
 }
 
 
@@ -236,8 +250,11 @@ void FC_HMC5883L_Lib::writeRegisterBit(uint8_t reg, uint8_t pos, bool state)
 }
 
 
-void FC_HMC5883L_Lib::enableHMC_on_MPU()
+void FC_HMC5883L_Lib::enableHMC_on_MPU(bool needToBeginWire_flag)
 {
+	if (needToBeginWire_flag)
+		Wire.begin();
+	
 	// setting I2C Master Mode disabled
 	writeRegisterBit(0x6A, 5, false);
 	

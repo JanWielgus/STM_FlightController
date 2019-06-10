@@ -35,13 +35,14 @@ class FC_HMC5883L_Lib
 	
 	FC_HMC5883L_Lib();
 	bool initialize(bool needToBeginWire_flag = true);
+	void setFastClock();
 	void readCompassData(float angleX=-100, float angleY=-100);
 	float getHeading();
 	void calibrateCompass();
 	void setCalibrationValues(vector3Int& minimums, vector3Int& maximums); // instead of making a full calibration, provide values from earlier calibration
 	void setCompassDeclination(float declin);
 	void setCalibrationDuration(uint8_t seconds); // how long time will take compass calibration
-	void enableHMC_on_MPU(); // set proper bits in MPU-6050 to enable compass in GY-86 module
+	void enableHMC_on_MPU(bool needToBeginWire_flag = true); // set proper bits in MPU-6050 to enable compass in GY-86 module
 	
  private:
 	static const uint8_t HMC5883L_Address = 0x1E;
