@@ -180,8 +180,8 @@ void FC_HMC5883L_Lib::readCompassData(float angleX, float angleY)
 	// If angle data is provided
 	if (angleX != -100) // others are not necessary
 	{
-		compass.x = (float)compass.x * cos(-radians(angleX)) + (float)compass.y * sin(radians(angleY)) * sin(-radians(angleX)) - (float)compass.z * cos(radians(angleY)) * sin(-radians(angleX));
-		compass.y = (float)compass.y * cos(radians(angleY)) + (float)compass.z * sin(radians(angleY));
+		compass.x = (float)compass.x * cos(-radians(angleY)) + (float)compass.y * sin(radians(angleX)) * sin(-radians(angleY)) - (float)compass.z * cos(radians(angleX)) * sin(-radians(angleY));
+		compass.y = (float)compass.y * cos(radians(angleX)) + (float)compass.z * sin(radians(angleX));
 	}
 	
 	// Heading is calculated in degrees
