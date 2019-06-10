@@ -13,7 +13,7 @@ FC_HMC5883L_Lib compass;
 
 void setup()
 {
-	Serial.begin(9600);
+	Serial.begin(115200);
 	Serial.println("Program has just started!");
 	
 	Serial.println("Started enabling");
@@ -28,12 +28,15 @@ void setup()
 	}
 	
 	compass.calibrateCompass();
+	
+	compass.setCompassDeclination(5.0);
 }
 
 
 void loop()
 {
 	compass.readCompassData(0.0, 0.0);
+	
 	Serial.print("Heading: ");
 	Serial.print(compass.getHeading());
 	Serial.println();

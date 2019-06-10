@@ -60,12 +60,12 @@ bool FC_HMC5883L_Lib::initialize(bool needToBeginWire_flag)
 	
 	
 	// calculate the calibration offset and scale values
-	scale_y = ((float)calMaxs.x - calMins.x) / (calMaxs.y - calMins.y);
-	scale_z = ((float)calMaxs.x - calMins.x) / (calMaxs.z - calMins.z);
+	scale_y = float(calMaxs.x - calMins.x) / float(calMaxs.y - calMins.y);
+	scale_z = float(calMaxs.x - calMins.x) / float(calMaxs.z - calMins.z);
 	
-	offset.x = ((float)calMaxs.x - calMins.x) / 2 - calMaxs.x;
-	offset.y = (((float)calMaxs.y - calMins.y) / 2 - calMaxs.y) * scale_y;
-	offset.z = (((float)calMaxs.z - calMins.z) / 2 - calMaxs.z) * scale_z;
+	offset.x = float(calMaxs.x - calMins.x) / 2 - calMaxs.x;
+	offset.y = (float(calMaxs.y - calMins.y) / 2 - calMaxs.y) * scale_y;
+	offset.z = (float(calMaxs.z - calMins.z) / 2 - calMaxs.z) * scale_z;
 	
 	
 	return true;
@@ -81,12 +81,12 @@ void FC_HMC5883L_Lib::setFastClock()
 void FC_HMC5883L_Lib::setCalibrationValues(vector3Int& minimums, vector3Int& maximums)
 {
 	// calculate the calibration offset and scale values
-	scale_y = ((float)maximums.x - minimums.x) / (maximums.y - minimums.y);
-	scale_z = ((float)maximums.x - minimums.x) / (maximums.z - minimums.z);
+	scale_y = float(maximums.x - minimums.x) / float(maximums.y - minimums.y);
+	scale_z = float(maximums.x - minimums.x) / float(maximums.z - minimums.z);
 	
-	offset.x = ((float)maximums.x - minimums.x) / 2 - maximums.x;
-	offset.y = (((float)maximums.y - minimums.y) / 2 - maximums.y) * scale_y;
-	offset.z = (((float)maximums.z - minimums.z) / 2 - maximums.z) * scale_z;
+	offset.x = float(maximums.x - minimums.x) / 2 - maximums.x;
+	offset.y = (float(maximums.y - minimums.y) / 2 - maximums.y) * scale_y;
+	offset.z = (float(maximums.z - minimums.z) / 2 - maximums.z) * scale_z;
 }
 
 
@@ -95,6 +95,12 @@ void FC_HMC5883L_Lib::calibrateCompass()
 	#ifdef SERIAL_CALIBRATION_DEBUG
 		Serial.println("Compass calibration has started");
 	#endif
+	
+	// Initial values for calibration. If not provided, there is zero (Z axiz is always below zero so max is never reached))
+	readCompassData();
+	calMins.x = calMaxs.x = compass_raw.x;
+	calMins.y = calMaxs.y = compass_raw.y;
+	calMins.z = calMaxs.z = compass_raw.z;
 	
 	uint32_t startTime = millis();
 	while (millis()-startTime < calibrationDuration*1000)
@@ -154,12 +160,22 @@ void FC_HMC5883L_Lib::readCompassData(float angleX, float angleY)
 	compass_raw.x = Wire.read() << 8 | Wire.read();
 	compass_raw.x *= -1;
 	
+	/*
+	Serial.print("raw X: ");
+	Serial.print(compass_raw.x);
+	Serial.print("\tY:");
+	Serial.print(compass_raw.y);
+	Serial.print("\tZ:");
+	Serial.print(compass_raw.z);
+	Serial.println();
+	*/
+	
 	// Process data
 	compass.y = compass_raw.y + offset.y;
 	compass.y *= scale_y;
 	compass.z = compass_raw.z + offset.z;
 	compass.z *= scale_z;
-	compass.z = compass_raw.x + offset.x;
+	compass.x = compass_raw.x + offset.x;
 	
 	// If angle data is provided
 	if (angleX != -100) // others are not necessary
@@ -170,9 +186,12 @@ void FC_HMC5883L_Lib::readCompassData(float angleX, float angleY)
 	
 	// Heading is calculated in degrees
 	if (compass.y < 0)
-		heading = 180 + (180 + degrees(atan2(compass.y, compass.x)));
+		heading = 360 + degrees(atan2(compass.x, compass.y));
 	else
-		heading = degrees(atan2(compass.y, compass.x));
+		heading = degrees(atan2(compass.x, compass.y));
+	
+	// heading is back to front
+	heading -= 180;
 	
 	// To get the geographic north
 	heading += declination;
