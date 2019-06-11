@@ -34,6 +34,7 @@ void setup()
 	}
 	
 	mpu.setCalculationsFrequency(75);
+	mpu.calibrateAccelerometer(); // NEED TO BE IN THE LEVEL POSITION
 	mpu.calibrateGyro(700);
 	
 	
