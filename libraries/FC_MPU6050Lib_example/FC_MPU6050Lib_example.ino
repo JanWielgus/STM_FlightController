@@ -69,6 +69,10 @@ void loop()
 	Serial.println();
 	
 	
+	// Z angle
+	//mpu.getZAngle(<compass heading>); // compass heading is optional but expected
+	
+	
 	//delay(4); // 250Hz loop
 	while (micros()-loopStartTime <= 4000)
 	{
