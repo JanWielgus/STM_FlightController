@@ -77,6 +77,8 @@ bool FC_MPU6050Lib::initialize(bool needToBeginWire_flag)
 	
 	
 	// Set start position to angles got from the gyro
+	fusedAngle.x = 0;
+	fusedAngle.y = 0;
 	int samples = 50;
 	for (int i=0; i<samples; i++)
 	{
@@ -84,6 +86,7 @@ bool FC_MPU6050Lib::initialize(bool needToBeginWire_flag)
 		getAccAngles();
 		fusedAngle.x += accAngle.x;
 		fusedAngle.y += accAngle.y;
+		delay(4);
 	}
 	fusedAngle.x /= samples;
 	fusedAngle.y /= samples;
@@ -179,6 +182,21 @@ void FC_MPU6050Lib::calibrateAccelerometer(int samples)
 	accCalVal.x += float(sumX) / samples;
 	accCalVal.y += float(sumY) / samples;
 	accCalVal.z += float(sumZ) / samples;
+	
+	
+	// Set initial gyro values after calibration
+	fusedAngle.x = 0; // reset values
+	fusedAngle.y = 0;
+	for (int i=0; i<50; i++)
+	{
+		read6AxisMotion();
+		getAccAngles();
+		fusedAngle.x += accAngle.x;
+		fusedAngle.y += accAngle.y;
+		delay(4);
+	}
+	fusedAngle.x /= 50;
+	fusedAngle.y /= 50;
 }
 
 
