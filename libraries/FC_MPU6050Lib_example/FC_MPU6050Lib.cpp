@@ -209,7 +209,7 @@ FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getAccAngles()
 }
 
 
-FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getFusedAngles(float compass)
+FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getFusedXYAngles()
 {
 	//Gyro angle calculations
 
@@ -221,14 +221,11 @@ FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getFusedAngles(float compass)
 	temp = fusedAngle.x;
 	fusedAngle.x -= fusedAngle.y * sin((float)rawRotation.z * Multiplier2);
 	fusedAngle.y += temp * sin((float)rawRotation.z * Multiplier2);
-		
-	// Z axis
-	fusedAngle.z += (float)rawRotation.z * Multiplier1;
-	if(fusedAngle.z < 0.0)
-		fusedAngle.z += 360.0;
-	else if (fusedAngle.z >= 360.0)
-		fusedAngle.z -= 360.0;
-	// USE COMPASS DATA IF PROVIDED (if not, compass is == -1)  !!!!   <<<-----
+	
+	
+	// Z axis is calculated in getZAngle() method
+	// because to calculate heading (which is needed for Z axis calculations)
+	// you have to calculate angle X and Y at first
 	
 	
 	getAccAngles();
@@ -239,6 +236,48 @@ FC_MPU6050Lib::vector3Float& FC_MPU6050Lib::getFusedAngles(float compass)
 	
 	
 	return fusedAngle;
+}
+
+
+float FC_MPU6050Lib::getZAngle(float heading)
+{
+	// Z axis
+	fusedAngle.z += (float)rawRotation.z * Multiplier1;
+	
+	// 0-359.99 correction
+	if(fusedAngle.z < 0.0)
+		fusedAngle.z += 360.0;
+	else if (fusedAngle.z >= 360.0)
+		fusedAngle.z -= 360.0;
+	
+	
+	// USE COMPASS DATA IF PROVIDED (if not, compass is == -1)  !!!!   <<<-----
+	if (heading != -1)
+	{
+		// fuse compass with gyro
+		
+		// eg. if compass is 359 but gyro is 1 degree
+		// this solve this error
+		if (abs(fusedAngle.z - heading) > 100)
+		{
+			if (heading > 180)
+				heading -= 360.0;
+			else
+				heading += 360.0;
+		}
+		
+		// complementary filter
+		fusedAngle.z = 0.98 * fusedAngle.z + 0.02 * heading;
+		
+		// 0-359.99 correction
+		if(fusedAngle.z < 0.0)
+			fusedAngle.z += 360.0;
+		else if (fusedAngle.z >= 360.0)
+			fusedAngle.z -= 360.0;
+	}
+	
+	
+	return fusedAngle.z;
 }
 
 

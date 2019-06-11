@@ -56,8 +56,8 @@ void setup()
 void loop()
 {
 	mpu.read6AxisMotion();
-	data = mpu.getFusedAngles(); // !!! This method have to be called in a certain frequency (default 250Hz) !!!
-	//data = mpu.getAccAngles(); // alternative (very noisy measurement)
+	data = mpu.getFusedXYAngles(); // !!! This method have to be called in a certain frequency (default 250Hz) !!!
+	//data = mpu.getAccAngles(); // alternative (very noisy measurement, don't have to be calle in the specific frequency)
 	Serial.print("X: ");
 	Serial.print(data.x);
 	Serial.print("\tY: ");

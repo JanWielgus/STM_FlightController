@@ -43,10 +43,11 @@ class FC_MPU6050Lib
 	vector3Int& getRawAcceleration();
 	vector3Int& getRawRotation();
 	int16_t getTemperature();
-	vector3Float& getAccAngles();                                        // angles calculated from the accelerometer
-	//vector3& getGyroAngles();                                          // (useless) angles calculated from the gyro (rotation)
-	vector3Float& getFusedAngles(float compass=-1);
-	void calibrateGyro(int samples = 2000);                              // Whole process last about 8 seconds!!
+	vector3Float& getAccAngles();                          // angles calculated from the accelerometer
+	//vector3& getGyroAngles();                            // (useless) angles calculated from the gyro (rotation)
+	vector3Float& getFusedXYAngles();					
+	float getZAngle(float heading=-1);                     // just HEADING if compass data is provided
+	void calibrateGyro(int samples = 2000);                // Whole process last about 8 seconds!!
 	void setGyroFusionMultiplier(float);
 	void setCalculationsFrequency(uint16_t freq=250);
 	
