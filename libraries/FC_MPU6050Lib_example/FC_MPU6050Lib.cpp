@@ -281,3 +281,9 @@ float FC_MPU6050Lib::getZAngle(float heading)
 }
 
 
+void FC_MPU6050Lib::setInitialZAxisValue(float compassHeading)
+{
+	fusedAngle.z = compassHeading;
+}
+
+

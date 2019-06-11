@@ -50,6 +50,7 @@ class FC_MPU6050Lib
 	void calibrateGyro(int samples = 2000);                // Whole process last about 8 seconds!!
 	void setGyroFusionMultiplier(float);
 	void setCalculationsFrequency(uint16_t freq=250);
+	void setInitialZAxisValue(float compassHeading);                           // method to set Z axis value to compass measurement at the beginning
 	
 	
  private:

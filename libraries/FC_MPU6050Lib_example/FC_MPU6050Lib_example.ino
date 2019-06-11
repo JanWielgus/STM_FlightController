@@ -44,6 +44,10 @@ void setup()
 	//mpu.setGyroFusionMultiplier(0.996); // values between 0 and 1 (but not equal)
 	
 	
+	// if you use compass, provide initial Z axis value
+	//mpu.setInitialZAxisValue(<heading>);
+	
+	
 	// GYRO CALIBRATION !
 	Serial.println("Started calibrating the gyro");
 	mpu.calibrateGyro();
