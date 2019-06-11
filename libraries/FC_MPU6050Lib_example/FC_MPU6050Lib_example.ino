@@ -59,6 +59,11 @@ void setup()
 
 void loop()
 {
+	/*
+		NOTE: read6AxisMotion is to read raw data from the device (certain frequency if use gyro).
+		      Get methods are to get the data (use whenever needed)
+	*/
+	
 	mpu.read6AxisMotion();
 	data = mpu.getFusedXYAngles(); // !!! This method have to be called in a certain frequency (default 250Hz) !!!
 	//data = mpu.getAccAngles(); // alternative (very noisy measurement, don't have to be calle in the specific frequency)
