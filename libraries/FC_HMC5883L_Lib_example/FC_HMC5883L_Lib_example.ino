@@ -66,7 +66,7 @@ void loop()
 	
 	mpu.read6AxisMotion();
 	FC_MPU6050Lib::vector3Float angle;
-	angle = mpu.getFusedAngles();
+	angle = mpu.getFusedXYAngles();
 
 	compass.readCompassData(angle.x, angle.y);
 	
