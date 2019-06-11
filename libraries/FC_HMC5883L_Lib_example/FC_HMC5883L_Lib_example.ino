@@ -58,6 +58,14 @@ void setup()
 	
 	compass.setCompassDeclination(5.0);
 	
+	// set initial Z axis value
+	mpu.read6AxisMotion();
+	FC_MPU6050Lib::vector3Float angle;
+	angle = mpu.getFusedXYAngles();
+	compass.readCompassData(angle.x, angle.y);
+	mpu.setInitialZAxisValue(compass.getHeading());
+	
+	
 	loopStartTime = micros();
 }
 
@@ -71,8 +79,11 @@ void loop()
 
 	compass.readCompassData(angle.x, angle.y);
 	
+	// Fusion with the gyro
+	float heading = mpu.getZAngle(compass.getHeading());
+	
 	Serial.print("Heading: ");
-	Serial.print(compass.getHeading());
+	Serial.print(heading); // fused heading
 	Serial.println();
 	
 	
