@@ -38,10 +38,9 @@ class FC_HMC5883L_Lib
 	void setFastClock();
 	void readCompassData(float angleX=-100, float angleY=-100);
 	float getHeading();
-	void calibrateCompass();
+	void calibrateCompass(uint8_t seconds=10);
 	void setCalibrationValues(vector3Int& minimums, vector3Int& maximums); // instead of making a full calibration, provide values from earlier calibration
 	void setCompassDeclination(float declin);
-	void setCalibrationDuration(uint8_t seconds); // how long time will take compass calibration
 	void enableHMC_on_MPU(bool needToBeginWire_flag = true); // set proper bits in MPU-6050 to enable compass in GY-86 module
 	
  private:
@@ -52,7 +51,6 @@ class FC_HMC5883L_Lib
 	vector3Int compass; // compass data after calculations
 	float heading;
 	float declination;
-	uint8_t calibrationDuration; // seconds
 	
 	// calibration values to calculate scale and offset
 	vector3Int calMins; // calibration minimum values of raw readings

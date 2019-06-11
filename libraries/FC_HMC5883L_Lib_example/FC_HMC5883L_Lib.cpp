@@ -31,7 +31,6 @@ FC_HMC5883L_Lib::FC_HMC5883L_Lib()
 	calMaxs.z = 0;
 	
 	declination = 0;
-	calibrationDuration = 10; // sec
 }
 
 
@@ -90,7 +89,7 @@ void FC_HMC5883L_Lib::setCalibrationValues(vector3Int& minimums, vector3Int& max
 }
 
 
-void FC_HMC5883L_Lib::calibrateCompass()
+void FC_HMC5883L_Lib::calibrateCompass(uint8_t seconds)
 {
 	#ifdef SERIAL_CALIBRATION_DEBUG
 		Serial.println("Compass calibration has started");
@@ -103,7 +102,7 @@ void FC_HMC5883L_Lib::calibrateCompass()
 	calMins.z = calMaxs.z = compass_raw.z;
 	
 	uint32_t startTime = millis();
-	while (millis()-startTime < calibrationDuration*1000)
+	while (millis()-startTime < seconds*1000)
 	{
 		delayMicroseconds(3700); // simulate 250Hz program
 		
@@ -213,12 +212,6 @@ float FC_HMC5883L_Lib::getHeading()
 void FC_HMC5883L_Lib::setCompassDeclination(float declin)
 {
 	declination = declin;
-}
-
-
-void FC_HMC5883L_Lib::setCalibrationDuration(uint8_t seconds)
-{
-	calibrationDuration = seconds;
 }
 
 
