@@ -44,13 +44,17 @@ void setup()
 	//mpu.setGyroFusionMultiplier(0.996); // values between 0 and 1 (but not equal)
 	
 	
-	// if you use compass, provide initial Z axis value
+	// Calibrate accelerometer if needed (!! NEED TO be in the LEVEL position !!)
+	mpu.calibrateAccelerometer(); // parameter - amount of averaged samples
+	
+	
+	// If you use compass, provide initial Z axis value
 	//mpu.setInitialZAxisValue(<heading>);
 	
 	
 	// GYRO CALIBRATION !
 	Serial.println("Started calibrating the gyro");
-	mpu.calibrateGyro();
+	mpu.calibrateGyro(); // parameter - amount of averaged samples
 	Serial.println("Gyro calibration has finished");
 	
 	loopStartTime = micros();
@@ -60,7 +64,7 @@ void setup()
 void loop()
 {
 	/*
-		NOTE: read6AxisMotion is to read raw data from the device (certain frequency if use gyro).
+		NOTE: read6AxisMotion() is to read raw data from the device (certain frequency if use gyro).
 		      Get methods are to get the data (use whenever needed)
 	*/
 	
