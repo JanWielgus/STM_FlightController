@@ -47,10 +47,11 @@ class FC_MPU6050Lib
 	//vector3& getGyroAngles();                            // (useless) angles calculated from the gyro (rotation)
 	vector3Float& getFusedXYAngles();					
 	float getZAngle(float heading=-1);                     // just HEADING if compass data is provided
-	void calibrateGyro(int samples = 2000);                // Whole process last about 8 seconds!!
+	void calibrateGyro(int samples = 2000);                // Compensate drift. Whole process last about 8 seconds (if 2000 samples)!!
+	void calibrateAccelerometer(int samples = 250);        // current tilt will be the level
 	void setGyroFusionMultiplier(float);
 	void setCalculationsFrequency(uint16_t freq=250);
-	void setInitialZAxisValue(float compassHeading);                           // method to set Z axis value to compass measurement at the beginning
+	void setInitialZAxisValue(float compassHeading);       // method to set Z axis value to compass measurement at the beginning
 	
 	
  private:
@@ -75,6 +76,8 @@ class FC_MPU6050Lib
 		 int16_t yRoll;
 		 int16_t zYaw;
 	} gyroCalVal;
+	
+	vector3Int accCalVal;
 };
 
 

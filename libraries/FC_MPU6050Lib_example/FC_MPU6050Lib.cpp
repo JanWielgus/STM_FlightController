@@ -29,6 +29,10 @@ FC_MPU6050Lib::FC_MPU6050Lib()
 	gyroCalVal.yRoll = 0;
 	gyroCalVal.zYaw = 0;
 	
+	accCalVal.x = 0;
+	accCalVal.y = 0;
+	accCalVal.z = 0;
+	
 	// default gyro calculation multipliers values
 	Multiplier1 = 0.0000611;
 	Multiplier2 = 0.000001066;
@@ -112,25 +116,28 @@ void FC_MPU6050Lib::read6AxisMotion()
 	
 	
 	rawRotation.x *= -1; // pitch
-	rawRotation.z *= -1; // yaw      <---- !!! zalezy czy jest jak magnetometr
+	rawRotation.z *= -1; // yaw
 	
 	// Use the calibration data
 	rawRotation.x -= gyroCalVal.xPitch;
 	rawRotation.y -= gyroCalVal.yRoll;
 	rawRotation.z -= gyroCalVal.zYaw;
+	rawAcceleration.x -= accCalVal.x;
+	rawAcceleration.y -= accCalVal.y;
+	rawAcceleration.z -= accCalVal.z;
 	
 	// Temperature
-	temperature = (float)temperature/340 + 36.53;
+	temperature = ((float)temperature/340 + 36.53) + 0.5; // 0.5 to average for int
 }
 
 
-void FC_MPU6050Lib::calibrateGyro(int spls)
+void FC_MPU6050Lib::calibrateGyro(int samples)
 {
 	// !!!!
 	// Whole process last about 8 seconds !!
+	// (when 2000 samples)
 	// !!!!
 	
-	int samples = spls;
 	int32_t sumX = 0;
 	int32_t sumY = 0;
 	int32_t sumZ = 0;
@@ -146,9 +153,32 @@ void FC_MPU6050Lib::calibrateGyro(int spls)
 		delay(4); // simulate 250Hz loop
 	}
 	
-	gyroCalVal.xPitch += float(sumX)/float(samples);
-	gyroCalVal.yRoll += float(sumY)/float(samples);
-	gyroCalVal.zYaw += float(sumZ)/float(samples);
+	gyroCalVal.xPitch += float(sumX) / samples;
+	gyroCalVal.yRoll += float(sumY) / samples;
+	gyroCalVal.zYaw += float(sumZ) / samples;
+}
+
+
+void FC_MPU6050Lib::calibrateAccelerometer(int samples)
+{
+	int32_t sumX = 0;
+	int32_t sumY = 0;
+	int32_t sumZ = 0;
+	
+	for (int i=0; i<samples; i++)
+	{
+		read6AxisMotion();
+		
+		sumX += rawAcceleration.x;
+		sumY += rawAcceleration.y;
+		sumZ += (rawAcceleration.z - 4096); // 4096 is the value for 1g (from the datasheet)
+		
+		delay(4);
+	}
+	
+	accCalVal.x += float(sumX) / samples;
+	accCalVal.y += float(sumY) / samples;
+	accCalVal.z += float(sumZ) / samples;
 }
 
 
