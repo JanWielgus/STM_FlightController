@@ -40,6 +40,7 @@ class FC_HMC5883L_Lib
 	float getHeading();
 	void calibrateCompass(uint8_t seconds=10);
 	void setCalibrationValues(vector3Int& minimums, vector3Int& maximums); // instead of making a full calibration, provide values from earlier calibration
+	void getCalibrationValues(vector3Int* minimums, vector3Int* maximums); // values returned through the pointers
 	void setCompassDeclination(float declin);
 	void enableHMC_on_MPU(bool needToBeginWire_flag = true); // set proper bits in MPU-6050 to enable compass in GY-86 module
 	

@@ -89,6 +89,18 @@ void FC_HMC5883L_Lib::setCalibrationValues(vector3Int& minimums, vector3Int& max
 }
 
 
+void FC_HMC5883L_Lib::getCalibrationValues(vector3Int* minimums, vector3Int* maximums)
+{
+	minimums->x = calMins.x;
+	minimums->y = calMins.y;
+	minimums->z = calMins.z;
+	
+	maximums->x = calMaxs.x;
+	maximums->y = calMaxs.y;
+	maximums->z = calMaxs.z;
+}
+
+
 void FC_HMC5883L_Lib::calibrateCompass(uint8_t seconds)
 {
 	#ifdef SERIAL_CALIBRATION_DEBUG
