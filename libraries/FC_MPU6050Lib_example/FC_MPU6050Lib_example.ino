@@ -46,6 +46,9 @@ void setup()
 	
 	// Calibrate accelerometer if needed (!! NEED TO be in the LEVEL position !!)
 	mpu.calibrateAccelerometer(); // parameter - amount of averaged samples
+	// Get and set calibration values
+	//mpu.setAccelerometerCalibrationValues(<>, <>, <>);
+	//FC_MPU6050Lib::vector3Int calibValues = mpu.getAccelerometerCalibrationValues();
 	
 	
 	// If you use compass, provide initial Z axis value
