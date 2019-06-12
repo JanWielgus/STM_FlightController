@@ -200,6 +200,20 @@ void FC_MPU6050Lib::calibrateAccelerometer(int samples)
 }
 
 
+FC_MPU6050Lib::vector3Int FC_MPU6050Lib::getAccelerometerCalibrationValues()
+{
+	return accCalVal;
+}
+
+
+void FC_MPU6050Lib::setAccelerometerCalibrationValues(int16_t offX, int16_t offY, int16_t offZ)
+{
+	accCalVal.x = offX;
+	accCalVal.y = offY;
+	accCalVal.z = offZ;
+}
+
+
 void FC_MPU6050Lib::setGyroFusionMultiplier(float mpr)
 {
 	GyroFusionMultiplier = mpr;
