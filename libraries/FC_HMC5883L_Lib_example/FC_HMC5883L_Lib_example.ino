@@ -50,11 +50,21 @@ void setup()
 		delay(500);
 	}
 	
+	
+	// Compass calibration
 	//compass.calibrateCompass();
+	
+	
 	// Temporary and not accurate values
 	FC_HMC5883L_Lib::vector3Int minCalVal = {-503, -505, -1440};
 	FC_HMC5883L_Lib::vector3Int maxCalVal = {504, 463, -330};
 	compass.setCalibrationValues(minCalVal, maxCalVal);
+	
+	
+	/* How to get calibration values
+	FC_HMC5883L_Lib::vector3Int readCalValuesMin, readCalValuesMax; // calibration values
+	compass.getCalibrationValues(&readCalValuesMin, &readCalValuesMax);
+	*/
 	
 	compass.setCompassDeclination(5.0);
 	
