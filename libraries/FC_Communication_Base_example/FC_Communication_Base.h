@@ -43,8 +43,8 @@ class FC_Communication_Base
 	FC_Communication_Base(Stream* serial, uint8_t bufSize=255); // serial, packetToPrepare - packet used outside to send data (there memory is allocated), bufSize - max buffer size
 	~FC_Communication_Base();
 	
-	void sendData(); // data to send packet before to dpToSend
-	bool receiveData(); // return false if there are no data
+	virtual void sendData(); // data to send packet before to dpToSend
+	virtual bool receiveData(); // return false if there are no data
 	//bool isAvailable(); // receiveData() return true if was available and false if not
 	
 	// dataPackets to transfer data between class and outside
