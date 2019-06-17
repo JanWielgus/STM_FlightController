@@ -111,19 +111,3 @@ uint8_t FC_Communication_Base::calcChecksum()
 	return checksum;
 }
 
-
-bool FC_Communication_Base::checkReceivedDataPacket(uint8_t packetID, uint8_t packetSize, bool checkChecksumFlag, uint8_t IDpos)
-{
-	if (dpReceived.buffer[IDpos] == packetID && dpReceived.size == packetSize)
-	{
-		if (!checkChecksumFlag)
-			return true;
-		
-		//else
-		if (checkChecksum())
-			return true;	
-	}
-	
-	return false;
-}
-

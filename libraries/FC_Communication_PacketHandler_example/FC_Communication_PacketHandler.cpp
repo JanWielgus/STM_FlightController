@@ -56,3 +56,19 @@ bool FC_Communication_PacketHandler::connectionState()
 }
 
 
+bool FC_Communication_PacketHandler::checkReceivedDataPacket(uint8_t packetID, uint8_t packetSize, bool checkChecksumFlag, uint8_t IDpos)
+{
+	if (dpReceived.buffer[IDpos] == packetID && dpReceived.size == packetSize)
+	{
+		if (!checkChecksumFlag)
+		return true;
+		
+		//else
+		if (checkChecksum())
+		return true;
+	}
+	
+	return false;
+}
+
+

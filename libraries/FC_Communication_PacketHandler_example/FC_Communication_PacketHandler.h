@@ -34,6 +34,13 @@ class FC_Communication_PacketHandler : public FC_Communication_Base
 	void packAndSendData(uint8_t packetID);       // pack data to the data packet and send it
 	bool connectionState();                       // returns true if data are being properly unpacked
 	
+	// check if data is a certain packet with ID and SIZE
+	bool checkReceivedDataPacket(uint8_t packetID, uint8_t packetSize, bool checkChecksumFlag = false, uint8_t IDpos = 0);
+		// packetID - check if this data packet is a specific data packet with that ID
+		// packetSize - check if this data packet has the same size as should have
+		// checkChecksumFlag - if there is a need to check checksum (if not, IDpos is default 0 -> first in buffer)
+		// IDpos - position of the packetID in buffer (if use checksum -> 1, if not -> 0)
+	
 	
  private:
 
