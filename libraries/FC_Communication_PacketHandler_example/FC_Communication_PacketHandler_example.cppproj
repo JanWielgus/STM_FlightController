@@ -64,6 +64,7 @@
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_Communication_PacketHandler_example</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -98,6 +99,7 @@
   <armgcccpp.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_Communication_PacketHandler_example</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -461,6 +463,7 @@ build.path=C:\Users\janwi\AppData\Local\Temp\VMBuilds\FC_Communication_PacketHan
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_Communication_PacketHandler_example</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -495,6 +498,7 @@ build.path=C:\Users\janwi\AppData\Local\Temp\VMBuilds\FC_Communication_PacketHan
   <armgcccpp.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FC_Communication_PacketHandler_example</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>

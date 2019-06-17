@@ -10,6 +10,7 @@
 #endif
 
 #include <FC_Communication_Base.h>
+#include <FC_CustomDataTypes.h>
 
 
 
@@ -25,7 +26,7 @@
 
 
 
-class FC_Communication_PacketHandler : public FC_Communication_Base
+class FC_Communication_PacketHandler : private FC_Communication_Base
 {
  public:
 	FC_Communication_PacketHandler(Stream* serial, uint8_t bufSize);
@@ -42,17 +43,42 @@ class FC_Communication_PacketHandler : public FC_Communication_Base
 		// (in code) IDpos - position of the packetID in buffer (auto: checkChecksum - 1, else - 0)
 	
 	
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	// CHANGE FOR OTHER PURPOSES FROM HERE
+	
+	
+	
+	
+	// data packet types and sizes
+	//TYPE1
+	struct
+	{
+		const uint8_t TYPE1_ID = 0x01; // Unique ID
+		const uint8_t TYPE1_SIZE = 9;  // How many uint8_t's is required to send all TYPE1 data packet
+		// Other types (pairs ID and SIZE)
+	} sendPacketTypes;
+	
+	struct
+	{
+		const uint8_t TYPE1_ID = 0x01;
+		const uint8_t TYPE1_SIZE = 11;  // How many uint8_t's is required to receive all TYPE1 data packet
+		// Other types (pairs ID and SIZE)
+	} receivedPacketTypes;
+	
+	
  private:
-
 	struct receivedDataType
 	{
 		// all received data
+		// use only variables that can be divided into uint8_t's
 		
 		//TYPE1
 		uint8_t var1;
-		int16_t liczba;
-		float zmienna;
-		int16_t innaLiczba;
+		int16Byte liczba;
+		floatByte zmienna;
+		uint16Byte innaLiczba;
 		
 		//TYPE2
 		//...
@@ -61,31 +87,23 @@ class FC_Communication_PacketHandler : public FC_Communication_Base
 	struct toSendDataType
 	{
 		// all data to send
+		// use only variables that can be divided into uint8_t's
 		
 		//TYPE1
-		float temp;
-		int16_t zmiennaDoWyslania;
+		floatByte temp;
+		int16Byte zmiennaDoWyslania;
 		uint8_t otherVar;
 		
 		//TYPE2
 		//...
 	};
 	
-	// data packet types and sizes
-	//TYPE1
-	struct
-	{
-		const uint8_t TYPE1_ID = 0x01; // Unique ID
-		const uint8_t TYPE1_SIZE = 8;  // How many uint8_t's is required to send all TYPE1 data packet
-		// Other types (pairs ID and SIZE)
-	} sendPacketTypes;
 	
-	struct
-	{
-		const uint8_t TYPE1_ID = 0x01;
-		const uint8_t TYPE1_SIZE = 10;  // How many uint8_t's is required to receive all TYPE1 data packet
-		// Other types (pairs ID and SIZE)
-	} receivedPacketTypes;
+	
+	// TO HERE
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
 	
 	
 	// There data is created (access from inside the class)
