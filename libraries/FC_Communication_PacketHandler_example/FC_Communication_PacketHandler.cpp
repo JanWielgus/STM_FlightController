@@ -32,11 +32,18 @@ bool FC_Communication_PacketHandler::receiveAndUnpackData()
 	if (!receiveData())
 		return false;
 	
-	if (/* write checking method in base class */)
+	// Check if this packet is the specific one (TYPE1)
+	if (checkReceivedDataPacket(receivedPacketTypes.TYPE1_ID, receivedPacketTypes.TYPE1_SIZE, true))
+	{
+		// Unpack data by updating proper variables
+		// [0] - checksum
+		// [1] - ID
+		data.received.var1 = dpReceived.buffer[2];
+	}
 	
-	
-	
-	
+	// Check if this packet is TYPE2
+	//else if (checkReceivedDataPacket(.......))
+	// ...
 	
 	
 	
@@ -56,8 +63,11 @@ bool FC_Communication_PacketHandler::connectionState()
 }
 
 
-bool FC_Communication_PacketHandler::checkReceivedDataPacket(uint8_t packetID, uint8_t packetSize, bool checkChecksumFlag, uint8_t IDpos)
+bool FC_Communication_PacketHandler::checkReceivedDataPacket(uint8_t packetID, uint8_t packetSize, bool checkChecksumFlag)
 {
+	static uint8_t IDpos;
+	IDpos = checkChecksumFlag==true ? 1 : 0;
+	
 	if (dpReceived.buffer[IDpos] == packetID && dpReceived.size == packetSize)
 	{
 		if (!checkChecksumFlag)
