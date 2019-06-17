@@ -13,60 +13,89 @@
 
 
 
+/*
+	HOW TO USE:
+	- In the class use data structure to access the data. This should be the only place, where whole
+	  sent and received data are stored.
+	- Outside the class use toSend and received public references to the data (data to send place
+	  in toSend structure reference before sending, in the received structure reference)
+	- All variables to send have to be created in toSendDataType and only there.
+	- All variables to receive have to be created in receivedDataType and only there.
+*/
+
+
+
 class FC_Communication_PacketHandler : public FC_Communication_Base
 {
  public:
 	FC_Communication_PacketHandler(Stream* serial, uint8_t bufSize);
- 
-	struct receivedGardenData
-	{
-		uint8_t var1;
-		int liczba;
-		float zmienna;
-		int innaLiczba;
-	};
 	
-	struct gardenDataToSend
-	{
-		float temp;
-		int zmiennaDoWyslania;
-		uint8_t otherVar;
-	};
-
-
-	// Tu musisz sobie przypomniec jak nadpisac stara metode z klasy podstawowej ale uzyc starej metody we wnetrzu nowej
-	// W starej bedzie trzeba dopisac virtual lub zrobic inna nazwe (lub chyba sie da uzyc takiej samej a starej uzywac klasa::metoda() )
-	
-	// metody: odbieranie, wysylanie, sprawdzanie stanu polaczenia (moze to dac do podstawowej??!), przekazanie spakowanej paczki do wyslania
-	
-	//void getReceivedData(receivedGardenData&); // returns reference to the structure of data to save time
-	// UWAGA!! Mo¿liwe, ze nie bedzie potrzeba tych zmiennych, wystarczy zrobic publiczne referencje do prywatnych struktur w programie, odpowiednia oznaczona const
-	
-	
-	/*
-	// 
-	typedef const gardenDataToSend& dataToSendType;
-	typedef const receivedGardenData& receivedDataType;
-	*/
+	bool receiveAndUnpackData();                  // receive proper data packet/packets, returns true if at least one data packet was received
+	void packAndSendData(uint8_t packetID);       // pack data to the data packet and send it
+	bool connectionState();                       // returns true if data are being properly unpacked
 	
 	
  private:
+
+	struct receivedDataType
+	{
+		// all received data
+		
+		//TYPE1
+		uint8_t var1;
+		int16_t liczba;
+		float zmienna;
+		int16_t innaLiczba;
+		
+		//TYPE2
+		//...
+	};
+	
+	struct toSendDataType
+	{
+		// all data to send
+		
+		//TYPE1
+		float temp;
+		int16_t zmiennaDoWyslania;
+		uint8_t otherVar;
+		
+		//TYPE2
+		//...
+	};
+	
+	// data packet types and sizes
+	//TYPE1
+	struct
+	{
+		const uint8_t TYPE1_ID = 0x01; // Unique ID
+		const uint8_t TYPE1_SIZE = 8;  // How many uint8_t's is required to send all TYPE1 data packet
+		// Other types (pairs ID and SIZE)
+	} sendPacketTypes;
 	
 	struct
 	{
-		receivedGardenData received; // this example data is private for this class and can be accessed through the getData() method
-		gardenDataToSend toSend; // powrorz sobie jak zrobic, zeby odebrane dane byly read-only dla outside a w dataToSend dalo sie wpisac dane przez jakas metode (przeslac gotowa paczke przez referencje)
+		const uint8_t TYPE1_ID = 0x01;
+		const uint8_t TYPE1_SIZE = 10;  // How many uint8_t's is required to receive all TYPE1 data packet
+		// Other types (pairs ID and SIZE)
+	} receivedPacketTypes;
+	
+	
+	// There data is created (access from inside the class)
+	struct
+	{
+		receivedDataType received;
+		toSendDataType toSend;
 	} data;
 	
 	
  public:
-
 	// This is to access data from outside the class. 
-	
-	gardenDataToSend& toSend = data.toSend;
-	const receivedGardenData& received = data.received;
+	toSendDataType& toSend = data.toSend;                // put data here (outside the class)
+	const receivedDataType& received = data.received;    // read-only, read data from here
 };
 
 
 #endif
+
 

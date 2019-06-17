@@ -12,11 +12,33 @@ FC_Communication_PacketHandler::FC_Communication_PacketHandler(Stream* serial, u
 }
 
 
-/*
-void FC_Communication_PacketHandler::getReceivedData(receivedGardenData& dataContainer)
+bool FC_Communication_PacketHandler::receiveAndUnpackData()
 {
-	dataContainer = allData;
+	// Stop if any data packet was received
+	if (!receiveData())
+		return false;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	return true;
 }
-*/
+
+
+void FC_Communication_PacketHandler::packAndSendData(uint8_t packetID)
+{
+	
+}
+
+
+bool FC_Communication_PacketHandler::connectionState()
+{
+	
+}
 
 
