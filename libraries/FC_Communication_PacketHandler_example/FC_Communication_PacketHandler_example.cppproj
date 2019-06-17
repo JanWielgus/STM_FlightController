@@ -5,7 +5,7 @@
     <ProjectVersion>7.0</ProjectVersion>
     <ToolchainName>com.Atmel.ARMGCC.CPP</ToolchainName>
     <ProjectGuid>{8b2d4a5a-ea2a-44a3-93a7-76148056c48f}</ProjectGuid>
-    <avrdevice>ATSAM3X8E</avrdevice>
+    <avrdevice>AT90CAN128</avrdevice>
     <avrdeviceseries>none</avrdeviceseries>
     <OutputType>Executable</OutputType>
     <Language>CPP</Language>
@@ -65,15 +65,19 @@
     <ListValues>
       <Value>../../../FC_Communication_PacketHandler_example</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/avr</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.2/include</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.3/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize for size (-Os)</armgcc.compiler.optimization.level>
@@ -95,15 +99,19 @@
     <ListValues>
       <Value>../../../FC_Communication_PacketHandler_example</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/avr</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.2/include</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.3/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master</Value>
     </ListValues>
   </armgcccpp.compiler.directories.IncludePaths>
   <armgcccpp.compiler.optimization.level>Optimize for size (-Os)</armgcccpp.compiler.optimization.level>
@@ -454,15 +462,19 @@ build.path=C:\Users\janwi\AppData\Local\Temp\VMBuilds\FC_Communication_PacketHan
     <ListValues>
       <Value>../../../FC_Communication_PacketHandler_example</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/avr</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.2/include</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.3/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master</Value>
     </ListValues>
   </armgcc.compiler.directories.IncludePaths>
   <armgcc.compiler.optimization.level>Optimize for size (-Os)</armgcc.compiler.optimization.level>
@@ -484,15 +496,19 @@ build.path=C:\Users\janwi\AppData\Local\Temp\VMBuilds\FC_Communication_PacketHan
     <ListValues>
       <Value>../../../FC_Communication_PacketHandler_example</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/avr</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.2/include</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.3/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master</Value>
     </ListValues>
   </armgcccpp.compiler.directories.IncludePaths>
   <armgcccpp.compiler.optimization.level>Optimize for size (-Os)</armgcccpp.compiler.optimization.level>
