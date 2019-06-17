@@ -25,17 +25,16 @@ typedef uint8 size_t;
 
 
 
-
-struct dataPacket
-{
-	uint8_t* buffer;
-	size_t size;
-};
-
-
-
 class FC_Communication_Base
 {
+ private:
+	struct dataPacket
+	{
+		uint8_t* buffer;
+		size_t size;
+	};
+	
+	
  public:
 	const size_t BufferSize; // MAX: 256
 	//typedef void (*PacketHandlerFunction)(const uint8_t* buffer, size_t size);
@@ -51,6 +50,12 @@ class FC_Communication_Base
 	dataPacket dpToSend; // data packet used to send data (filled outside)
 	dataPacket dpReceived; // data packet with received data (used outside to unpack data)
 
+	/*
+		How to use checksums:
+		- buffer[0] in dataPacket is reserved for the checksum value
+		- if you are calculating the checksum, store it in the buffer[0]
+		  (calculate it after packing data to dataPacket!)
+	*/
 	bool checkChecksum(); // xor'owanie
 	uint8_t calcChecksum();
 	
