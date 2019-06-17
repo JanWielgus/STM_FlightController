@@ -57,7 +57,19 @@ bool FC_Communication_Base::receiveData()
 			
 			dpReceived.buffer = decodeBuffer;
 			dpReceived.size = numDecoded;
+			
+			//
 			receivedDataFlag = true;
+			// THERE IS A SERIOUS BUG !!!!
+			//
+			// If there will be two data packets single file, then only last one will be received
+			// (previous ones will we overwritten) 
+			//
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			//
+			// najlepiej od razu tutaj zwroc true i zakoncz funkcje
+			// a w wywylouacej trzeba zrobic petle dopuki ta funkcja zwraca true
+			// to odbieraj kolejne paczki danych
 			
 			receiveBufferIndex = 0;
 		}
@@ -97,5 +109,11 @@ uint8_t FC_Communication_Base::calcChecksum()
 		checksum ^= dpToSend.buffer[i]; // xor'owanie kolejnych bajtow
 	
 	return checksum;
+}
+
+
+bool FC_Communication_Base::checkDataPacket(uint8_t packetID, uint8_t packetSize, bool checkChecksumFlag)
+{
+	if ()
 }
 
