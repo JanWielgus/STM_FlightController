@@ -46,7 +46,6 @@ void FC_Communication_Base::sendData()
 
 bool FC_Communication_Base::receiveData()
 {
-	bool receivedDataFlag = false;
 	while (serial->available() > 0)
 	{
 		uint8_t data = serial->read();
@@ -58,20 +57,13 @@ bool FC_Communication_Base::receiveData()
 			dpReceived.buffer = decodeBuffer;
 			dpReceived.size = numDecoded;
 			
-			//
-			receivedDataFlag = true;
-			// THERE IS A SERIOUS BUG !!!!
-			//
-			// If there will be two data packets single file, then only last one will be received
-			// (previous ones will we overwritten) 
-			//
-			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			//
-			// najlepiej od razu tutaj zwroc true i zakoncz funkcje
-			// a w wywylouacej trzeba zrobic petle dopuki ta funkcja zwraca true
-			// to odbieraj kolejne paczki danych
+			// Function can not end here
+			//receivedDataFlag = true;
 			
 			receiveBufferIndex = 0;
+			
+			// So end here
+			return true; // Data packet was decoded
 		}
 		else
 		{
@@ -79,12 +71,13 @@ bool FC_Communication_Base::receiveData()
 				receiveBuffer[receiveBufferIndex++] = data;
 			else
 			{
-				// ERROR, buffer oberflow if we write.
+				// ERROR, buffer oberflow if we write. 
 			}
 		}
 	}
 	
-	return receivedDataFlag;
+	// Any complete data packet was received
+	return false;
 }
 
 

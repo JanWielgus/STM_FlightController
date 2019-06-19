@@ -28,46 +28,49 @@ FC_Communication_PacketHandler::FC_Communication_PacketHandler(Stream* serial, u
 
 bool FC_Communication_PacketHandler::receiveAndUnpackData()
 {
-	// Stop if any data packet was received
-	if (!receiveData())
-		return false;
-	
-	// Check if this packet is the specific one (TYPE1)
-	if (checkReceivedDataPacket(receivedPacketTypes.TYPE1_ID, receivedPacketTypes.TYPE1_SIZE, true))
+	bool atLeastOneFlag = false; // at least one packet was received. Needed to return true/false at the end
+		
+	while (receiveData())
 	{
-		// Unpack data by updating proper variables
-		// [0] - checksum
-		// [1] - ID
-		data.received.var1 = dpReceived.buffer[2];
-		data.received.liczba.byteArr()[0] = dpReceived.buffer[3];
-		data.received.liczba.byteArr()[1] = dpReceived.buffer[4];
-		// 4 bytes
-		for(int i=0; i<4; i++)
-			data.received.zmienna.byteArr()[i] = dpReceived.buffer[5+i];
-		data.received.innaLiczba.byteArr()[0] = dpReceived.buffer[9];
-		data.received.innaLiczba.byteArr()[1] = dpReceived.buffer[10];
+		// Check if this packet is the specific one (TYPE1)
+		if (checkReceivedDataPacket(receivedPacketTypes.TYPE1_ID, receivedPacketTypes.TYPE1_SIZE, true))
+		{
+			// Unpack data by updating proper variables
+			// [0] - checksum
+			// [1] - ID
+			data.received.var1 = dpReceived.buffer[2];
+			data.received.liczba.byteArr()[0] = dpReceived.buffer[3];
+			data.received.liczba.byteArr()[1] = dpReceived.buffer[4];
+			// 4 bytes
+			for(int i=0; i<4; i++)
+				data.received.zmienna.byteArr()[i] = dpReceived.buffer[5+i];
+			data.received.innaLiczba.byteArr()[0] = dpReceived.buffer[9];
+			data.received.innaLiczba.byteArr()[1] = dpReceived.buffer[10];
 		
-		// PACKET SIZE SHOULD BE 11 !!! (10+1=11  counted from zero)
+			// PACKET SIZE SHOULD BE 11 !!! (10+1=11  counted from zero)
 		
-		// RETURN TRUE after each successful communication
-		return true;
+			// indicate a successful communication
+			atLeastOneFlag = true;
+		}
+	
+	
+		// Check if this packet is TYPE2
+		/*
+		else if (checkReceivedDataPacket(receivedPacketTypes.TYPE2_ID, receivedPacketTypes.TYPE2_SIZE, true))
+		{
+			// ....
+		
+		
+		
+			// indicate a successful communication
+			atLeastOneFlag = true;
+		}
+		*/
 	}
 	
 	
-	// Check if this packet is TYPE2
-	/*
-	else if (checkReceivedDataPacket(receivedPacketTypes.TYPE2_ID, receivedPacketTypes.TYPE2_SIZE, true))
-	{
-		// ....
-		
-		
-		
+	if (atLeastOneFlag)
 		return true;
-	}
-	*/
-	
-	
-	// There was no successfully read data packet
 	return false;
 }
 

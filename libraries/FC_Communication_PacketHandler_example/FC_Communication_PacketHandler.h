@@ -30,6 +30,7 @@ class FC_Communication_PacketHandler : private FC_Communication_Base
 {
  public:
 	FC_Communication_PacketHandler(Stream* serial, uint8_t bufSize);
+		// bufSize - the size of the largest data packet + ~2 for safety
 	
 	bool receiveAndUnpackData();                  // receive proper data packet/packets, returns true if at least one data packet was received
 	void packAndSendData(uint8_t packetID);       // pack data to the data packet and send it

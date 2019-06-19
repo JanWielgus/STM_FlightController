@@ -43,7 +43,7 @@ class FC_Communication_Base
 	~FC_Communication_Base();
 	
 	void sendData(); // data to send packet before to dpToSend
-	bool receiveData(); // return false if there are no data
+	bool receiveData(); // receive AT MOST ONE data packet. HAVE TO be called until returns false (data packet was incomplete or no data)
 	//bool isAvailable(); // receiveData() return true if was available and false if not
 	
 	// dataPackets to transfer data between class and outside
