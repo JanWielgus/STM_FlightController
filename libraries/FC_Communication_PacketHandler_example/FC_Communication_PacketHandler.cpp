@@ -8,7 +8,7 @@
 FC_Communication_PacketHandler::FC_Communication_PacketHandler(Stream* serial, uint8_t bufSize)
 	:FC_Communication_Base(serial, bufSize)
 {
-	
+	conStab = 0;
 }
 
 
@@ -69,8 +69,18 @@ bool FC_Communication_PacketHandler::receiveAndUnpackData()
 	}
 	
 	
+	// Calculate the connection stability
+	uint8_t sum = (uint8_t)pastComStatesArr[1] + pastComStatesArr[0] + atLeastOneFlag;
+	// TUNE multipliers if needed (depending on the update frequency)
+	conStab = sum<conStab ? 0.9*sum + 0.1*conStab  :  0.7*sum + 0.3*conStab; // slower increase than decrease
+	// update historic values
+	pastComStatesArr[1] = pastComStatesArr[0];
+	pastComStatesArr[0] = atLeastOneFlag;
+	
+	
 	if (atLeastOneFlag)
 		return true;
+	
 	return false;
 }
 
@@ -108,9 +118,10 @@ void FC_Communication_PacketHandler::packAndSendData(uint8_t packetID)
 }
 
 
-bool FC_Communication_PacketHandler::connectionState()
+uint8_t FC_Communication_PacketHandler::connectionStability()
 {
-	
+	// calculated while receiving
+	return conStab;
 }
 
 

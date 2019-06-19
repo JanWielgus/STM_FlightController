@@ -34,7 +34,7 @@ class FC_Communication_PacketHandler : private FC_Communication_Base
 	
 	bool receiveAndUnpackData();                  // receive proper data packet/packets, returns true if at least one data packet was received
 	void packAndSendData(uint8_t packetID);       // pack data to the data packet and send it
-	bool connectionState();                       // returns true if data are being properly unpacked
+	uint8_t connectionStability();                // 0-no connection, 1-minor com.  <---> 3-stable com
 	
 	// check if data is a certain packet with ID and SIZE
 	bool checkReceivedDataPacket(uint8_t packetID, uint8_t packetSize, bool checkChecksumFlag = false);
@@ -113,6 +113,9 @@ class FC_Communication_PacketHandler : private FC_Communication_Base
 		receivedDataType received;
 		toSendDataType toSend;
 	} data;
+	
+	bool pastComStatesArr[2] = {}; // 2 because you need 2 past values and one present to have 3 max (read conStab() description), 0-newer, 1-older
+	float conStab; // connectionStability method return this value. Calculated in the receive function
 	
 	
  public:
