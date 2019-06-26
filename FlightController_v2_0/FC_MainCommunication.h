@@ -144,8 +144,8 @@ class FC_MainCommunication : private FC_Communication_Base
 		
 		// TYPE2 - basic
 		// napiecie najnizszej celi
-		// errors 1 & 2 /\
-		// bitSwitch 1 /\
+		// errors 1 & 2 (up)
+		// bitSwitch 1 (up)
 	};
 	
 	
