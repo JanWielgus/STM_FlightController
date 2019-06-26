@@ -26,6 +26,16 @@ FC_Communication_PacketHandler::FC_Communication_PacketHandler(Stream* serial, u
 */
 
 
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// CHANGE FOR OTHER PURPOSES FROM HERE
+
+
+
+
+
 bool FC_Communication_PacketHandler::receiveAndUnpackData()
 {
 	bool atLeastOneFlag = false; // at least one packet was received. Needed to return true/false at the end
@@ -69,7 +79,7 @@ bool FC_Communication_PacketHandler::receiveAndUnpackData()
 	}
 	
 	
-	// Calculate the connection stability
+	// Calculate the connection stability (edit only parameters)
 	uint8_t sum = (uint8_t)pastComStatesArr[1] + pastComStatesArr[0] + atLeastOneFlag;
 	// TUNE multipliers if needed (depending on the update frequency)
 	conStab = sum<conStab ? 0.8*sum + 0.2*conStab  :  0.6*sum + 0.4*conStab; // slower increase than decrease
@@ -116,6 +126,16 @@ void FC_Communication_PacketHandler::packAndSendData(uint8_t packetID)
 	}
 	*/
 }
+
+
+
+
+
+// TO HERE
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
 
 
 uint8_t FC_Communication_PacketHandler::connectionStability()
