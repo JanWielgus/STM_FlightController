@@ -46,7 +46,6 @@ void FC_Communication_Base::sendData()
 
 bool FC_Communication_Base::receiveData()
 {
-	bool receivedDataFlag = false;
 	while (serial->available() > 0)
 	{
 		uint8_t data = serial->read();
@@ -57,9 +56,14 @@ bool FC_Communication_Base::receiveData()
 			
 			dpReceived.buffer = decodeBuffer;
 			dpReceived.size = numDecoded;
-			receivedDataFlag = true;
+			
+			// Function can not end here
+			//receivedDataFlag = true;
 			
 			receiveBufferIndex = 0;
+			
+			// So end here
+			return true; // Data packet was decoded
 		}
 		else
 		{
@@ -67,12 +71,13 @@ bool FC_Communication_Base::receiveData()
 				receiveBuffer[receiveBufferIndex++] = data;
 			else
 			{
-				// ERROR, buffer oberflow if we write.
+				// ERROR, buffer oberflow if we write. 
 			}
 		}
 	}
 	
-	return receivedDataFlag;
+	// Any complete data packet was received
+	return false;
 }
 
 
