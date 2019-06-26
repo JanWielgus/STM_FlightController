@@ -12,13 +12,13 @@
 
 const uint8_t MAX_SEND_SIZE = 30;
 
-FC_Communication_PacketHandler com(&Serial, MAX_SEND_SIZE);
+FC_Communication_PacketHandler com(&Serial1, MAX_SEND_SIZE);
 
 
 
 void setup()
 {
-
+	Serial1.begin(9600);
 }
 
 
@@ -45,4 +45,7 @@ void loop()
 	
 	// Check conneciton stability:
 	int conStability = com.connectionStability(); // int values from 0 to 3 (3 best)
+	
+	
+	delay(50);
 }
