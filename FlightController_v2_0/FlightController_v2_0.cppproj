@@ -70,6 +70,14 @@
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FlightController_v2_0</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/MyPID</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_MPU6050Lib</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_HMC5883L_Lib</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_EVA_Filter</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Motors</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -110,6 +118,14 @@
   <armgcccpp.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FlightController_v2_0</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/MyPID</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_MPU6050Lib</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_HMC5883L_Lib</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_EVA_Filter</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Motors</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -151,7 +167,7 @@
   </armgcccpp.preprocessingassembler.general.IncludePaths>
 </ArmGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>../../../FlightController_v2_0;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>../../../FlightController_v2_0;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base;C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes;C:/Users/janwi/Documents/Arduino/libraries/FC_EVA_Filter;C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker;C:/Users/janwi/Documents/Arduino/libraries/FC_MPU6050Lib;C:/Users/janwi/Documents/Arduino/libraries/FC_HMC5883L_Lib;C:/Users/janwi/Documents/Arduino/libraries/FC_Motors;C:/Users/janwi/Documents/Arduino/libraries/MyPID;</VMSETTING_IncludePaths>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -182,6 +198,14 @@
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FlightController_v2_0</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/MyPID</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_MPU6050Lib</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_HMC5883L_Lib</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_EVA_Filter</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Motors</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -222,6 +246,14 @@
   <armgcccpp.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FlightController_v2_0</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/MyPID</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_MPU6050Lib</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_HMC5883L_Lib</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_EVA_Filter</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Motors</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -263,7 +295,7 @@
   </armgcccpp.preprocessingassembler.general.IncludePaths>
 </ArmGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>../../../FlightController_v2_0;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>../../../FlightController_v2_0;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base;C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes;C:/Users/janwi/Documents/Arduino/libraries/FC_EVA_Filter;C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker;C:/Users/janwi/Documents/Arduino/libraries/FC_MPU6050Lib;C:/Users/janwi/Documents/Arduino/libraries/FC_HMC5883L_Lib;C:/Users/janwi/Documents/Arduino/libraries/FC_Motors;C:/Users/janwi/Documents/Arduino/libraries/MyPID;</VMSETTING_IncludePaths>
   </PropertyGroup>
   <ItemGroup>
     <None Include="FlightController_v2_0.ino">
@@ -274,6 +306,12 @@
     <Folder Include="__vm\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FC_MainCommunication.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FC_MainCommunication.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="__vm\.FlightController_v2_0.vsarduino.h">
       <SubType>compile</SubType>
     </Compile>
