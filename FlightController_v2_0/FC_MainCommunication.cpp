@@ -45,29 +45,32 @@ bool FC_MainCommunication::receiveAndUnpackData()
 		// Check if this packet is the specific one (TYPE1)
 		if (checkReceivedDataPacket(receivedPacketTypes.TYPE1_ID, receivedPacketTypes.TYPE1_SIZE, true))
 		{
+			data.received.steer.throttle.byteArr()[0] = dpReceived.buffer[2];
+			data.received.steer.throttle.byteArr()[1] = dpReceived.buffer[3];
+			data.received.steer.rotate.byteArr()[0] = dpReceived.buffer[4];
+			data.received.steer.rotate.byteArr()[1] = dpReceived.buffer[5];
+			data.received.steer.TB.byteArr()[0] = dpReceived.buffer[6];
+			data.received.steer.TB.byteArr()[1] = dpReceived.buffer[7];
+			data.received.steer.LR.byteArr()[0] = dpReceived.buffer[8];
+			data.received.steer.LR.byteArr()[1] = dpReceived.buffer[9];
+			data.received.pilotDistance.byteArr()[0] = dpReceived.buffer[10];
+			data.received.pilotDistance.byteArr()[1] = dpReceived.buffer[11];
+			data.received.pilotDirection.byteArr()[0] = dpReceived.buffer[12];
+			data.received.pilotDirection.byteArr()[1] = dpReceived.buffer[13];
+			data.received.flightMode = dpReceived.buffer[14];
+			data.received.arming = dpReceived.buffer[15];
+			// losowa wartosc
+			data.received.bitSwitches1.byte = dpReceived.buffer[17];
+			data.received.bitSwitches2.byte = dpReceived.buffer[18];
+			data.received.signalLostScenario = dpReceived.buffer[19];
 			
 			
-			// Unpack data by updating proper variables
-			// [0] - checksum
-			// [1] - ID
-			data.received.var1 = dpReceived.buffer[2];
-			data.received.liczba.byteArr()[0] = dpReceived.buffer[3];
-			data.received.liczba.byteArr()[1] = dpReceived.buffer[4];
-			// 4 bytes
-			for(int i=0; i<4; i++)
-				data.received.zmienna.byteArr()[i] = dpReceived.buffer[5+i];
-			data.received.innaLiczba.byteArr()[0] = dpReceived.buffer[9];
-			data.received.innaLiczba.byteArr()[1] = dpReceived.buffer[10];
-		
-			// PACKET SIZE SHOULD BE 11 !!! (10+1=11  counted from zero)
-		
 			// indicate a successful communication
 			atLeastOneFlag = true;
 		}
 	
 	
 		// Check if this packet is TYPE2
-		/*
 		else if (checkReceivedDataPacket(receivedPacketTypes.TYPE2_ID, receivedPacketTypes.TYPE2_SIZE, true))
 		{
 			// ....
@@ -77,7 +80,17 @@ bool FC_MainCommunication::receiveAndUnpackData()
 			// indicate a successful communication
 			atLeastOneFlag = true;
 		}
-		*/
+		
+		
+		else if (checkReceivedDataPacket(receivedPacketTypes.TYPE3_ID, receivedPacketTypes.TYPE3_SIZE, true))
+		{
+			// ...
+			
+			
+			
+			// indicate a successful communication
+			atLeastOneFlag = true;
+		}
 		
 		
 		
