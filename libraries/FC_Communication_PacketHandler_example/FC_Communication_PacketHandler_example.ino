@@ -25,6 +25,24 @@ void setup()
 
 void loop()
 {
-
-
+	//
+	// HOW TO USE THIS CLASS
+	//
+	
+	
+	// Access the data by using this:
+	com.receiveAndUnpackData();
+	int odebrana = com.received.var1;
+	// you can access other data
+	
+	
+	// Pack data here:
+	com.toSend.zmiennaDoWyslania = 5;
+	// pack all variables in the data packet
+	com.packAndSendData(com.sendPacketTypes.TYPE1_ID);
+	// you can repeat this for every data packet
+	
+	
+	// Check conneciton stability:
+	int conStability = com.connectionStability(); // int values from 0 to 3 (3 best)
 }
