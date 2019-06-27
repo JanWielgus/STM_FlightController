@@ -10,6 +10,7 @@
 #endif
 
 #include <FC_Communication_Base.h>
+#include <FC_CustomDataTypes.h>
 
 /*
 	HOW TO USE:
@@ -30,7 +31,7 @@ class FC_MainCommunication : private FC_Communication_Base
 		// bufSize - the size of the largest data packet + ~2 for safety
 	
 	bool receiveAndUnpackData();                  // receive proper data packet/packets, returns true if at least one data packet was received
-	void packAndSendData(uint8_t packetID);       // pack data to the data packet and send it
+	void packAndSendData(uint8_t packetID, uint8_t packetSize);       // pack data to the data packet and send it
 	uint8_t connectionStability();                // 0-no connection, 1-minor com.  <---> 3-stable com
 	
 	
@@ -107,7 +108,7 @@ class FC_MainCommunication : private FC_Communication_Base
 		uint16Byte pilotDirection;
 		uint8_t flightMode;
 		uint8_t arming;
-		// losowa wartosc
+		// random value
 		bitByte bitSwitches1;
 		bitByte bitSwitches2;
 		uint8_t signalLostScenario;
@@ -128,22 +129,21 @@ class FC_MainCommunication : private FC_Communication_Base
 		
 		
 		// TYPE1 - full
-		//napiecie
+		// voltage
 		int8_t tilt_TB; // top/back
 		int8_t tilt_LR; // left/right
 		int16Byte heading;
 		int16Byte altitude;
 		int32Byte longitude;
 		int32Byte latitude;
-		// wartosc losowa
+		// random value
 		bitByte errors1;
 		bitByte errors2;
 		bitByte bitSwitches1;
-		// zapas 6x
 		
 		
 		// TYPE2 - basic
-		// napiecie najnizszej celi
+		// voltage on the lowest cell
 		// errors 1 & 2 (up)
 		// bitSwitch 1 (up)
 	};

@@ -63,19 +63,57 @@ bool FC_MainCommunication::receiveAndUnpackData()
 			data.received.bitSwitches1.byte = dpReceived.buffer[17];
 			data.received.bitSwitches2.byte = dpReceived.buffer[18];
 			data.received.signalLostScenario = dpReceived.buffer[19];
+			// margin 6x
 		}
 	
 	
 		// Check if this packet is TYPE2
 		else if (checkReceivedDataPacket(receivedPacketTypes.TYPE2_ID, receivedPacketTypes.TYPE2_SIZE, true))
 		{
-			// ....
+			data.received.steer.throttle.byteArr()[0] = dpReceived.buffer[2];
+			data.received.steer.throttle.byteArr()[1] = dpReceived.buffer[3];
+			data.received.steer.rotate.byteArr()[0] = dpReceived.buffer[4];
+			data.received.steer.rotate.byteArr()[1] = dpReceived.buffer[5];
+			data.received.steer.TB.byteArr()[0] = dpReceived.buffer[6];
+			data.received.steer.TB.byteArr()[1] = dpReceived.buffer[7];
+			data.received.steer.LR.byteArr()[0] = dpReceived.buffer[8];
+			data.received.steer.LR.byteArr()[1] = dpReceived.buffer[9];
+			data.received.flightMode = dpReceived.buffer[10];
+			data.received.arming = dpReceived.buffer[11];
+			data.received.bitSwitches1.byte = dpReceived.buffer[12];
+			data.received.bitSwitches2.byte = dpReceived.buffer[13];
+			data.received.signalLostScenario = dpReceived.buffer[14];
 		}
 		
 		
 		else if (checkReceivedDataPacket(receivedPacketTypes.TYPE3_ID, receivedPacketTypes.TYPE3_SIZE, true))
 		{
-			// ...
+			// Leveling PID parameters
+			for (int i=0; i<4; i++)
+				data.received.levelingPID.P.byteArr()[i] = dpReceived.buffer[i+2];
+			for (int i=0; i<4; i++)
+				data.received.levelingPID.I.byteArr()[i] = dpReceived.buffer[i+6];
+			for (int i=0; i<4; i++)
+				data.received.levelingPID.D.byteArr()[i] = dpReceived.buffer[i+10];
+			data.received.levelingPID.I_max = dpReceived.buffer[14];
+			
+			// Yaw control PID parameters
+			for (int i=0; i<4; i++)
+				data.received.yawPID.P.byteArr()[i] = dpReceived.buffer[i+15];
+			for (int i=0; i<4; i++)
+				data.received.yawPID.I.byteArr()[i] = dpReceived.buffer[i+19];
+			for (int i=0; i<4; i++)
+				data.received.yawPID.D.byteArr()[i] = dpReceived.buffer[i+23];
+			data.received.yawPID.I_max = dpReceived.buffer[27];
+			
+			// altHold PID parameters
+			for (int i=0; i<4; i++)
+				data.received.altHoldPID.P.byteArr()[i] = dpReceived.buffer[i+28];
+			for (int i=0; i<4; i++)
+				data.received.altHoldPID.I.byteArr()[i] = dpReceived.buffer[i+32];
+			for (int i=0; i<4; i++)
+				data.received.altHoldPID.D.byteArr()[i] = dpReceived.buffer[i+36];
+			data.received.altHoldPID.I_max = dpReceived.buffer[40];
 		}
 		
 		
@@ -104,8 +142,9 @@ bool FC_MainCommunication::receiveAndUnpackData()
 }
 
 
-void FC_MainCommunication::packAndSendData(uint8_t packetID)
+void FC_MainCommunication::packAndSendData(uint8_t packetID, uint8_t packetSize)
 {
+	dpToSend.size = (size_t)packetSize;
 	dpToSend.buffer[1] = packetID;
 	
 	
@@ -116,32 +155,45 @@ void FC_MainCommunication::packAndSendData(uint8_t packetID)
 	
 	
 	
-	// TYPE1
+	// TYPE1 - full
 	if (packetID == sendPacketTypes.TYPE1_ID)
 	{
-		// 4 bytes
+		// voltage on the 6 cells
+		dpToSend.buffer[8] = data.toSend.tilt_TB;
+		dpToSend.buffer[9] = data.toSend.tilt_LR;
+		dpToSend.buffer[10] = data.toSend.heading.byteArr()[0];
+		dpToSend.buffer[11] = data.toSend.heading.byteArr()[1];
+		dpToSend.buffer[12] = data.toSend.altitude.byteArr()[0];
+		dpToSend.buffer[13] = data.toSend.altitude.byteArr()[1];
 		for (int i=0; i<4; i++)
-			dpToSend.buffer[2+i] = data.toSend.temp.byteArr()[i];
-		dpToSend.buffer[6] = data.toSend.zmiennaDoWyslania.byteArr()[0];
-		dpToSend.buffer[7] = data.toSend.zmiennaDoWyslania.byteArr()[1];
-		dpToSend.buffer[8] = data.toSend.otherVar;
+			dpToSend.buffer[i+14] = data.toSend.longitude.byteArr()[i];
+		for (int i=0; i<4; i++)
+			dpToSend.buffer[i+18] = data.toSend.latitude.byteArr()[i];
+		// random value
+		dpToSend.buffer[23] = data.toSend.errors1.byte;
+		dpToSend.buffer[24] = data.toSend.errors2.byte;
+		dpToSend.buffer[25] = data.toSend.bitSwitches1.byte;
+		// margin 6x
+		
 		
 		dpToSend.buffer[0] = calcChecksum();
 		
 		sendData();
 	}
 	
-	// TYPE2
-	/*
+	// TYPE2 - basic
 	else if (packetID == sendPacketTypes.TYPE2_ID)
 	{
-		// .....
+		// voltage on the lowest cell
+		dpToSend.buffer[3] = data.toSend.errors1.byte;
+		dpToSend.buffer[4] = data.toSend.errors2.byte;
+		dpToSend.buffer[5] = data.toSend.bitSwitches1.byte;
+		
 		
 		dpToSend.buffer[0] = calcChecksum();
 		
 		sendData();
 	}
-	*/
 	
 	
 	

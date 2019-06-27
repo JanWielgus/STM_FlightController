@@ -27,7 +27,7 @@ void updateMainCommunication();
 // create the tasker
 FC_SimpleTasker tasker;
 
-FC_MainCommunication com(&Serial1, 45)
+FC_MainCommunication com(&Serial1, 45);
 
 
 
