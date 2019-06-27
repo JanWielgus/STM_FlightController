@@ -71,12 +71,12 @@
     <ListValues>
       <Value>../../../FlightController_v2_0</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/MyPID</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_MPU6050Lib</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries/Wire</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_HMC5883L_Lib</Value>
-      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_EVA_Filter</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Motors</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
@@ -120,12 +120,12 @@
     <ListValues>
       <Value>../../../FlightController_v2_0</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/MyPID</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_MPU6050Lib</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries/Wire</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_HMC5883L_Lib</Value>
-      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_EVA_Filter</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Motors</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
@@ -201,12 +201,12 @@
     <ListValues>
       <Value>../../../FlightController_v2_0</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/MyPID</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_MPU6050Lib</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries/Wire</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_HMC5883L_Lib</Value>
-      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_EVA_Filter</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Motors</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
@@ -250,12 +250,12 @@
     <ListValues>
       <Value>../../../FlightController_v2_0</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Communication_Base</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/MyPID</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_MPU6050Lib</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries/Wire</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_HMC5883L_Lib</Value>
-      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_EVA_Filter</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Motors</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
