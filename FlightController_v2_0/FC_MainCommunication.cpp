@@ -30,7 +30,7 @@ FC_MainCommunication::FC_MainCommunication(Stream* serial, uint8_t bufSize)
 
 bool FC_MainCommunication::receiveAndUnpackData()
 {
-	bool atLeastOneFlag = false; // at least one packet was received. Needed to return true/false at the end
+	atLeastOneFlag = false; // at least one packet was received. Needed to return true/false at the end
 		
 	while (receiveData())
 	{
@@ -63,10 +63,6 @@ bool FC_MainCommunication::receiveAndUnpackData()
 			data.received.bitSwitches1.byte = dpReceived.buffer[17];
 			data.received.bitSwitches2.byte = dpReceived.buffer[18];
 			data.received.signalLostScenario = dpReceived.buffer[19];
-			
-			
-			// indicate a successful communication
-			atLeastOneFlag = true;
 		}
 	
 	
@@ -74,22 +70,12 @@ bool FC_MainCommunication::receiveAndUnpackData()
 		else if (checkReceivedDataPacket(receivedPacketTypes.TYPE2_ID, receivedPacketTypes.TYPE2_SIZE, true))
 		{
 			// ....
-		
-		
-		
-			// indicate a successful communication
-			atLeastOneFlag = true;
 		}
 		
 		
 		else if (checkReceivedDataPacket(receivedPacketTypes.TYPE3_ID, receivedPacketTypes.TYPE3_SIZE, true))
 		{
 			// ...
-			
-			
-			
-			// indicate a successful communication
-			atLeastOneFlag = true;
 		}
 		
 		
@@ -177,17 +163,23 @@ uint8_t FC_MainCommunication::connectionStability()
 
 bool FC_MainCommunication::checkReceivedDataPacket(uint8_t packetID, uint8_t packetSize, bool checkChecksumFlag)
 {
-	static uint8_t IDpos;
+	uint8_t IDpos;
 	IDpos = checkChecksumFlag==true ? 1 : 0;
 	
 	if (dpReceived.buffer[IDpos] == packetID && dpReceived.size == packetSize)
 	{
 		if (!checkChecksumFlag)
-		return true;
+		{
+			atLeastOneFlag = true;
+			return true;
+		}
 		
 		//else
 		if (checkChecksum())
-		return true;
+		{
+			atLeastOneFlag = true;
+			return true;
+		}
 	}
 	
 	return false;
