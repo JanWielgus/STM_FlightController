@@ -39,7 +39,7 @@ void loop()
 	// Pack data here:
 	com.toSend.zmiennaDoWyslania = 5;
 	// pack all variables in the data packet
-	com.packAndSendData(com.sendPacketTypes.TYPE1_ID);
+	com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE);
 	// you can repeat this for every data packet
 	
 	

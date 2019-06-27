@@ -98,8 +98,9 @@ bool FC_Communication_PacketHandler::receiveAndUnpackData()
 }
 
 
-void FC_Communication_PacketHandler::packAndSendData(uint8_t packetID)
+void FC_Communication_PacketHandler::packAndSendData(uint8_t packetID, uint8_t packetSize)
 {
+	dpToSend.size = (size_t)packetSize;
 	dpToSend.buffer[1] = packetID;
 	
 	

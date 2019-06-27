@@ -32,9 +32,9 @@ class FC_Communication_PacketHandler : private FC_Communication_Base
 	FC_Communication_PacketHandler(Stream* serial, uint8_t bufSize);
 		// bufSize - the size of the largest data packet + ~2 for safety
 	
-	bool receiveAndUnpackData();                  // receive proper data packet/packets, returns true if at least one data packet was received
-	void packAndSendData(uint8_t packetID);       // pack data to the data packet and send it
-	uint8_t connectionStability();                // 0-no connection, 1-minor com.  <---> 3-stable com
+	bool receiveAndUnpackData();                                  // receive proper data packet/packets, returns true if at least one data packet was received
+	void packAndSendData(uint8_t packetID, uint8_t packetSize);   // pack data to the data packet and send it
+	uint8_t connectionStability();                                // 0-no connection, 1-minor com.  <---> 3-stable com
 	
 	
  private:
