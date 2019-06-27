@@ -121,6 +121,7 @@ class FC_Communication_PacketHandler : private FC_Communication_Base
 	
 	bool pastComStatesArr[2] = {}; // 2 because you need 2 past values and one present to have 3 max (read conStab() description), 0-newer, 1-older
 	float conStab; // connectionStability method return this value. Calculated in the receive function
+	bool atLeastOneFlag; // used only in the receiveAndUnpackData() method. True if at least one packet wad decoded
 	
 	
  public:

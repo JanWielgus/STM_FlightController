@@ -30,7 +30,8 @@ FC_Communication_PacketHandler::FC_Communication_PacketHandler(Stream* serial, u
 
 bool FC_Communication_PacketHandler::receiveAndUnpackData()
 {
-	bool atLeastOneFlag = false; // at least one packet was received. Needed to return true/false at the end
+	// Need to be reset before receiving. Used to calculate connection stability.
+	atLeastOneFlag = false; // at least one packet was received. Needed to return true/false at the end
 		
 	while (receiveData())
 	{
@@ -58,9 +59,6 @@ bool FC_Communication_PacketHandler::receiveAndUnpackData()
 			data.received.innaLiczba.byteArr()[1] = dpReceived.buffer[10];
 		
 			// PACKET SIZE SHOULD BE 11 !!! (10+1=11  counted from zero)
-		
-			// indicate a successful communication
-			atLeastOneFlag = true;
 		}
 	
 	
@@ -69,11 +67,8 @@ bool FC_Communication_PacketHandler::receiveAndUnpackData()
 		else if (checkReceivedDataPacket(receivedPacketTypes.TYPE2_ID, receivedPacketTypes.TYPE2_SIZE, true))
 		{
 			// ....
-		
-		
-		
-			// indicate a successful communication
-			atLeastOneFlag = true;
+			// unpack data from the buffer
+			// ....
 		}
 		*/
 		
@@ -162,17 +157,23 @@ uint8_t FC_Communication_PacketHandler::connectionStability()
 
 bool FC_Communication_PacketHandler::checkReceivedDataPacket(uint8_t packetID, uint8_t packetSize, bool checkChecksumFlag)
 {
-	static uint8_t IDpos;
+	uint8_t IDpos;
 	IDpos = checkChecksumFlag==true ? 1 : 0;
 	
 	if (dpReceived.buffer[IDpos] == packetID && dpReceived.size == packetSize)
 	{
 		if (!checkChecksumFlag)
-		return true;
+		{
+			atLeastOneFlag = true;
+			return true;
+		}
 		
 		//else
 		if (checkChecksum())
-		return true;
+		{
+			atLeastOneFlag = true;
+			return true;
+		}
 	}
 	
 	return false;
