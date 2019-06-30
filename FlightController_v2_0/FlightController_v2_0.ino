@@ -47,6 +47,12 @@ FC_HMC5883L_Lib::vector3Int maxCompassDefaultCalibrationValues = {504, 463, -330
 
 void setup()
 {
+	// Debugging
+	Serial.begin(115200);
+	delay(1200); // Only for Atmel studio serial monitor
+	Serial.println("Program has just started!");
+	
+	
 	// default values
 	angle.x = 0;
 	angle.y = 0;
@@ -54,37 +60,47 @@ void setup()
 	heading = 0;
 	
 	// Add functions to the Tasker tasks
-	tasker.addFunction(readXY_angles, 4000L, 15);              // 250Hz
-	tasker.addFunction(readCompass, 13340L, 15);               // 75Hz
-	tasker.addFunction(stabilize, 4000L, 15);                  // 250Hz
-	tasker.addFunction(updateMainCommunication, 40000L, 15);   // 25Hz
-	tasker.addFunction(checkCalibrations, 700000L, 15);        // 1.4Hz
+	tasker.addFunction(readXY_angles, 4000L, 639);             // 250Hz (tested duration)
+	tasker.addFunction(readCompass, 13340L, 492);              // 75Hz  (tested duration)
+	tasker.addFunction(stabilize, 4000L, 17);                  // 250Hz
+	tasker.addFunction(updateMainCommunication, 40000L, 11);   // 25Hz
+	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
+	
+	tasker.scheduleTasks();
 	
 	delay(300);
-	
+	Serial.println("tasker done");
 	
 	// MPU6050
 	while (!mpu.initialize()) // While mpu is not initialized
 	{
 		// If gets stuck here, there is an error
-		
+		Serial.println("cannot initialize mpu");
 		// DETECT MPU ERROR HERE
 		delay(200);
 	}
 	
 	mpu.setCalculationsFrequency(250);
 	
+	Serial.print("Started calibrations... ");
+	mpu.calibrateAccelerometer(100);
+	mpu.calibrateGyro(500);
+	Serial.println(" OK");
+	
+	Serial.println("mpu initialized");
+	
 	// HMC5003L
 	compass.enableHMC_on_MPU(false); // delete this parameter. There is no need because wire have to be initialized before mpu starts
 	while (!compass.initialize(false))
 	{
 		// If gets stuck here, there is an error
-		
+		Serial.println("cannot initialize compass");
 		// DETECT COMPASS ERROR HERE
 		delay(200);
 	}
 	
 	compass.setCompassDeclination(5.0);
+	Serial.println("compass initialized");
 	
 	
 	// Default calibration values
@@ -103,7 +119,7 @@ void setup()
 	compass.readCompassData(angle.x, angle.y);
 	mpu.setInitialZAxisValue(compass.getHeading());
 	
-	
+	Serial.println("setup done");
 }
 
 
@@ -121,9 +137,11 @@ void loop()
 
 void readXY_angles()
 {
+	
 	mpu.read6AxisMotion();
 	angle = mpu.getFusedXYAngles();
 	heading = mpu.getZAngle(compass.getHeading());
+	
 }
 
 
@@ -143,10 +161,12 @@ void stabilize()
 
 void updateMainCommunication()
 {
-	com.receiveAndUnpackData();
+	
+	//com.receiveAndUnpackData();
 	
 	// send proper data packet: TYPE1-full, TYPE2-basic
-	com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
+	//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
+	
 }
 
 
