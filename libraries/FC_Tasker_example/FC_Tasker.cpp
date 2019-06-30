@@ -87,11 +87,11 @@ void FC_SimpleTasker::copyTaskList(Task *from, Task *to, uint8_t amount)
 {
 	for (int i=0; i < amount; i++)
 	{
-		to->functionPointer = from->functionPointer;
-		to->interval = from->interval;
-		to->maxDuration = from->maxDuration;
-		to->lastExecuteTime = from->lastExecuteTime;
-		to->timeShift = from->timeShift;
+		to[i].functionPointer = from[i].functionPointer;
+		to[i].interval = from[i].interval;
+		to[i].maxDuration = from[i].maxDuration;
+		to[i].lastExecuteTime = from[i].lastExecuteTime;
+		to[i].timeShift = from[i].timeShift;
 	}
 }
 
