@@ -70,6 +70,9 @@
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FlightControllerPilot_v2_0</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/LiquidCrystal_I2C</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -106,6 +109,9 @@
   <armgcccpp.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FlightControllerPilot_v2_0</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/LiquidCrystal_I2C</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -143,7 +149,7 @@
   </armgcccpp.preprocessingassembler.general.IncludePaths>
 </ArmGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>../../../FlightControllerPilot_v2_0;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/avr;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.2/include;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.3/include;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>../../../FlightControllerPilot_v2_0;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/avr;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.2/include;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.3/include;C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker;C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes;C:/Users/janwi/Documents/Arduino/libraries/LiquidCrystal_I2C;</VMSETTING_IncludePaths>
     <VisualMicroSettings>
       <VisualMicroSettings>
         <arduino.board.name>nano_atmega328</arduino.board.name>
@@ -473,6 +479,9 @@ build.arch=AVR
   <armgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FlightControllerPilot_v2_0</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/LiquidCrystal_I2C</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -509,6 +518,9 @@ build.arch=AVR
   <armgcccpp.compiler.directories.IncludePaths>
     <ListValues>
       <Value>../../../FlightControllerPilot_v2_0</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes</Value>
+      <Value>C:/Users/janwi/Documents/Arduino/libraries/LiquidCrystal_I2C</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Users/janwi/Documents/Arduino/libraries</Value>
@@ -546,7 +558,7 @@ build.arch=AVR
   </armgcccpp.preprocessingassembler.general.IncludePaths>
 </ArmGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>../../../FlightControllerPilot_v2_0;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/avr;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.2/include;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.3/include;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>../../../FlightControllerPilot_v2_0;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/libraries;C:/Users/janwi/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/avr;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/cores/maple/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/variants/generic_stm32f103c;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/stm32f1/include;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/stm32f1;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master/STM32F1/system/libmaple/usb/usb_lib;C:/Program Files (x86)/Arduino/hardware/Arduino_STM32-master;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/avr;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.2/include;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.9.3/include;C:/Users/janwi/Documents/Arduino/libraries/FC_Tasker;C:/Users/janwi/Documents/Arduino/libraries/FC_CustomDataTypes;C:/Users/janwi/Documents/Arduino/libraries/LiquidCrystal_I2C;</VMSETTING_IncludePaths>
     <VisualMicroSettings>
       <VisualMicroSettings>
         <arduino.board.name>nano_atmega328</arduino.board.name>
@@ -856,6 +868,9 @@ build.arch=AVR
     <Folder Include="__vm\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControlSticks.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="__vm\.FlightControllerPilot_v2_0.vsarduino.h">
       <SubType>compile</SubType>
     </Compile>
