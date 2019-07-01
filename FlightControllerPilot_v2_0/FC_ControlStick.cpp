@@ -5,7 +5,7 @@
 #include "FC_ControlStick.h"
 
 FC_ControlStick::FC_ControlStick(uint8_t pin, bool reverseFlag, uint16_t minRawVal, uint16_t maxRawVal)
-	:filter(0.6)
+	:filter(0.3)
 {
 	this->pin = pin;
 	calib.reverseFlag = reverseFlag;
@@ -28,10 +28,14 @@ void FC_ControlStick::readValue()
 	
 	// reverse if needed
 	if (calib.reverseFlag)
-		rawValue = abs(rawValue - (calib.minRawValue + calib.maxRawValue));
+	{
+		rawValue = rawValue - (calib.minRawValue + calib.maxRawValue);
+		rawValue = abs(rawValue);
+	}
 	
 	// filter
-	value = (int16_t)filter.updateFilter((float&)rawValue);
+	float temp = rawValue;
+	value = (int16_t)filter.updateFilter(temp);
 	
 	// calculate the output values
 	if (value > outputProperties.rawCenterValue + outputProperties.deadZone)

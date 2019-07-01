@@ -43,22 +43,23 @@ namespace config
 	{
 		// throttle
 		uint16_t thrMin = 65;
+		uint16_t thrCen = 65; // throttle center is the same as the min value
 		uint16_t thrMax = 960;
 		// rotate
 		uint16_t rotMin = 48;
 		uint16_t rotCen = 514; // center
 		uint16_t rotMax = 970;
 		// TB tilt
-		uint16_t TB_Min = 16;
-		uint16_t TB_Cen = 490;
-		uint16_t TB_Max = 900;
+		uint16_t TB_Min = 14;
+		uint16_t TB_Cen = 487;
+		uint16_t TB_Max = 893;
 		// LR tilt
 		uint16_t LR_Min = 65;
 		uint16_t LR_Cen = 526;
 		uint16_t LR_Max = 984;
 	} tiltsRange;
 	
-	uint8_t stickDeadZone = 10;
+	uint8_t stickDeadZone = 20;
 }
 
 

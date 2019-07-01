@@ -42,7 +42,7 @@ class FC_ControlStick
  private:
 	FC_EVA_Filter filter;
 	
-	uint16_t rawValue;
+	int16_t rawValue;
 	int16_t value;
 	
 	uint8_t pin;

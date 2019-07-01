@@ -25,6 +25,7 @@ FC_ControlStick stickLR(config::pin.tiltLR, true, config::tiltsRange.LR_Min, con
 
 // Tasker function prototypes
 void readControlSticksValues();
+void tempSerial();
 
 
 
@@ -35,15 +36,16 @@ void setup()
 	delay(300);
 	
 	// Add functions to the tasker
-	tasker.addFunction(readControlSticksValues, 40000L, 15);
+	tasker.addFunction(readControlSticksValues, 20000L, 15); // 50Hz
+	tasker.addFunction(tempSerial, 40000L, 15); //25Hz;
 	tasker.scheduleTasks();
 	
 	
 	// init the control sticks
-	stickThr.setOutputValueProperties(0, 1000, 0, config::stickDeadZone);
+	stickThr.setOutputValueProperties(0, 1000, config::tiltsRange.thrCen, config::stickDeadZone);
 	stickRot.setOutputValueProperties(-500, 500, config::tiltsRange.rotCen, config::stickDeadZone);
-	stickTB.setOutputValueProperties(-500, 500, config::tiltsRange.rotCen, config::stickDeadZone);
-	stickLR.setOutputValueProperties(-500, 500, config::tiltsRange.rotCen, config::stickDeadZone);
+	stickTB.setOutputValueProperties(-500, 500, config::tiltsRange.TB_Cen, config::stickDeadZone);
+	stickLR.setOutputValueProperties(-500, 500, config::tiltsRange.LR_Cen, config::stickDeadZone);
 
 	
 	lcd.init(); // Wire.begin() is here
@@ -70,4 +72,10 @@ void readControlSticksValues()
 	stickRot.readValue();
 	stickTB.readValue();
 	stickLR.readValue();
+}
+
+
+void tempSerial()
+{
+	Serial.println(stickTB.getValue());
 }
