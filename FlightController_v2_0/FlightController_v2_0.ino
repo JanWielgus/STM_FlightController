@@ -82,10 +82,20 @@ void setup()
 	
 	mpu.setCalculationsFrequency(250);
 	
+	
+	
+	///////////////
+	// TEMPORARY //
+	///////////////
+	
 	Serial.print("Started calibrations... ");
-	mpu.calibrateAccelerometer(100);
-	mpu.calibrateGyro(500);
+	mpu.calibrateAccelerometer(30); // 
+	mpu.calibrateGyro(110);
 	Serial.println(" OK");
+	
+	///////////////
+	
+	
 	
 	Serial.println("mpu initialized");
 	
