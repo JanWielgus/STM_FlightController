@@ -47,6 +47,9 @@ FC_HMC5883L_Lib::vector3Int maxCompassDefaultCalibrationValues = {504, 463, -330
 
 void setup()
 {
+	// Cummunication serial
+	Serial1.begin(9600);
+	
 	// Debugging
 	Serial.begin(115200);
 	delay(1200); // Only for Atmel studio serial monitor
@@ -65,7 +68,6 @@ void setup()
 	tasker.addFunction(stabilize, 4000L, 17);                  // 250Hz
 	tasker.addFunction(updateMainCommunication, 40000L, 11);   // 25Hz
 	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
-	
 	tasker.scheduleTasks();
 	
 	delay(300);
@@ -171,12 +173,16 @@ void stabilize()
 
 void updateMainCommunication()
 {
-	
-	//com.receiveAndUnpackData();
+	com.receiveAndUnpackData();
 	
 	// send proper data packet: TYPE1-full, TYPE2-basic
-	//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
+	com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
 	
+	/*
+	Serial.print("H: ");
+	Serial.print(heading);
+	Serial.println();
+	*/
 }
 
 
