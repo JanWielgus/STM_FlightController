@@ -6,7 +6,8 @@
 #include <FC_Tasker.h>
 #include <FC_CustomDataTypes.h>
 #include <LiquidCrystal_I2C.h>
-#include "ControlSticks.h"
+#include "FC_MainCommunication.h"
+#include "FC_ControlStick.h"
 #include "config.h"
 
 
@@ -23,11 +24,18 @@ void setup()
 	delay(300);
 	
 	// Add functions to the tasker
-	tasker.addFunction(ctrlStk::readStickValues, 40000L, 15);
+	//tasker.addFunction(ctrlStk::readStickValues, 40000L, 15);
 	tasker.scheduleTasks();
 
-
-	ctrlStk::stickInitiazlize();
+	
+	lcd.init(); // Wire.begin() is here
+	lcd.backlight();
+	lcd.setCursor(0, 0);
+	lcd.print("FC Pilot");
+	lcd.setCursor(0, 1);
+	lcd.print("v 2.0");
+	delay(700);
+	lcd.clear();
 }
 
 
