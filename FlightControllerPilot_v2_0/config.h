@@ -16,11 +16,22 @@ namespace config
 	{
 		uint8_t redDiode;
 		uint8_t greenDiode;
+		
+		// steering
+		uint8_t throttle;
+		uint8_t rotate;
+		uint8_t tiltTB;
+		uint8_t tiltLR;
+		
 	} pin;
 
 	// Defalut pin values
 	pin.redDiode = 5;
 	pin.greenDiode = 6;
+	pin.throttle = A0;
+	pin.rotate = A1;
+	pin.tiltTB = A2;
+	pin.tiltLR = A3;
 	
 	
 	uint8_t LCD_ADDRESS = 0x3F;
