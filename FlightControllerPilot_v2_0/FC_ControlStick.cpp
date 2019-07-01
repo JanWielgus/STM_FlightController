@@ -4,13 +4,21 @@
 
 #include "FC_ControlStick.h"
 
-FC_ControlStick::FC_ControlStick(uint8 pin, bool reverseFlag, int16_t minFinalVal, int16_t maxFinalVal,
-								 uint16_t minRawVal, uint16_t maxRawVal)
-	: filter(0.6)
+FC_ControlStick::FC_ControlStick(uint8_t pin, bool reverseFlag, uint16_t minRawVal, uint16_t maxRawVal)
+	:filter(0.6)
 {
 	this->pin = pin;
-	this->reverseFlag = reverseFlag;
+	calib.reverseFlag = reverseFlag;
 	setRawBorderValues(minRawVal, maxRawVal);
+}
+
+
+void FC_ControlStick::setOutputValueProperties(int16_t minFinalVal, int16_t maxFinalVal, int16_t rawCenterValue, uint8_t nearZeroDeadZone)
+{
+	outputProperties.minFinalValue = minFinalVal;
+	outputProperties.maxFinalValue = maxFinalVal;
+	outputProperties.rawCenterValue = rawCenterValue;
+	setDeadZone(nearZeroDeadZone);
 }
 
 
@@ -19,11 +27,29 @@ void FC_ControlStick::readValue()
 	rawValue = analogRead(pin);
 	
 	// reverse if needed
-	if (reverseFlag)
-		rawValue = abs(rawValue - (minRawValue + maxRawValue));
+	if (calib.reverseFlag)
+		rawValue = abs(rawValue - (calib.minRawValue + calib.maxRawValue));
 	
 	// filter
-	value = (int16_t)filter.updateFilter((float)rawValue);
+	value = (int16_t)filter.updateFilter((float&)rawValue);
+	
+	// calculate the output values
+	if (value > outputProperties.rawCenterValue + outputProperties.deadZone)
+	{
+		value = map(value,
+					outputProperties.rawCenterValue + outputProperties.deadZone, calib.maxRawValue,
+					0, outputProperties.maxFinalValue);
+		value = constrain(value, 0, outputProperties.maxFinalValue);
+	}
+	else if (value < outputProperties.rawCenterValue - outputProperties.deadZone)
+	{
+		value = map(value,
+					calib.minRawValue, outputProperties.rawCenterValue - outputProperties.deadZone,
+					outputProperties.minFinalValue, 0);
+		value = constrain(value, outputProperties.minFinalValue, 0);
+	}
+	else
+		value = 0;
 }
 
 
@@ -48,8 +74,14 @@ void FC_ControlStick::setFilterIntensity(uint8_t intensity)
 
 void FC_ControlStick::setRawBorderValues(uint16_t minVal, uint16_t maxVal)
 {
-	this->minRawValue = minVal;
-	this->maxRawValue = maxVal;
+	calib.minRawValue = minVal;
+	calib.maxRawValue = maxVal;
+}
+
+
+void FC_ControlStick::setDeadZone(uint8_t deadZone)
+{
+	outputProperties.deadZone = deadZone;
 }
 
 
