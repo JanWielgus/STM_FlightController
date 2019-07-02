@@ -33,10 +33,6 @@ void tempSerial();
 enum stateType {disarmed, arming1, arming2, armed};
 stateType state = disarmed;
 
-enum gestureDebugType {p1, p2, p3, p4};
-gestureDebugType gDebOut = p1;
-gestureDebugType gDebIn = p1;
-
 
 
 void setup()
@@ -166,7 +162,7 @@ void gestureRecognition()
 			}
 			
 			// Step 2
-			if (step1Passed == true && step2Passed == false)
+			if (step1Passed && step2Passed == false)
 			{
 				// Update step start counter to make time limit
 				if (rot < 20)
@@ -191,7 +187,7 @@ void gestureRecognition()
 			}
 			
 			// Step 3
-			if (step1Passed == true && step2Passed == true && step3Passed == false)
+			if (step1Passed && step2Passed && step3Passed == false)
 			{
 				// Failure
 				if (rot < 450 || thr > 5 || tb !=0 || counter-stepStartCounter>10)
@@ -208,8 +204,16 @@ void gestureRecognition()
 					step2Passed = true;
 					step3Passed = true;
 					state = arming2;
+					stepStartCounter = counter;
 				}
 			}
+			/*
+			// Step 4 - back to idle
+			if (step3Passed)
+			{
+				// Failure
+				if ()
+			}*/
 			
 			
 			
