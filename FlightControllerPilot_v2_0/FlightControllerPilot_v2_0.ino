@@ -26,11 +26,16 @@ FC_ControlStick LR_Stick;
 // Tasker function prototypes
 void readControlSticksValues();
 void updateLCD();
+void gestureRecognition();
 void tempSerial();
 
 
-enum stateType {disarmed, armed};
+enum stateType {disarmed, arming1, arming2, armed};
 stateType state = disarmed;
+
+enum gestureDebugType {p1, p2, p3, p4};
+gestureDebugType gDebOut = p1;
+gestureDebugType gDebIn = p1;
 
 
 
@@ -42,7 +47,8 @@ void setup()
 	
 	// Add functions to the tasker
 	tasker.addFunction(readControlSticksValues, 20000L, 15); // 50Hz
-	tasker.addFunction(updateLCD, 41666L, 15); // 24Hz
+	tasker.addFunction(updateLCD, 100000L, 15); // 10Hz
+	tasker.addFunction(gestureRecognition, 100000L, 15); // 10Hz
 	tasker.addFunction(tempSerial, 40000L, 15); //25Hz
 	tasker.scheduleTasks();
 	
@@ -66,6 +72,9 @@ void setup()
 	lcd.print("v 2.0");
 	delay(700);
 	lcd.clear();
+	
+	// Necessary
+	Wire.setClock(400000L);
 }
 
 
@@ -94,7 +103,7 @@ void updateLCD()
 {
 	// Print the throttle value
 	lcd.clear();
-	lcd.setCursor(0, 0);
+	//lcd.setCursor(0, 0);
 	lcd.print("Thr: ");
 	lcd.print(thrStick.getValue());
 	
@@ -103,17 +112,124 @@ void updateLCD()
 	lcd.print("state: ");
 	switch (state)
 	{
-		case armed:
-			lcd.print("armed");
-			break;
 		case disarmed:
 			lcd.print("disarmed");
+			break;
+		case arming1:
+			lcd.print("arming1");
+			break;
+		case arming2:
+			lcd.print("arming2");
+			break;
+		case armed:
+			lcd.print("armed");
 			break;
 	}
 }
 
 
+void gestureRecognition()
+{
+	static uint32_t counter = 0; // every 5 is one second
+	
+	int16_t thr, rot, tb, lr;
+	thr = thrStick.getValue();
+	rot = rotStick.getValue();
+	tb = TB_Stick.getValue();
+	lr = LR_Stick.getValue();
+	
+	
+	// Arming / Disarming
+	{
+		static bool step1Passed = false;
+		static bool step2Passed = false;
+		static bool step3Passed = false;
+		static uint32_t stepStartCounter = 0;
+		if (state==disarmed || state==arming1 || state==arming2)
+		{
+			//////////////////
+			// Arming
+			//////////////////
+			
+			// Step 1
+			if (step1Passed == false)
+			{
+				step2Passed = false;
+				step3Passed = false;
+				
+				// Idle position
+				if (thr==0 && rot==0 && tb==0 && lr==0)
+				{
+					step1Passed = true;
+					state = disarmed;
+				}
+			}
+			
+			// Step 2
+			if (step1Passed == true && step2Passed == false)
+			{
+				// Update step start counter to make time limit
+				if (rot < 20)
+					stepStartCounter = counter;
+				
+				// Failure
+				if (thr > 5 || tb!=0 || lr!=0 || counter-stepStartCounter>6)
+				{
+					step1Passed = false;
+					state = disarmed;
+				}
+				
+				// Step 3 detection
+				if (rot > 450)
+				{
+					// Step 2 passed
+					step1Passed = true;
+					step2Passed = true;
+					state = arming1;
+					stepStartCounter = counter;
+				}
+			}
+			
+			// Step 3
+			if (step1Passed == true && step2Passed == true && step3Passed == false)
+			{
+				// Failure
+				if (rot < 450 || thr > 5 || tb !=0 || counter-stepStartCounter>10)
+				{
+					step1Passed = false;
+					step2Passed = false;
+					state = disarmed;
+				}
+				
+				// Step 4 detection
+				if (lr < -450)
+				{
+					step1Passed = true;
+					step2Passed = true;
+					step3Passed = true;
+					state = arming2;
+				}
+			}
+			
+			
+			
+			
+		}
+		else if (state == armed)
+		{
+			//////////////////
+			// Disarming
+			//////////////////
+		}
+	}
+	
+	
+	
+	counter++;
+}
+
+
 void tempSerial()
 {
-	Serial.println(TB_Stick.getValue());
+	//Serial.println(TB_Stick.getValue());
 }
