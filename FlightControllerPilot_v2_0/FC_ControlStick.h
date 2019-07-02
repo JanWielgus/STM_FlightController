@@ -21,7 +21,8 @@
 class FC_ControlStick
 {
  public:
-	FC_ControlStick(uint8_t pin, bool reverseFlag, uint16_t minRawVal = 0, uint16_t maxRawVal = 1023);
+	FC_ControlStick();
+	void setInputProperties(uint8_t pin, bool reverseFlag, uint16_t minRawVal = 0, uint16_t maxRawVal = 1023);
 		// pin
 		// reverseFlag - true -> need to reverse the value
 		// min/maxRawVal - readings of the extreme stick tilts

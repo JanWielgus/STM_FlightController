@@ -4,8 +4,14 @@
 
 #include "FC_ControlStick.h"
 
-FC_ControlStick::FC_ControlStick(uint8_t pin, bool reverseFlag, uint16_t minRawVal, uint16_t maxRawVal)
+FC_ControlStick::FC_ControlStick()
 	:filter(0.3)
+{
+	// Nothing here
+}
+
+
+void FC_ControlStick::setInputProperties(uint8_t pin, bool reverseFlag, uint16_t minRawVal, uint16_t maxRawVal)
 {
 	this->pin = pin;
 	calib.reverseFlag = reverseFlag;

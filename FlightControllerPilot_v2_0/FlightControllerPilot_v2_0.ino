@@ -17,15 +17,20 @@ LiquidCrystal_I2C lcd(config::LCD_ADDRESS, 16, 2);
 
 
 // control sticks
-FC_ControlStick stickThr(config::pin.throttle, true, config::tiltsRange.thrMin, config::tiltsRange.thrMax);
-FC_ControlStick stickRot(config::pin.rotate, true, config::tiltsRange.rotMin, config::tiltsRange.rotMax);
-FC_ControlStick stickTB(config::pin.tiltTB, true, config::tiltsRange.TB_Min, config::tiltsRange.TB_Max);
-FC_ControlStick stickLR(config::pin.tiltLR, true, config::tiltsRange.LR_Min, config::tiltsRange.LR_Max);
+FC_ControlStick thrStick;
+FC_ControlStick rotStick;
+FC_ControlStick TB_Stick;
+FC_ControlStick LR_Stick;
 
 
 // Tasker function prototypes
 void readControlSticksValues();
+void updateLCD();
 void tempSerial();
+
+
+enum stateType {disarmed, armed};
+stateType state = disarmed;
 
 
 
@@ -37,15 +42,20 @@ void setup()
 	
 	// Add functions to the tasker
 	tasker.addFunction(readControlSticksValues, 20000L, 15); // 50Hz
-	tasker.addFunction(tempSerial, 40000L, 15); //25Hz;
+	tasker.addFunction(updateLCD, 41666L, 15); // 24Hz
+	tasker.addFunction(tempSerial, 40000L, 15); //25Hz
 	tasker.scheduleTasks();
 	
 	
 	// init the control sticks
-	stickThr.setOutputValueProperties(0, 1000, config::tiltsRange.thrCen, config::stickDeadZone);
-	stickRot.setOutputValueProperties(-500, 500, config::tiltsRange.rotCen, config::stickDeadZone);
-	stickTB.setOutputValueProperties(-500, 500, config::tiltsRange.TB_Cen, config::stickDeadZone);
-	stickLR.setOutputValueProperties(-500, 500, config::tiltsRange.LR_Cen, config::stickDeadZone);
+	thrStick.setInputProperties(config::pin.throttle, true, config::tiltsRange.thrMin, config::tiltsRange.thrMax);
+	rotStick.setInputProperties(config::pin.rotate, true, config::tiltsRange.rotMin, config::tiltsRange.rotMax);
+	TB_Stick.setInputProperties(config::pin.tiltTB, true, config::tiltsRange.TB_Min, config::tiltsRange.TB_Max);
+	LR_Stick.setInputProperties(config::pin.tiltLR, true, config::tiltsRange.LR_Min, config::tiltsRange.LR_Max);
+	thrStick.setOutputValueProperties(0, 1000, config::tiltsRange.thrCen, config::stickDeadZone);
+	rotStick.setOutputValueProperties(-500, 500, config::tiltsRange.rotCen, config::stickDeadZone);
+	TB_Stick.setOutputValueProperties(-500, 500, config::tiltsRange.TB_Cen, config::stickDeadZone);
+	LR_Stick.setOutputValueProperties(-500, 500, config::tiltsRange.LR_Cen, config::stickDeadZone);
 
 	
 	lcd.init(); // Wire.begin() is here
@@ -65,17 +75,45 @@ void loop()
 }
 
 
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+
 
 void readControlSticksValues()
 {
-	stickThr.readValue();
-	stickRot.readValue();
-	stickTB.readValue();
-	stickLR.readValue();
+	thrStick.readValue();
+	rotStick.readValue();
+	TB_Stick.readValue();
+	LR_Stick.readValue();
+}
+
+
+void updateLCD()
+{
+	// Print the throttle value
+	lcd.clear();
+	lcd.setCursor(0, 0);
+	lcd.print("Thr: ");
+	lcd.print(thrStick.getValue());
+	
+	// print the state
+	lcd.setCursor(0, 1);
+	lcd.print("state: ");
+	switch (state)
+	{
+		case armed:
+			lcd.print("armed");
+			break;
+		case disarmed:
+			lcd.print("disarmed");
+			break;
+	}
 }
 
 
 void tempSerial()
 {
-	Serial.println(stickTB.getValue());
+	Serial.println(TB_Stick.getValue());
 }
