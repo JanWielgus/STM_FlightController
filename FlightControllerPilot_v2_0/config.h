@@ -12,6 +12,7 @@
 
 namespace config
 {
+	// Pins
 	struct
 	{
 		uint8_t redDiode = 5;
@@ -24,14 +25,6 @@ namespace config
 		uint8_t tiltLR = A3;
 		
 	} pin;
-/* If does not compile with default values in the structure
-	// Defalut pin values
-	pin.redDiode = 5;
-	pin.greenDiode = 6;
-	pin.throttle = A0;
-	pin.rotate = A1;
-	pin.tiltTB = A2;
-	pin.tiltLR = A3;*/
 	
 	
 	// Addresses
