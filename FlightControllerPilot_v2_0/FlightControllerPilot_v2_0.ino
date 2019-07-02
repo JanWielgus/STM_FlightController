@@ -152,13 +152,11 @@ void gestureRecognition()
 			{
 				step2Passed = false;
 				step3Passed = false;
+				state = disarmed;
 				
 				// Idle position
 				if (thr==0 && rot==0 && tb==0 && lr==0)
-				{
 					step1Passed = true;
-					state = disarmed;
-				}
 			}
 			
 			// Step 2
@@ -170,10 +168,7 @@ void gestureRecognition()
 				
 				// Failure
 				if (thr > 5 || tb!=0 || lr!=0 || counter-stepStartCounter>6)
-				{
 					step1Passed = false;
-					state = disarmed;
-				}
 				
 				// Step 3 detection
 				if (rot > 450)
@@ -191,11 +186,7 @@ void gestureRecognition()
 			{
 				// Failure
 				if (rot < 450 || thr > 5 || tb !=0 || counter-stepStartCounter>10)
-				{
 					step1Passed = false;
-					step2Passed = false;
-					state = disarmed;
-				}
 				
 				// Step 4 detection
 				if (lr < -450)
@@ -207,13 +198,21 @@ void gestureRecognition()
 					stepStartCounter = counter;
 				}
 			}
-			/*
+			
 			// Step 4 - back to idle
 			if (step3Passed)
 			{
 				// Failure
-				if ()
-			}*/
+				if (counter-stepStartCounter > 7)
+					step1Passed = false;
+				
+				// Armed detection
+				if (thr==0 && rot==0 && tb==0 && lr==0)
+				{
+					step1Passed = false; // reset
+					state = armed;
+				}
+			}
 			
 			
 			
