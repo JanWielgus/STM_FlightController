@@ -13,6 +13,8 @@
 
 FC_SimpleTasker tasker;
 
+FC_MainCommunication com(&Serial, 45);
+
 LiquidCrystal_I2C lcd(config::LCD_ADDRESS, 16, 2);
 
 
@@ -24,6 +26,7 @@ FC_ControlStick LR_Stick;
 
 
 // Tasker function prototypes
+void updateMainCommunication();
 void readControlSticksValues();
 void updateLCD();
 void gestureRecognition();
@@ -38,14 +41,15 @@ stateType state = disarmed;
 void setup()
 {
 	// Communication serial
-	Serial.begin(115200);
+	Serial.begin(9600);
 	delay(300);
 	
 	// Add functions to the tasker
-	tasker.addFunction(readControlSticksValues, 20000L, 15); // 50Hz
-	tasker.addFunction(updateLCD, 100000L, 15); // 10Hz
-	tasker.addFunction(gestureRecognition, 100000L, 15); // 10Hz
-	tasker.addFunction(tempSerial, 40000L, 15); //25Hz
+	tasker.addFunction(updateMainCommunication, 40000L, 11);
+	tasker.addFunction(readControlSticksValues, 20000L, 14); // 50Hz
+	tasker.addFunction(updateLCD, 100000L, 10); // 10Hz
+	tasker.addFunction(gestureRecognition, 100000L, 16); // 10Hz
+	//tasker.addFunction(tempSerial, 40000L, 15); //25Hz
 	tasker.scheduleTasks();
 	
 	
@@ -83,6 +87,22 @@ void loop()
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
+
+
+void updateMainCommunication()
+{
+	com.receiveAndUnpackData();
+	
+	// pack data
+	com.toSend.steer.throttle = thrStick.getValue();
+	com.toSend.steer.rotate = rotStick.getValue();
+	com.toSend.steer.TB = TB_Stick.getValue();
+	com.toSend.steer.LR = LR_Stick.getValue();
+	com.toSend.arming = state==armed ? 1 : 0;
+	// OTHER DATA !!!
+	// send packed data
+	com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
+}
 
 
 
