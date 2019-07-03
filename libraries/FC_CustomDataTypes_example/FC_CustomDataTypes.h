@@ -29,7 +29,7 @@ class floatByte
 		data.value = v;
 	}
 
-	operator float()
+	operator float() const
 	{
 		return data.value;
 	}
@@ -58,7 +58,7 @@ class uint32Byte
 		data.value = v;
 	}
 
-	operator uint32_t()
+	operator uint32_t() const
 	{
 		return data.value;
 	}
@@ -87,7 +87,7 @@ class int32Byte
 		data.value = v;
 	}
 
-	operator int32_t()
+	operator int32_t() const
 	{
 		return data.value;
 	}
@@ -116,7 +116,7 @@ class uint16Byte
 		data.value = v;
 	}
 
-	operator uint16_t()
+	operator uint16_t() const
 	{
 		return data.value;
 	}
@@ -144,7 +144,7 @@ class int16Byte
 		data.value = v;
 	}
 
-	operator int16_t()
+	operator int16_t() const
 	{
 		return data.value;
 	}
