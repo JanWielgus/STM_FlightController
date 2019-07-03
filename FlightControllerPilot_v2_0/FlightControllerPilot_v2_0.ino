@@ -141,6 +141,11 @@ void updateLCD()
 			lcd.print("armed");
 			break;
 	}
+	
+	lcd.setCursor(10, 0);
+	lcd.print(com.connectionStability());
+	lcd.setCursor(12, 0);
+	lcd.print(com.received.tilt_TB);
 }
 
 

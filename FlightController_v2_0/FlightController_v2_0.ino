@@ -176,6 +176,8 @@ void updateMainCommunication()
 	com.receiveAndUnpackData();
 	
 	// send proper data packet: TYPE1-full, TYPE2-basic
+	com.toSend.tilt_TB = (int8_t)angle.x;
+	com.toSend.tilt_LR = (int8_t)angle.y;
 	com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
 	
 	/*
@@ -183,6 +185,7 @@ void updateMainCommunication()
 	Serial.print(heading);
 	Serial.println();
 	*/
+	Serial.println((uint16_t)com.received.steer.throttle);
 }
 
 
