@@ -41,7 +41,7 @@ void FC_ControlStick::readValue()
 	
 	// filter
 	float temp = rawValue;
-	value = (int16_t)filter.updateFilter(temp);
+	value = (int16_t)(filter.updateFilter(temp) + 0.5);
 	
 	// calculate the output values
 	if (value > outputProperties.rawCenterValue + outputProperties.deadZone)
