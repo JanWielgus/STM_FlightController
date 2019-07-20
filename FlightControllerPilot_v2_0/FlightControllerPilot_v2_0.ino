@@ -30,7 +30,7 @@ void updateMainCommunication();
 void readControlSticksValues();
 void updateLCD();
 void gestureRecognition();
-void tempSerial();
+void updateControlDiode();
 
 
 enum stateType {disarmed, arming1, arming2, armed};
@@ -44,12 +44,14 @@ void setup()
 	Serial.begin(9600);
 	delay(300);
 	
+	pinMode(LED_BUILTIN, OUTPUT);
+	
 	// Add functions to the tasker
 	tasker.addFunction(updateMainCommunication, 40000L, 11);
 	tasker.addFunction(readControlSticksValues, 20000L, 14); // 50Hz
 	tasker.addFunction(updateLCD, 100000L, 10); // 10Hz
-	tasker.addFunction(gestureRecognition, 100000L, 16); // 10Hz
-	//tasker.addFunction(tempSerial, 40000L, 15); //25Hz
+	tasker.addFunction(gestureRecognition, 100001L, 16); // 10Hz (without 1 at the end is 7/8Hz)
+	tasker.addFunction(updateControlDiode, 1000000L, 5); // blink builtin diode every second
 	tasker.scheduleTasks();
 	
 	
@@ -87,6 +89,15 @@ void loop()
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
+
+void updateControlDiode()
+{
+	
+	static bool ledState = LOW;
+	digitalWrite(LED_BUILTIN, ledState);
+	ledState = !ledState;
+}
+
 
 
 void updateMainCommunication()
@@ -142,10 +153,8 @@ void updateLCD()
 			break;
 	}
 	
-	lcd.setCursor(10, 0);
-	lcd.print(com.connectionStability());
 	lcd.setCursor(12, 0);
-	lcd.print(com.received.tilt_TB);
+	lcd.print(com.connectionStability());
 }
 
 
@@ -323,8 +332,3 @@ void gestureRecognition()
 	counter++;
 }
 
-
-void tempSerial()
-{
-	//Serial.println(TB_Stick.getValue());
-}
