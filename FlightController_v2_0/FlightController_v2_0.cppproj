@@ -5,7 +5,7 @@
     <ProjectVersion>7.0</ProjectVersion>
     <ToolchainName>com.Atmel.ARMGCC.CPP</ToolchainName>
     <ProjectGuid>{d3581bc6-bb30-4e59-8704-9b8938cc5e0a}</ProjectGuid>
-    <avrdevice>AT90CAN128</avrdevice>
+    <avrdevice>ATSAM3X8E</avrdevice>
     <avrdeviceseries>none</avrdeviceseries>
     <OutputType>Executable</OutputType>
     <Language>CPP</Language>
@@ -51,14 +51,20 @@
   <armgcc.common.outputfiles.srec>True</armgcc.common.outputfiles.srec>
   <armgcc.compiler.symbols.DefSymbols>
     <ListValues>
-      <Value>__AVR_ATmega328p__</Value>
-      <Value>__AVR_ATmega328P__</Value>
       <Value>ARDUINO=10807</Value>
       <Value>ARDUINO_MAIN</Value>
-      <Value>F_CPU=16000000L</Value>
-      <Value>__AVR__</Value>
-      <Value>ARDUINO_AVR_NANO</Value>
-      <Value>ARDUINO_ARCH_AVR</Value>
+      <Value>F_CPU=72000000L</Value>
+      <Value>printf=iprintf</Value>
+      <Value>__STM32F1__</Value>
+      <Value>DEBUG_LEVEL=DEBUG_NONE</Value>
+      <Value>BOARD_generic_stm32f103c</Value>
+      <Value>VECT_TAB_ADDR=0x8000000</Value>
+      <Value>ERROR_LED_PORT=GPIOC</Value>
+      <Value>ERROR_LED_PIN=13</Value>
+      <Value>ARDUINO_GENERIC_STM32F103C</Value>
+      <Value>ARDUINO_ARCH_STM32F1</Value>
+      <Value>CONFIG_MAPLE_MINI_NO_DISABLE_DEBUG</Value>
+      <Value>MCU_STM32F103CB</Value>
     </ListValues>
   </armgcc.compiler.symbols.DefSymbols>
   <armgcc.compiler.directories.IncludePaths>
@@ -94,14 +100,20 @@
   <armgcc.compiler.warnings.AllWarnings>True</armgcc.compiler.warnings.AllWarnings>
   <armgcccpp.compiler.symbols.DefSymbols>
     <ListValues>
-      <Value>__AVR_ATmega328p__</Value>
-      <Value>__AVR_ATmega328P__</Value>
       <Value>ARDUINO=10807</Value>
       <Value>ARDUINO_MAIN</Value>
-      <Value>F_CPU=16000000L</Value>
-      <Value>__AVR__</Value>
-      <Value>ARDUINO_AVR_NANO</Value>
-      <Value>ARDUINO_ARCH_AVR</Value>
+      <Value>F_CPU=72000000L</Value>
+      <Value>printf=iprintf</Value>
+      <Value>__STM32F1__</Value>
+      <Value>DEBUG_LEVEL=DEBUG_NONE</Value>
+      <Value>BOARD_generic_stm32f103c</Value>
+      <Value>VECT_TAB_ADDR=0x8000000</Value>
+      <Value>ERROR_LED_PORT=GPIOC</Value>
+      <Value>ERROR_LED_PIN=13</Value>
+      <Value>ARDUINO_GENERIC_STM32F103C</Value>
+      <Value>ARDUINO_ARCH_STM32F1</Value>
+      <Value>CONFIG_MAPLE_MINI_NO_DISABLE_DEBUG</Value>
+      <Value>MCU_STM32F103CB</Value>
     </ListValues>
   </armgcccpp.compiler.symbols.DefSymbols>
   <armgcccpp.compiler.directories.IncludePaths>
@@ -437,6 +449,7 @@ build.arch=STM32F1
         <visualmicro.application.name>arduino16x</visualmicro.application.name>
         <visualmicro.package.name>Arduino_STM32-master</visualmicro.package.name>
         <visualmicro.platform.name>STM32F1</visualmicro.platform.name>
+        <arduino.upload.port>COM4</arduino.upload.port>
       </VisualMicroSettings>
     </VisualMicroSettings>
   </PropertyGroup>
@@ -450,14 +463,20 @@ build.arch=STM32F1
   <armgcc.common.outputfiles.srec>True</armgcc.common.outputfiles.srec>
   <armgcc.compiler.symbols.DefSymbols>
     <ListValues>
-      <Value>__AVR_ATmega328p__</Value>
-      <Value>__AVR_ATmega328P__</Value>
       <Value>ARDUINO=10807</Value>
       <Value>ARDUINO_MAIN</Value>
-      <Value>F_CPU=16000000L</Value>
-      <Value>__AVR__</Value>
-      <Value>ARDUINO_AVR_NANO</Value>
-      <Value>ARDUINO_ARCH_AVR</Value>
+      <Value>F_CPU=72000000L</Value>
+      <Value>printf=iprintf</Value>
+      <Value>__STM32F1__</Value>
+      <Value>DEBUG_LEVEL=DEBUG_NONE</Value>
+      <Value>BOARD_generic_stm32f103c</Value>
+      <Value>VECT_TAB_ADDR=0x8000000</Value>
+      <Value>ERROR_LED_PORT=GPIOC</Value>
+      <Value>ERROR_LED_PIN=13</Value>
+      <Value>ARDUINO_GENERIC_STM32F103C</Value>
+      <Value>ARDUINO_ARCH_STM32F1</Value>
+      <Value>CONFIG_MAPLE_MINI_NO_DISABLE_DEBUG</Value>
+      <Value>MCU_STM32F103CB</Value>
     </ListValues>
   </armgcc.compiler.symbols.DefSymbols>
   <armgcc.compiler.directories.IncludePaths>
@@ -493,14 +512,20 @@ build.arch=STM32F1
   <armgcc.compiler.warnings.AllWarnings>True</armgcc.compiler.warnings.AllWarnings>
   <armgcccpp.compiler.symbols.DefSymbols>
     <ListValues>
-      <Value>__AVR_ATmega328p__</Value>
-      <Value>__AVR_ATmega328P__</Value>
       <Value>ARDUINO=10807</Value>
       <Value>ARDUINO_MAIN</Value>
-      <Value>F_CPU=16000000L</Value>
-      <Value>__AVR__</Value>
-      <Value>ARDUINO_AVR_NANO</Value>
-      <Value>ARDUINO_ARCH_AVR</Value>
+      <Value>F_CPU=72000000L</Value>
+      <Value>printf=iprintf</Value>
+      <Value>__STM32F1__</Value>
+      <Value>DEBUG_LEVEL=DEBUG_NONE</Value>
+      <Value>BOARD_generic_stm32f103c</Value>
+      <Value>VECT_TAB_ADDR=0x8000000</Value>
+      <Value>ERROR_LED_PORT=GPIOC</Value>
+      <Value>ERROR_LED_PIN=13</Value>
+      <Value>ARDUINO_GENERIC_STM32F103C</Value>
+      <Value>ARDUINO_ARCH_STM32F1</Value>
+      <Value>CONFIG_MAPLE_MINI_NO_DISABLE_DEBUG</Value>
+      <Value>MCU_STM32F103CB</Value>
     </ListValues>
   </armgcccpp.compiler.symbols.DefSymbols>
   <armgcccpp.compiler.directories.IncludePaths>
@@ -836,6 +861,7 @@ build.arch=STM32F1
         <visualmicro.application.name>arduino16x</visualmicro.application.name>
         <visualmicro.package.name>Arduino_STM32-master</visualmicro.package.name>
         <visualmicro.platform.name>STM32F1</visualmicro.platform.name>
+        <arduino.upload.port>COM4</arduino.upload.port>
       </VisualMicroSettings>
     </VisualMicroSettings>
   </PropertyGroup>

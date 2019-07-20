@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "FlightController_v2_0", "FlightController_v2_0.cppproj", "{D3581BC6-BB30-4E59-8704-9B8938CC5E0A}"
 EndProject
-Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "FlightControllerPilot_v2_0", "..\FlightControllerPilot_v2_0\FlightControllerPilot_v2_0.cppproj", "{2E85E9F3-98C4-4984-B78F-BB8EE6ACA179}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -17,10 +15,6 @@ Global
 		{D3581BC6-BB30-4E59-8704-9B8938CC5E0A}.Debug|AVR.Build.0 = Debug|AVR
 		{D3581BC6-BB30-4E59-8704-9B8938CC5E0A}.Release|AVR.ActiveCfg = Release|AVR
 		{D3581BC6-BB30-4E59-8704-9B8938CC5E0A}.Release|AVR.Build.0 = Release|AVR
-		{2E85E9F3-98C4-4984-B78F-BB8EE6ACA179}.Debug|AVR.ActiveCfg = Debug|AVR
-		{2E85E9F3-98C4-4984-B78F-BB8EE6ACA179}.Debug|AVR.Build.0 = Debug|AVR
-		{2E85E9F3-98C4-4984-B78F-BB8EE6ACA179}.Release|AVR.ActiveCfg = Release|AVR
-		{2E85E9F3-98C4-4984-B78F-BB8EE6ACA179}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

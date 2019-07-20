@@ -25,6 +25,7 @@ void stabilize();
 void updateMainCommunication();
 // Check if there is a need to calibrate one of the module and perform it if needed
 void checkCalibrations();
+void updateControlDiode(); // built in diode is blinked once per second
 
 
 // create the tasker object
@@ -55,6 +56,8 @@ void setup()
 	delay(1200); // Only for Atmel studio serial monitor
 	Serial.println("Program has just started!");
 	
+	pinMode(LED_BUILTIN, OUTPUT);
+	
 	
 	// default values
 	angle.x = 0;
@@ -68,6 +71,7 @@ void setup()
 	tasker.addFunction(stabilize, 4000L, 17);                  // 250Hz
 	tasker.addFunction(updateMainCommunication, 40000L, 11);   // 25Hz
 	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
+	tasker.addFunction(updateControlDiode, 1000000L, 5);       // 1Hz
 	tasker.scheduleTasks();
 	
 	delay(300);
@@ -146,6 +150,14 @@ void loop()
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
+void updateControlDiode()
+{
+	static bool ledState = LOW;
+	digitalWrite(LED_BUILTIN, ledState);
+	ledState = !ledState;
+}
+
+
 
 void readXY_angles()
 {
@@ -186,6 +198,8 @@ void updateMainCommunication()
 	Serial.println();
 	*/
 	Serial.println((uint16_t)com.received.steer.throttle);
+	//Serial.println(com.connectionStability());
+	//Serial.println(com.toSend.tilt_TB);
 }
 
 
