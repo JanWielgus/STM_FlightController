@@ -10,8 +10,7 @@
 #define GESTURERECOGNITION_H_
 
 
-enum stateType {disarmed, arming1, arming2, armed};
-stateType state = disarmed;
+#include "FC_Pilot_Storage.h"
 
 
 namespace gr // gesture recognition
