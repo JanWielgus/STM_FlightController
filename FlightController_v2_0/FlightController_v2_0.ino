@@ -15,6 +15,7 @@
 #include <FC_HMC5883L_Lib.h>
 #include <FC_EVA_Filter.h>
 #include <FC_Motors.h>
+#include "config.h"
 
 
 
@@ -39,10 +40,6 @@ FC_MPU6050Lib mpu;
 FC_HMC5883L_Lib compass;
 FC_MPU6050Lib::vector3Float angle; // X and Y angles
 float heading;
-
-// Default calibration values
-FC_HMC5883L_Lib::vector3Int minCompassDefaultCalibrationValues = {-503, -505, -1440};
-FC_HMC5883L_Lib::vector3Int maxCompassDefaultCalibrationValues = {504, 463, -330};
 
 
 
@@ -124,7 +121,7 @@ void setup()
 	// and the whole process is repeated
 	//mpu.setAccelerometerCalibrationValues(....);
 	//setGyroCalibrationMethod here <----
-	compass.setCalibrationValues(minCompassDefaultCalibrationValues, maxCompassDefaultCalibrationValues);
+	compass.setCalibrationValues(config::calibVal.compassMin, config::calibVal.compassMax);
 	
 	
 	mpu.setFastClock(); // 400 kHz
