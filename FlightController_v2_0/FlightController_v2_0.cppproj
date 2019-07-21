@@ -874,6 +874,9 @@ build.arch=STM32F1
     <Folder Include="__vm\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="config.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="FC_MainCommunication.cpp">
       <SubType>compile</SubType>
     </Compile>
