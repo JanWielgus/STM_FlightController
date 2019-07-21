@@ -1,5 +1,5 @@
 /*
- * FC_Pilot_Storage.h
+ * Storage.h
  *
  * Created: 20/07/2019 19:27:18
  *  Author: Jan Wielgus
@@ -10,8 +10,8 @@
  */ 
 
 
-#ifndef FC_PILOT_STORAGE_H_
-#define FC_PILOT_STORAGE_H_
+#ifndef STORAGE_H_
+#define STORAGE_H_
 
 
 // Include files
@@ -46,4 +46,4 @@
 
 
 
-#endif /* FC_PILOT_STORAGE_H_ */
+#endif /* STORAGE_H_ */

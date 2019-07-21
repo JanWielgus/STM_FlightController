@@ -10,7 +10,7 @@
 #define GESTURERECOGNITION_H_
 
 
-#include "FC_Pilot_Storage.h"
+#include "Storage.h"
 
 
 namespace gr // gesture recognition

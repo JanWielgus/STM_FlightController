@@ -3,7 +3,7 @@
     Author:     Jan Wielgus
 */
 
-#include "FC_Pilot_Storage.h"
+#include "Storage.h"
 #include <FC_CustomDataTypes.h>
 #include "config.h"
 #include "GestureRecognition.h"
@@ -49,7 +49,7 @@ void setup()
 	
 	lcdH::initLCD();
 	
-	// Necessary
+	// Necessary for LCD to keep up
 	Wire.setClock(400000L);
 }
 
