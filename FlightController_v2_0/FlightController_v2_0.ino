@@ -175,7 +175,11 @@ void stabilize()
 
 void updateMainCommunication()
 {
-	com.receiveAndUnpackData();
+	if (com.receiveAndUnpackData())
+	{
+		headingToHold += ((float)com.received.steer.rotate * 0.04); // if 25Hz
+	}
+	
 	
 	// send proper data packet: TYPE1-full, TYPE2-basic
 	com.toSend.tilt_TB = (int8_t)angle.x;
