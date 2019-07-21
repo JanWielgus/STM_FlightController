@@ -39,6 +39,11 @@ float heading;
 // create motors object
 FC_Motors motors;
 
+// PID objects
+static float calculationsDeltaTime = 0.00025f; //  250Hz / 1'000'000
+MyPID levelXpid(calculationsDeltaTime, 0, 0, 0, 0);
+MyPID levelYpid(calculationsDeltaTime, 0, 0, 0, 0);
+
 
 
 

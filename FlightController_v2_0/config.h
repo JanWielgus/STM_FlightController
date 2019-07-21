@@ -18,11 +18,13 @@ namespace config
 	// pins
 	struct 
 	{
+		/* not used in the code
 		// motors
 		uint8_t mTL = PA6;
 		uint8_t mTR = PA7;
 		uint8_t mBR = PB0;
 		uint8_t mBL = PB1;
+		*/
 		
 		
 		// diodes

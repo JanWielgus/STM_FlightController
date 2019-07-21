@@ -16,8 +16,7 @@ void readXY_angles();
 void readCompass();
 void stabilize();
 void updateMainCommunication();
-// Check if there is a need to calibrate one of the module and perform it if needed
-void checkCalibrations();
+void checkCalibrations(); // Check if there is a need to calibrate one of the module and perform it if needed
 void updateControlDiode(); // built in diode is blinked once per second
 
 
@@ -40,6 +39,7 @@ void setup()
 	motors.setOnTR(0);
 	motors.setOnBR(0);
 	motors.setOnBL(0);
+	motors.setMotorState(false); // disable motors
 	
 	
 	// default values
@@ -165,10 +165,22 @@ void stabilize()
 	// use PID class
 	
 	
-	motors.setOnTL(0);
-	motors.setOnTR(0);
-	motors.setOnBR(0);
-	motors.setOnBL(0);
+	// leveling PID
+	int16_t pidXval = levelXpid.updateController(angle.x + (com.received.steer.TB/10)) + 0.5;
+	int16_t pidYval = levelYpid.updateController(angle.y + (com.received.steer.LR/10)) + 0.5;
+	
+	
+	// yaw PID
+	// ...
+	
+	
+	
+	// when pilot is disarmed motors will not spin
+	// when disconnected form the pilot, motors will stop
+	motors.setOnTL(com.received.steer.throttle);
+	motors.setOnTR(com.received.steer.throttle);
+	motors.setOnBR(com.received.steer.throttle);
+	motors.setOnBL(com.received.steer.throttle);
 	motors.forceMotorsExecution();
 }
 
@@ -177,22 +189,43 @@ void updateMainCommunication()
 {
 	if (com.receiveAndUnpackData())
 	{
+		// check if pilot set armed state
+		if (com.received.arming == 1)
+		{
+			levelXpid.resetController();
+			levelYpid.resetController();
+			//    RESET ALL PID CONTROLLERS  !!!
+			// and do all code when arming
+			
+			motors.setMotorState(true);
+		}
+		else
+			motors.setMotorState(false);
+		
 		headingToHold += ((float)com.received.steer.rotate * 0.04); // if 25Hz
 	}
+	
+	/*
+	// WHEN LOST THE SIGNAL, then disable motors
+	if (com.connectionStability() == 0)
+	{
+		motors.setMotorState(false);
+	}*/
 	
 	
 	// send proper data packet: TYPE1-full, TYPE2-basic
 	com.toSend.tilt_TB = (int8_t)angle.x;
 	com.toSend.tilt_LR = (int8_t)angle.y;
 	com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
+	//com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE);
 	
 	/*
 	Serial.print("H: ");
 	Serial.print(heading);
 	Serial.println();
 	*/
-	Serial.println((uint16_t)com.received.steer.throttle);
-	//Serial.println(com.connectionStability());
+	//Serial.println((uint16_t)com.received.steer.throttle);
+	Serial.println(com.connectionStability());
 	//Serial.println(com.toSend.tilt_TB);
 }
 
