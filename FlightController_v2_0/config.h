@@ -31,6 +31,13 @@ namespace config
 		uint8_t redDiode = PB15;
 		uint8_t blueDiode = PB14;
 		
+		
+		// radio module
+		uint8_t m0pin = PA1;
+		uint8_t m1pin = PA0;
+		uint8_t aux = PB5;
+		
+		
 	} pin;
 	
 	

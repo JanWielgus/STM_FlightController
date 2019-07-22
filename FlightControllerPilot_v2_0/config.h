@@ -24,6 +24,11 @@ namespace config
 		uint8_t tiltTB = A2;
 		uint8_t tiltLR = A3;
 		
+		
+		// radio module
+		uint8_t m0pin = 9;
+		uint8_t m1pin = 10;
+		uint8_t aux = 11;
 	} pin;
 	
 	

@@ -34,6 +34,14 @@ void setup()
 	pinMode(LED_BUILTIN, OUTPUT);
 	
 	
+	// TEMPORARY !!!  set 
+	pinMode(config::pin.m0pin, OUTPUT);
+	pinMode(config::pin.m1pin, OUTPUT);
+	pinMode(config::pin.aux, INPUT);
+	digitalWrite(config::pin.m0pin, LOW);
+	digitalWrite(config::pin.m1pin, LOW);
+	
+	
 	// set motors to zero power
 	motors.setOnTL(0);
 	motors.setOnTR(0);
