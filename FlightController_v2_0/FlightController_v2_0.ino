@@ -23,8 +23,8 @@ void updateControlDiode(); // built in diode is blinked once per second
 
 void setup()
 {
-	// Cummunication serial
-	Serial1.begin(9600);
+	// Communication serial
+	Serial1.begin(19200);
 	
 	// Debugging
 	Serial.begin(115200);
@@ -175,7 +175,7 @@ void stabilize()
 	
 	// leveling PID
 	int16_t pidXval = levelXpid.updateController(angle.x + (com.received.steer.TB/10)) + 0.5;
-	int16_t pidYval = levelYpid.updateController(angle.y + (com.received.steer.LR/10)) + 0.5;
+	int16_t pidYval = levelYpid.updateController(angle.y - (com.received.steer.LR/10)) + 0.5;
 	
 	
 	// yaw PID
@@ -184,11 +184,11 @@ void stabilize()
 	
 	
 	// when pilot is disarmed motors will not spin
-	// when disconnected form the pilot, motors will stop
-	motors.setOnTL(com.received.steer.throttle);
-	motors.setOnTR(com.received.steer.throttle);
-	motors.setOnBR(com.received.steer.throttle);
-	motors.setOnBL(com.received.steer.throttle);
+	// when disconnected form the pilot, motors will stop (not enabled)
+	motors.setOnTL(com.received.steer.throttle + pidXval + pidYval); // BR (damaged)
+	motors.setOnTR(com.received.steer.throttle + pidXval - pidYval); // BL
+	motors.setOnBR(com.received.steer.throttle - pidXval - pidYval); // TL
+	motors.setOnBL(com.received.steer.throttle - pidXval + pidYval); // TR
 	motors.forceMotorsExecution();
 }
 
@@ -224,8 +224,8 @@ void updateMainCommunication()
 	// send proper data packet: TYPE1-full, TYPE2-basic
 	com.toSend.tilt_TB = (int8_t)angle.x;
 	com.toSend.tilt_LR = (int8_t)angle.y;
-	com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
-	//com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE);
+	//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
+	com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE);
 	
 	/*
 	Serial.print("H: ");

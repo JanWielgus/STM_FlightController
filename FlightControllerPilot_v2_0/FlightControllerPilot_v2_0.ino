@@ -22,7 +22,7 @@ void updateControlDiode();
 void setup()
 {
 	// Communication serial
-	Serial.begin(9600);
+	Serial.begin(19200);
 	delay(300);
 	
 	pinMode(LED_BUILTIN, OUTPUT);
@@ -95,6 +95,7 @@ void updateMainCommunication()
 	// OTHER DATA !!!
 	// send packed data
 	com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
+	//com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE);
 }
 
 
