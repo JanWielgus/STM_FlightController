@@ -189,7 +189,7 @@ void stabilize()
 	motors.setOnTR(com.received.steer.throttle + pidXval - pidYval); // BL
 	motors.setOnBR(com.received.steer.throttle - pidXval - pidYval); // TL
 	motors.setOnBL(com.received.steer.throttle - pidXval + pidYval); // TR
-	motors.forceMotorsExecution();
+	//motors.forceMotorsExecution();
 }
 
 
