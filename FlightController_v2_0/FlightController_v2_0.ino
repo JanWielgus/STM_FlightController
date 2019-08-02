@@ -21,6 +21,37 @@ void updateControlDiode(); // built in diode is blinked once per second
 
 
 
+
+class MesasureTime
+{
+	public:
+	
+	static uint32_t startTime;
+	static uint32_t dur;
+	
+ public:
+	static void start()
+	{
+		startTime = micros();
+	}
+	
+	static void end()
+	{
+		dur = micros() - startTime;
+	}
+	
+	static uint16_t duration()
+	{
+		return dur;
+	}
+};
+uint32_t MesasureTime::startTime = 0;
+uint32_t MesasureTime::dur = 0;
+
+int16_t counter = 0; // Used to measure how many times function does in a second (checked in the updateControlDiode() )
+
+
+
 void setup()
 {
 	// Communication serial
@@ -57,13 +88,13 @@ void setup()
 	heading = 0;
 	
 	// Add functions to the Tasker tasks
+	tasker.addFunction(stabilize, 4000L, 31);                  // 250Hz (duration tested only with leveling)
+	tasker.addFunction(updateControlDiode, 1000000L, 2);       // 1Hz (tested duration)
 	tasker.addFunction(readXY_angles, 4000L, 639);             // 250Hz (tested duration)
 	tasker.addFunction(readCompass, 13340L, 492);              // 75Hz  (tested duration)
-	tasker.addFunction(stabilize, 4000L, 17);                  // 250Hz
-	tasker.addFunction(updateMainCommunication, 40000L, 11);   // 25Hz
+	tasker.addFunction(updateMainCommunication, 40000L, 229);  // 25Hz (tested duration)
 	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
-	tasker.addFunction(updateControlDiode, 1000000L, 5);       // 1Hz
-	tasker.scheduleTasks();
+	//tasker.scheduleTasks();
 	
 	delay(300);
 	Serial.println("tasker done");
@@ -78,6 +109,7 @@ void setup()
 	}
 	
 	mpu.setCalculationsFrequency(250);
+	mpu.setGyroFusionMultiplier(0.996); // CHANGED TO TEST
 	
 	
 	
@@ -146,6 +178,9 @@ void updateControlDiode()
 	static bool ledState = LOW;
 	digitalWrite(LED_BUILTIN, ledState);
 	ledState = !ledState;
+	
+	//Serial.println(counter);
+	counter = 0;
 }
 
 
@@ -168,28 +203,40 @@ void readCompass()
 
 void stabilize()
 {
+	counter++;
 	//...
 	// use angle and heading variables
 	// use PID class
 	
+	int16_t pidXval, pidYval;
 	
 	// leveling PID
-	int16_t pidXval = levelXpid.updateController(angle.x + (com.received.steer.TB/10)) + 0.5;
-	int16_t pidYval = levelYpid.updateController(angle.y - (com.received.steer.LR/10)) + 0.5;
-	
-	
+	pidXval = levelXpid.updateController(angle.x + (com.received.steer.TB/10)) + 0.5;
+	//pidYval = levelYpid.updateController(angle.y - (com.received.steer.LR/10)) + 0.5;
+		
+		
 	// yaw PID
 	// ...
 	
 	
+	//Serial.println(pidXval);
+	
+	
+	if (com.received.steer.throttle < 20)
+	{
+		pidXval = 0;
+		pidYval = 0;
+	}
+	
 	
 	// when pilot is disarmed motors will not spin
 	// when disconnected form the pilot, motors will stop (not enabled)
-	motors.setOnTL(com.received.steer.throttle + pidXval + pidYval); // BR (damaged)
-	motors.setOnTR(com.received.steer.throttle + pidXval - pidYval); // BL
-	motors.setOnBR(com.received.steer.throttle - pidXval - pidYval); // TL
-	motors.setOnBL(com.received.steer.throttle - pidXval + pidYval); // TR
-	//motors.forceMotorsExecution();
+	
+ 	motors.setOnTL(com.received.steer.throttle + pidXval + pidYval); // BR (damaged)
+ 	motors.setOnTR(com.received.steer.throttle + pidXval - pidYval); // BL
+ 	motors.setOnBR(com.received.steer.throttle - pidXval - pidYval); // TL
+ 	motors.setOnBL(com.received.steer.throttle - pidXval + pidYval); // TR
+	motors.forceMotorsExecution();
 }
 
 
@@ -232,9 +279,20 @@ void updateMainCommunication()
 	Serial.print(heading);
 	Serial.println();
 	*/
+	
+	/*
 	//Serial.println((uint16_t)com.received.steer.throttle);
-	Serial.println(com.connectionStability());
+	Serial.print(com.connectionStability());
+	Serial.print("\t");
+	Serial.print(angle.x);
+	Serial.print("\t");
+	Serial.print(angle.y);
+	Serial.println();
+	*/
+	
 	//Serial.println(com.toSend.tilt_TB);
+	
+	//Serial.println(MesasureTime::duration());
 }
 
 

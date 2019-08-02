@@ -41,7 +41,7 @@ void setup()
 	tasker.addFunction(lcdH::updateLCD, 100000L, 10); // 10Hz
 	tasker.addFunction(gestureRecognition, 100001L, 16); // 10Hz (without 1 at the end is 7/8Hz)
 	tasker.addFunction(updateControlDiode, 1000000L, 5); // blink builtin diode every second
-	tasker.scheduleTasks();
+	//tasker.scheduleTasks();
 	
 	
 	// init the control sticks

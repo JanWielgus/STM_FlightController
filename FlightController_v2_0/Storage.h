@@ -40,9 +40,9 @@ float heading;
 FC_Motors motors;
 
 // PID objects
-static float calculationsDeltaTime = 0.00025f; //  250Hz / 1'000'000
-MyPID levelXpid(calculationsDeltaTime, 1, 0, 0, 0);
-MyPID levelYpid(calculationsDeltaTime, 1, 0, 0, 0);
+static float calculationsDeltaTime = 0.00025f; //  = 250Hz / 1'000'000
+MyPID levelXpid(calculationsDeltaTime, 0, 0, 0, 100);
+MyPID levelYpid(calculationsDeltaTime, 0, 0, 0, 100);
 
 
 
