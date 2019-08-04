@@ -26,8 +26,8 @@ namespace config
 		
 		
 		// radio module
-		uint8_t m0pin = 9;
-		uint8_t m1pin = 10;
+		uint8_t m0pin = 7;
+		uint8_t m1pin = 8;
 		uint8_t aux = 11;
 	} pin;
 	
