@@ -32,11 +32,11 @@ void setup()
 	pinMode(config::pin.m0pin, OUTPUT);
 	pinMode(config::pin.m1pin, OUTPUT);
 	pinMode(config::pin.aux, INPUT);
-	digitalWrite(config::pin.m0pin, LOW);
+	digitalWrite(config::pin.m0pin, HIGH);
 	digitalWrite(config::pin.m1pin, LOW);
 	
 	// Add functions to the tasker
-	tasker.addFunction(updateMainCommunication, 40000L, 11);
+	tasker.addFunction(updateMainCommunication, 10000L, 11);
 	tasker.addFunction(readControlSticksValues, 20000L, 14); // 50Hz
 	tasker.addFunction(lcdH::updateLCD, 100000L, 10); // 10Hz
 	tasker.addFunction(gestureRecognition, 100001L, 16); // 10Hz (without 1 at the end is 7/8Hz)

@@ -69,7 +69,7 @@ void setup()
 	pinMode(config::pin.m0pin, OUTPUT);
 	pinMode(config::pin.m1pin, OUTPUT);
 	pinMode(config::pin.aux, INPUT);
-	digitalWrite(config::pin.m0pin, LOW);
+	digitalWrite(config::pin.m0pin, HIGH);
 	digitalWrite(config::pin.m1pin, LOW);
 	
 	
@@ -92,7 +92,7 @@ void setup()
 	tasker.addFunction(updateControlDiode, 1000000L, 2);       // 1Hz (tested duration)
 	tasker.addFunction(readXY_angles, 4000L, 639);             // 250Hz (tested duration)
 	tasker.addFunction(readCompass, 13340L, 492);              // 75Hz  (tested duration)
-	tasker.addFunction(updateMainCommunication, 40000L, 229);  // 25Hz (tested duration)
+	tasker.addFunction(updateMainCommunication, 10000L, 229);  // 25Hz (tested duration)
 	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
 	//tasker.scheduleTasks();
 	
