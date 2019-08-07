@@ -38,7 +38,7 @@ void setup()
 	digitalWrite(config::pin.m1pin, LOW);
 	
 	// Add functions to the tasker
-	tasker.addFunction(updateSteeringSending, 16000L, 1); // 62.5Hz - (250/4)
+	tasker.addFunction(updateSteeringSending, 6000L, 1); // 166.6Hz - higher than drone receiving frequency to make communication uninterrupted !!!!!
 	tasker.addFunction(updateOtherSending, 200000L, 1); // 5Hz
 	tasker.addFunction(updateReceiving, 100000L, 1); // 10Hz
 	tasker.addFunction(readControlSticksValues, 20000L, 730); // 50Hz (tested duration)
