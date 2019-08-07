@@ -14,6 +14,41 @@
 #define LCDHANDLER_H_
 
 
+class MesasureTime
+{
+	public:
+	
+	static uint32_t startTime;
+	static uint32_t dur;
+	
+	public:
+	static void start()
+	{
+		startTime = micros();
+	}
+	
+	static void end()
+	{
+		dur = micros() - startTime;
+	}
+	
+	static uint16_t duration()
+	{
+		return dur;
+	}
+};
+uint32_t MesasureTime::startTime = 0;
+uint32_t MesasureTime::dur = 0;
+
+uint16_t counter = 0; // Used to measure how many times function does in a second (checked in the updateControlDiode() )
+uint16_t temp_counter = 0;
+
+
+
+
+
+
+
 namespace lcdH // LCD handler
 {	
 	void initLCD()
@@ -43,21 +78,22 @@ namespace lcdH // LCD handler
 		switch (state)
 		{
 			case disarmed:
-			lcd.print("disarmed");
+			lcd.print("dsmd");
 			break;
 			case arming1:
-			lcd.print("arming1");
+			lcd.print("a1");
 			break;
 			case arming2:
-			lcd.print("arming2");
+			lcd.print("a2");
 			break;
 			case armed:
-			lcd.print("armed");
+			lcd.print("arm");
 			break;
 		}
 		
 		lcd.setCursor(12, 0);
 		lcd.print(com.connectionStability());
+		//lcd.print(temp_counter);
 	}
 }
 

@@ -36,10 +36,10 @@ void setup()
 	digitalWrite(config::pin.m1pin, LOW);
 	
 	// Add functions to the tasker
-	tasker.addFunction(updateMainCommunication, 10000L, 11);
-	tasker.addFunction(readControlSticksValues, 20000L, 14); // 50Hz
-	tasker.addFunction(lcdH::updateLCD, 100000L, 10); // 10Hz
-	tasker.addFunction(gestureRecognition, 100001L, 16); // 10Hz (without 1 at the end is 7/8Hz)
+	tasker.addFunction(updateMainCommunication, 20000L, 220); // 50Hz (tested duration)
+	tasker.addFunction(readControlSticksValues, 20000L, 730); // 50Hz (tested duration)
+	tasker.addFunction(lcdH::updateLCD, 100000L, 2002); // 10Hz (tested duration ? not sure if is real)
+	tasker.addFunction(gestureRecognition, 100001L, 20); // 10Hz (without 1 at the end is 7/8Hz) (tested duration)
 	tasker.addFunction(updateControlDiode, 1000000L, 5); // blink builtin diode every second
 	//tasker.scheduleTasks();
 	
@@ -78,6 +78,9 @@ void updateControlDiode()
 	static bool ledState = LOW;
 	digitalWrite(LED_BUILTIN, ledState);
 	ledState = !ledState;
+	
+	temp_counter = counter;
+	counter = 0;
 }
 
 
@@ -94,8 +97,8 @@ void updateMainCommunication()
 	com.toSend.arming = state==armed ? 1 : 0;
 	// OTHER DATA !!!
 	// send packed data
-	com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
-	//com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE);
+	//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
+	com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE);
 }
 
 
@@ -110,7 +113,7 @@ void readControlSticksValues()
 
 
 void gestureRecognition()
-{		
+{
 	gr::recognizeArmingAndDisarmingGesture(thrStick.getValue(),
 										   rotStick.getValue(),
 										   TB_Stick.getValue(),
