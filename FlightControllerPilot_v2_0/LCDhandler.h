@@ -6,12 +6,11 @@
  */ 
 
 
-#include "Storage.h"
-
-
-
 #ifndef LCDHANDLER_H_
 #define LCDHANDLER_H_
+
+#include "Storage.h"
+
 
 
 class MesasureTime
@@ -91,9 +90,11 @@ namespace lcdH // LCD handler
 			break;
 		}
 		
-		lcd.setCursor(12, 0);
-		lcd.print(com.connectionStability());
+		lcd.setCursor(10, 0);
+		//lcd.print(com.connectionStability());
 		//lcd.print(temp_counter);
+		//lcd.print(MesasureTime::duration());
+		lcd.print(btPID_P);
 	}
 }
 

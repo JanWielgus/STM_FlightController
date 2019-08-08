@@ -8,6 +8,7 @@
 #include "config.h"
 #include "GestureRecognition.h"
 #include "LCDhandler.h"
+#include "BluetoothDevice.h"
 
 
 
@@ -27,6 +28,9 @@ void setup()
 	Serial.begin(19200);
 	delay(300);
 	
+	// bluetooth software serial
+	btDevice::init();
+	
 	pinMode(LED_BUILTIN, OUTPUT);
 	
 	
@@ -38,13 +42,14 @@ void setup()
 	digitalWrite(config::pin.m1pin, LOW);
 	
 	// Add functions to the tasker
-	tasker.addFunction(updateSteeringSending, 6000L, 1); // 166.6Hz - higher than drone receiving frequency to make communication uninterrupted !!!!!
-	tasker.addFunction(updateOtherSending, 200000L, 1); // 5Hz
-	tasker.addFunction(updateReceiving, 100000L, 1); // 10Hz
+	tasker.addFunction(updateSteeringSending, 6000L, 160); // 166.6Hz - higher than drone receiving frequency to make communication uninterrupted !!!!! (tested duration)
+	tasker.addFunction(updateOtherSending, 200000L, 170); // 5Hz (tested duration)
+	tasker.addFunction(updateReceiving, 100000L, 730); // 10Hz (tested duration)
 	tasker.addFunction(readControlSticksValues, 20000L, 730); // 50Hz (tested duration)
 	tasker.addFunction(lcdH::updateLCD, 100000L, 2002); // 10Hz (tested duration ? not sure if is real)
 	tasker.addFunction(gestureRecognition, 100001L, 20); // 10Hz (without 1 at the end is 7/8Hz) (tested duration)
 	tasker.addFunction(updateControlDiode, 1000000L, 5); // blink built in diode every second
+	tasker.addFunction(btDevice::handleReceivedData, 500000L, 1); // 2Hz do something with data received from the bluetooth device
 	//tasker.scheduleTasks();
 	
 	
@@ -68,6 +73,9 @@ void setup()
 
 void loop()
 {
+	// Read bluetooth software serial
+	btDevice::read();
+	
 	tasker.runTasker();
 }
 
