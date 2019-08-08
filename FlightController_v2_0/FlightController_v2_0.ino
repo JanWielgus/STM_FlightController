@@ -281,9 +281,12 @@ void updateReceiving()
 {
 	if (com.receiveAndUnpackData())
 	{
-		// check if pilot set armed state
-		if (com.received.arming == 1)
+		static bool lastArmingState = 0;
+		
+		// check if pilot changed armed state from 0 to 1
+		if (lastArmingState == 0 && com.received.arming == 1)
 		{
+			lastArmingState = 1;
 			levelXpid.resetController();
 			levelYpid.resetController();
 			//    RESET ALL PID CONTROLLERS  !!!
@@ -291,10 +294,17 @@ void updateReceiving()
 			
 			motors.setMotorState(true);
 		}
-		else
-		motors.setMotorState(false);
 		
-		headingToHold += ((float)com.received.steer.rotate * 0.04); // if 25Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
+		
+		if (com.received.arming == 0)
+		{
+			lastArmingState = 0;
+			motors.setMotorState(false);
+		}
+		
+		
+		//headingToHold += ((float)com.received.steer.rotate * 0.04); // if 25Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
+		headingToHold += ((float)com.received.steer.rotate * 0.0125); // if 80Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
 	}
 	
 	
