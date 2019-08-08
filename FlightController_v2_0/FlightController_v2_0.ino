@@ -98,8 +98,8 @@ void setup()
 	tasker.addFunction(readXY_angles, 4000L, 639);             // 250Hz (tested duration)
 	tasker.addFunction(readCompass, 13340L, 492);              // 75Hz  (tested duration)
 	//tasker.addFunction(updateMainCommunication, 20000L, 229);  // 50Hz (tested duration)
-	tasker.addFunction(updateSending, 100000L, 1);             // 10Hz
-	tasker.addFunction(updateReceiving, 8000L, 1);            // 125Hz - (250/2)
+	tasker.addFunction(updateSending, 22000L, 1);              // ~45Hz
+	tasker.addFunction(updateReceiving, 12500L, 1);            // 80Hz
 	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
 	//tasker.scheduleTasks();
 	
@@ -298,15 +298,16 @@ void updateReceiving()
 	}
 	
 	
-	/*
+	
 	// WHEN LOST THE SIGNAL, then disable motors
 	if (com.connectionStability() == 0)
 	{
 		motors.setMotorState(false);
-	}*/
+	}
+	
 	
 	// light up the red diode if connection stability is greater than 0
-	digitalWrite(config::pin.redDiode, (com.connectionStability() > 0) ? HIGH : LOW );
+	digitalWrite(config::pin.redDiode, (com.connectionStability() >= 3) ? HIGH : LOW );
 }
 
 
