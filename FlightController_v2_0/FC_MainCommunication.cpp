@@ -45,44 +45,27 @@ bool FC_MainCommunication::receiveAndUnpackData()
 		// Check if this packet is the specific one (TYPE1)
 		if (checkReceivedDataPacket(receivedPacketTypes.TYPE1_ID, receivedPacketTypes.TYPE1_SIZE, true))
 		{
-			data.received.steer.throttle.byteArr()[0] = dpReceived.buffer[2];
-			data.received.steer.throttle.byteArr()[1] = dpReceived.buffer[3];
-			data.received.steer.rotate.byteArr()[0] = dpReceived.buffer[4];
-			data.received.steer.rotate.byteArr()[1] = dpReceived.buffer[5];
-			data.received.steer.TB.byteArr()[0] = dpReceived.buffer[6];
-			data.received.steer.TB.byteArr()[1] = dpReceived.buffer[7];
-			data.received.steer.LR.byteArr()[0] = dpReceived.buffer[8];
-			data.received.steer.LR.byteArr()[1] = dpReceived.buffer[9];
-			data.received.pilotDistance.byteArr()[0] = dpReceived.buffer[10];
-			data.received.pilotDistance.byteArr()[1] = dpReceived.buffer[11];
-			data.received.pilotDirection.byteArr()[0] = dpReceived.buffer[12];
-			data.received.pilotDirection.byteArr()[1] = dpReceived.buffer[13];
-			data.received.flightMode = dpReceived.buffer[14];
-			data.received.arming = dpReceived.buffer[15];
+			data.received.pilotDistance.byteArr()[0] = dpReceived.buffer[2];
+			data.received.pilotDistance.byteArr()[1] = dpReceived.buffer[3];
+			data.received.pilotDirection.byteArr()[0] = dpReceived.buffer[4];
+			data.received.pilotDirection.byteArr()[1] = dpReceived.buffer[5];
+			data.received.flightMode = dpReceived.buffer[6];
+			data.received.arming = dpReceived.buffer[7];
 			// losowa wartosc
-			data.received.bitSwitches1.byte = dpReceived.buffer[17];
-			data.received.bitSwitches2.byte = dpReceived.buffer[18];
-			data.received.signalLostScenario = dpReceived.buffer[19];
-			// margin 6x
+			data.received.bitSwitches1.byte = dpReceived.buffer[9];
+			data.received.bitSwitches2.byte = dpReceived.buffer[10];
+			data.received.signalLostScenario = dpReceived.buffer[11];
 		}
 	
 	
 		// Check if this packet is TYPE2
 		else if (checkReceivedDataPacket(receivedPacketTypes.TYPE2_ID, receivedPacketTypes.TYPE2_SIZE, true))
 		{
-			data.received.steer.throttle.byteArr()[0] = dpReceived.buffer[2];
-			data.received.steer.throttle.byteArr()[1] = dpReceived.buffer[3];
-			data.received.steer.rotate.byteArr()[0] = dpReceived.buffer[4];
-			data.received.steer.rotate.byteArr()[1] = dpReceived.buffer[5];
-			data.received.steer.TB.byteArr()[0] = dpReceived.buffer[6];
-			data.received.steer.TB.byteArr()[1] = dpReceived.buffer[7];
-			data.received.steer.LR.byteArr()[0] = dpReceived.buffer[8];
-			data.received.steer.LR.byteArr()[1] = dpReceived.buffer[9];
-			data.received.flightMode = dpReceived.buffer[10];
-			data.received.arming = dpReceived.buffer[11];
-			data.received.bitSwitches1.byte = dpReceived.buffer[12];
-			data.received.bitSwitches2.byte = dpReceived.buffer[13];
-			data.received.signalLostScenario = dpReceived.buffer[14];
+			data.received.flightMode = dpReceived.buffer[2];
+			data.received.arming = dpReceived.buffer[3];
+			data.received.bitSwitches1.byte = dpReceived.buffer[4];
+			data.received.bitSwitches2.byte = dpReceived.buffer[5];
+			data.received.signalLostScenario = dpReceived.buffer[6];
 		}
 		
 		
@@ -114,6 +97,19 @@ bool FC_MainCommunication::receiveAndUnpackData()
 			for (int i=0; i<4; i++)
 				data.received.altHoldPID.D.byteArr()[i] = dpReceived.buffer[i+36];
 			data.received.altHoldPID.I_max = dpReceived.buffer[40];
+		}
+		
+		
+		else if (checkReceivedDataPacket(receivedPacketTypes.TYPE4_ID, receivedPacketTypes.TYPE4_SIZE, true))
+		{
+			data.received.steer.throttle.byteArr()[0] = dpReceived.buffer[2];
+			data.received.steer.throttle.byteArr()[1] = dpReceived.buffer[3];
+			data.received.steer.rotate.byteArr()[0] = dpReceived.buffer[4];
+			data.received.steer.rotate.byteArr()[1] = dpReceived.buffer[5];
+			data.received.steer.TB.byteArr()[0] = dpReceived.buffer[6];
+			data.received.steer.TB.byteArr()[1] = dpReceived.buffer[7];
+			data.received.steer.LR.byteArr()[0] = dpReceived.buffer[8];
+			data.received.steer.LR.byteArr()[1] = dpReceived.buffer[9];
 		}
 		
 		

@@ -70,15 +70,18 @@ class FC_MainCommunication : private FC_Communication_Base
 	
 	struct
 	{
-		// full
+		// full background
 		const uint8_t TYPE1_ID = 0x01;
-		const uint8_t TYPE1_SIZE = 26;
-		// basic
+		const uint8_t TYPE1_SIZE = 12;
+		// basic background
 		const uint8_t TYPE2_ID = 0x02;
-		const uint8_t TYPE2_SIZE = 15;
+		const uint8_t TYPE2_SIZE = 7;
 		// pid params
 		const uint8_t TYPE3_ID = 0x03;
 		const uint8_t TYPE3_SIZE = 41;
+		// steering
+		const uint8_t TYPE4_ID = 0x04;
+		const uint8_t TYPE4_SIZE = 10;
 	} sendPacketTypes;
 	
 	

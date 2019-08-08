@@ -113,27 +113,19 @@ void FC_MainCommunication::packAndSendData(uint8_t packetID, uint8_t packetSize)
 	
 	
 	
-	// TYPE1 - full
+	// TYPE 1 - full background
 	if (packetID == sendPacketTypes.TYPE1_ID)
 	{
-		dpToSend.buffer[2] = data.toSend.steer.throttle.byteArr()[0];
-		dpToSend.buffer[3] = data.toSend.steer.throttle.byteArr()[1];
-		dpToSend.buffer[4] = data.toSend.steer.rotate.byteArr()[0];
-		dpToSend.buffer[5] = data.toSend.steer.rotate.byteArr()[1];
-		dpToSend.buffer[6] = data.toSend.steer.TB.byteArr()[0];
-		dpToSend.buffer[7] = data.toSend.steer.TB.byteArr()[1];
-		dpToSend.buffer[8] = data.toSend.steer.LR.byteArr()[0];
-		dpToSend.buffer[9] = data.toSend.steer.LR.byteArr()[1];
-		dpToSend.buffer[10] = data.toSend.pilotDistance.byteArr()[0];
-		dpToSend.buffer[11] = data.toSend.pilotDistance.byteArr()[1];
-		dpToSend.buffer[12] = data.toSend.pilotDirection.byteArr()[0];
-		dpToSend.buffer[13] = data.toSend.pilotDirection.byteArr()[1];
-		dpToSend.buffer[14] = data.toSend.flightMode;
-		dpToSend.buffer[15] = data.toSend.arming;
+		dpToSend.buffer[2] = data.toSend.pilotDistance.byteArr()[0];
+		dpToSend.buffer[3] = data.toSend.pilotDistance.byteArr()[1];
+		dpToSend.buffer[4] = data.toSend.pilotDirection.byteArr()[0];
+		dpToSend.buffer[5] = data.toSend.pilotDirection.byteArr()[1];
+		dpToSend.buffer[6] = data.toSend.flightMode;
+		dpToSend.buffer[7] = data.toSend.arming;
 		// random value
-		dpToSend.buffer[17] = data.toSend.bitSwitches1.byte;
-		dpToSend.buffer[18] = data.toSend.bitSwitches2.byte;
-		dpToSend.buffer[19] = data.toSend.signalLostScenario;
+		dpToSend.buffer[9] = data.toSend.bitSwitches1.byte;
+		dpToSend.buffer[10] = data.toSend.bitSwitches2.byte;
+		dpToSend.buffer[11] = data.toSend.signalLostScenario;
 		
 		
 		dpToSend.buffer[0] = calcChecksum();
@@ -141,22 +133,14 @@ void FC_MainCommunication::packAndSendData(uint8_t packetID, uint8_t packetSize)
 		sendData();
 	}
 	
-	// TYPE2 - basic
+	// TYPE 2 - basic background
 	else if (packetID == sendPacketTypes.TYPE2_ID)
 	{
-		dpToSend.buffer[2] = data.toSend.steer.throttle.byteArr()[0];
-		dpToSend.buffer[3] = data.toSend.steer.throttle.byteArr()[1];
-		dpToSend.buffer[4] = data.toSend.steer.rotate.byteArr()[0];
-		dpToSend.buffer[5] = data.toSend.steer.rotate.byteArr()[1];
-		dpToSend.buffer[6] = data.toSend.steer.TB.byteArr()[0];
-		dpToSend.buffer[7] = data.toSend.steer.TB.byteArr()[1];
-		dpToSend.buffer[8] = data.toSend.steer.LR.byteArr()[0];
-		dpToSend.buffer[9] = data.toSend.steer.LR.byteArr()[1];
-		dpToSend.buffer[10] = data.toSend.flightMode;
-		dpToSend.buffer[11] = data.toSend.arming;
-		dpToSend.buffer[12] = data.toSend.bitSwitches1.byte;
-		dpToSend.buffer[13] = data.toSend.bitSwitches2.byte;
-		dpToSend.buffer[14] = data.toSend.signalLostScenario;
+		dpToSend.buffer[2] = data.toSend.flightMode;
+		dpToSend.buffer[3] = data.toSend.arming;
+		dpToSend.buffer[4] = data.toSend.bitSwitches1.byte;
+		dpToSend.buffer[5] = data.toSend.bitSwitches2.byte;
+		dpToSend.buffer[6] = data.toSend.signalLostScenario;
 		
 		
 		dpToSend.buffer[0] = calcChecksum();
@@ -164,7 +148,7 @@ void FC_MainCommunication::packAndSendData(uint8_t packetID, uint8_t packetSize)
 		sendData();
 	}
 	
-	// TYPE3 - PID parameters
+	// TYPE 3 - PID parameters
 	else if (packetID == sendPacketTypes.TYPE3_ID)
 	{
 		// leveling
@@ -193,6 +177,24 @@ void FC_MainCommunication::packAndSendData(uint8_t packetID, uint8_t packetSize)
 		for (int i=0; i<4; i++)
 			dpToSend.buffer[36+i] = data.toSend.altHoldPID.D.byteArr()[i];
 		dpToSend.buffer[40] = data.toSend.altHoldPID.I_max;
+		
+		
+		dpToSend.buffer[0] = calcChecksum();
+		
+		sendData();
+	}
+	
+	// TYPE 4 - steering
+	else if (packetID == sendPacketTypes.TYPE4_ID)
+	{
+		dpToSend.buffer[2] = data.toSend.steer.throttle.byteArr()[0];
+		dpToSend.buffer[3] = data.toSend.steer.throttle.byteArr()[1];
+		dpToSend.buffer[4] = data.toSend.steer.rotate.byteArr()[0];
+		dpToSend.buffer[5] = data.toSend.steer.rotate.byteArr()[1];
+		dpToSend.buffer[6] = data.toSend.steer.TB.byteArr()[0];
+		dpToSend.buffer[7] = data.toSend.steer.TB.byteArr()[1];
+		dpToSend.buffer[8] = data.toSend.steer.LR.byteArr()[0];
+		dpToSend.buffer[9] = data.toSend.steer.LR.byteArr()[1];
 		
 		
 		dpToSend.buffer[0] = calcChecksum();

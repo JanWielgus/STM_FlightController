@@ -12,7 +12,9 @@
 
 
 // Tasker function prototypes
-void updateMainCommunication();
+void updateSteeringSending();
+void updateOtherSending();
+void updateReceiving();
 void readControlSticksValues();
 void gestureRecognition();
 void updateControlDiode();
@@ -36,11 +38,13 @@ void setup()
 	digitalWrite(config::pin.m1pin, LOW);
 	
 	// Add functions to the tasker
-	tasker.addFunction(updateMainCommunication, 20000L, 220); // 50Hz (tested duration)
+	tasker.addFunction(updateSteeringSending, 6000L, 1); // 166.6Hz - higher than drone receiving frequency to make communication uninterrupted !!!!!
+	tasker.addFunction(updateOtherSending, 200000L, 1); // 5Hz
+	tasker.addFunction(updateReceiving, 100000L, 1); // 10Hz
 	tasker.addFunction(readControlSticksValues, 20000L, 730); // 50Hz (tested duration)
 	tasker.addFunction(lcdH::updateLCD, 100000L, 2002); // 10Hz (tested duration ? not sure if is real)
 	tasker.addFunction(gestureRecognition, 100001L, 20); // 10Hz (without 1 at the end is 7/8Hz) (tested duration)
-	tasker.addFunction(updateControlDiode, 1000000L, 5); // blink builtin diode every second
+	tasker.addFunction(updateControlDiode, 1000000L, 5); // blink built in diode every second
 	//tasker.scheduleTasks();
 	
 	
@@ -84,21 +88,30 @@ void updateControlDiode()
 }
 
 
-
-void updateMainCommunication()
+void updateSteeringSending()
 {
-	com.receiveAndUnpackData();
-	
-	// pack data
 	com.toSend.steer.throttle = thrStick.getValue();
 	com.toSend.steer.rotate = rotStick.getValue();
 	com.toSend.steer.TB = TB_Stick.getValue();
 	com.toSend.steer.LR = LR_Stick.getValue();
+	
+	com.packAndSendData(com.sendPacketTypes.TYPE4_ID, com.sendPacketTypes.TYPE4_SIZE);
+}
+
+
+void updateOtherSending()
+{
 	com.toSend.arming = state==armed ? 1 : 0;
 	// OTHER DATA !!!
 	// send packed data
 	//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
 	com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE);
+}
+
+
+void updateReceiving()
+{
+	com.receiveAndUnpackData();
 }
 
 

@@ -27,7 +27,7 @@
 // Objects
 	FC_SimpleTasker tasker;
 
-	FC_MainCommunication com(&Serial, 45);
+	FC_MainCommunication com(&Serial, 100);
 
 	LiquidCrystal_I2C lcd(config::LCD_ADDRESS, 16, 2);
 	

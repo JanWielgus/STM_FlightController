@@ -15,7 +15,8 @@
 void readXY_angles();
 void readCompass();
 void stabilize();
-void updateMainCommunication();
+void updateSending();
+void updateReceiving();
 void checkCalibrations(); // Check if there is a need to calibrate one of the module and perform it if needed
 void updateControlDiode(); // built in diode is blinked once per second
 
@@ -64,6 +65,10 @@ void setup()
 	
 	pinMode(LED_BUILTIN, OUTPUT);
 	
+	// blue and red diode
+	pinMode(config::pin.redDiode, OUTPUT);
+	pinMode(config::pin.blueDiode, OUTPUT);
+	
 	
 	// TEMPORARY !!!  set 
 	pinMode(config::pin.m0pin, OUTPUT);
@@ -92,7 +97,9 @@ void setup()
 	tasker.addFunction(updateControlDiode, 1000000L, 2);       // 1Hz (tested duration)
 	tasker.addFunction(readXY_angles, 4000L, 639);             // 250Hz (tested duration)
 	tasker.addFunction(readCompass, 13340L, 492);              // 75Hz  (tested duration)
-	tasker.addFunction(updateMainCommunication, 20000L, 229);  // 50Hz (tested duration)
+	//tasker.addFunction(updateMainCommunication, 20000L, 229);  // 50Hz (tested duration)
+	tasker.addFunction(updateSending, 22000L, 1);              // ~45Hz
+	tasker.addFunction(updateReceiving, 12500L, 1);            // 80Hz
 	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
 	//tasker.scheduleTasks();
 	
@@ -240,34 +247,8 @@ void stabilize()
 }
 
 
-void updateMainCommunication()
+void updateSending()
 {
-	if (com.receiveAndUnpackData())
-	{
-		// check if pilot set armed state
-		if (com.received.arming == 1)
-		{
-			levelXpid.resetController();
-			levelYpid.resetController();
-			//    RESET ALL PID CONTROLLERS  !!!
-			// and do all code when arming
-			
-			motors.setMotorState(true);
-		}
-		else
-			motors.setMotorState(false);
-		
-		headingToHold += ((float)com.received.steer.rotate * 0.04); // if 25Hz
-	}
-	
-	/*
-	// WHEN LOST THE SIGNAL, then disable motors
-	if (com.connectionStability() == 0)
-	{
-		motors.setMotorState(false);
-	}*/
-	
-	
 	// send proper data packet: TYPE1-full, TYPE2-basic
 	com.toSend.tilt_TB = (int8_t)angle.x;
 	com.toSend.tilt_LR = (int8_t)angle.y;
@@ -293,6 +274,50 @@ void updateMainCommunication()
 	//Serial.println(com.toSend.tilt_TB);
 	
 	//Serial.println(MesasureTime::duration());
+}
+
+
+void updateReceiving()
+{
+	if (com.receiveAndUnpackData())
+	{
+		static bool lastArmingState = 0;
+		
+		// check if pilot changed armed state from 0 to 1
+		if (lastArmingState == 0 && com.received.arming == 1)
+		{
+			lastArmingState = 1;
+			levelXpid.resetController();
+			levelYpid.resetController();
+			//    RESET ALL PID CONTROLLERS  !!!
+			// and do all code when arming
+			
+			motors.setMotorState(true);
+		}
+		
+		
+		if (com.received.arming == 0)
+		{
+			lastArmingState = 0;
+			motors.setMotorState(false);
+		}
+		
+		
+		//headingToHold += ((float)com.received.steer.rotate * 0.04); // if 25Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
+		headingToHold += ((float)com.received.steer.rotate * 0.0125); // if 80Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
+	}
+	
+	
+	
+	// WHEN LOST THE SIGNAL, then disable motors
+	if (com.connectionStability() == 0)
+	{
+		motors.setMotorState(false);
+	}
+	
+	
+	// light up the red diode if connection stability is greater than 0
+	digitalWrite(config::pin.redDiode, (com.connectionStability() >= 3) ? HIGH : LOW );
 }
 
 
