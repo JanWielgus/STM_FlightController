@@ -123,10 +123,31 @@ void setup()
 	///////////////
 	// TEMPORARY //
 	///////////////
-	
 	Serial.print("Started calibrations... ");
-	mpu.calibrateAccelerometer(30); // 
-	mpu.calibrateGyro(110);
+	
+	/*
+	mpu.calibrateAccelerometer(1000); // 
+	Serial.print("Acc done. X: ");
+	Serial.print(mpu.getAccelerometerCalibrationValues().x);
+	Serial.print(" Y: ");
+	Serial.print(mpu.getAccelerometerCalibrationValues().y);
+	Serial.print(" Z: ");
+	Serial.print(mpu.getAccelerometerCalibrationValues().z);
+	Serial.println();*/
+	mpu.setAccelerometerCalibrationValues(397, 99, -227);
+	
+	
+	/*
+	mpu.calibrateGyro(4000);
+	Serial.print("Gyro done. X: ");
+	Serial.print(mpu.getGyroCalibrationValues().x);
+	Serial.print(" Y: ");
+	Serial.print(mpu.getGyroCalibrationValues().y);
+	Serial.print(" Z: ");
+	Serial.print(mpu.getGyroCalibrationValues().z);
+	Serial.println();*/
+	mpu.setGyroCalibrationValues(-104, -159, -9);
+	
 	Serial.println(" OK");
 	
 	///////////////
@@ -219,7 +240,7 @@ void stabilize()
 	
 	// leveling PID
 	pidXval = levelXpid.updateController(angle.x + (com.received.steer.TB/10)) + 0.5;
-	//pidYval = levelYpid.updateController(angle.y - (com.received.steer.LR/10)) + 0.5;
+	pidYval = levelYpid.updateController(angle.y - (com.received.steer.LR/10)) + 0.5;
 		
 		
 	// yaw PID
