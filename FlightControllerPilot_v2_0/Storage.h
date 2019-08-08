@@ -19,6 +19,7 @@
 	#include "FC_MainCommunication.h"
 	#include "FC_ControlStick.h"
 	#include <LiquidCrystal_I2C.h>
+	#include <SoftwareSerial.h>
 	#include "config.h"
 
 
@@ -30,6 +31,8 @@
 	FC_MainCommunication com(&Serial, 100);
 
 	LiquidCrystal_I2C lcd(config::LCD_ADDRESS, 16, 2);
+	
+	SoftwareSerial bluetoothSoftwareSerial(config::pin.btRX, config::pin.btTX); // RX, TX
 	
 	// control sticks
 	FC_ControlStick thrStick;
@@ -43,6 +46,18 @@
 // Other types
 	enum stateType {disarmed, arming1, arming2, armed};
 	stateType state = disarmed;
+	
+	
+	
+// Bluetooth app received data
+	bool btNeedToUpdatePIDFlag = false; // if this is true - need to send new PID data to the drone
+	// RESET THIS TO false AFTER SENDING TO THE DRONE
+	
+	uint8_t btControllerID;
+	float btPID_P;
+	float btPID_I;
+	uint8_t btPID_Imax;
+	float btPID_D;
 
 
 

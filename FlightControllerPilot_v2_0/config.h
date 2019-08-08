@@ -29,6 +29,10 @@ namespace config
 		uint8_t m0pin = 7;
 		uint8_t m1pin = 8;
 		uint8_t aux = 11;
+		
+		// bluetooth
+		uint8_t btRX = 10;
+		uint8_t btTX = 9;
 	} pin;
 	
 	
