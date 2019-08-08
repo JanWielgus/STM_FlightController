@@ -50,7 +50,9 @@ class FC_MPU6050Lib
 	void calibrateGyro(int samples = 2000);                // Compensate drift. Whole process last about 8 seconds (if 2000 samples)!!
 	void calibrateAccelerometer(int samples = 250);        // current tilt will be the level
 	vector3Int getAccelerometerCalibrationValues();        // return accelerometer calibration values
+	vector3Int getGyroCalibrationValues();                 // return gyro calibration values
 	void setAccelerometerCalibrationValues(int16_t offX, int16_t offY, int16_t offZ);
+	void setGyroCalibrationValues(int16_t offXpitch, int16_t offYroll, int16_t offZyaw);
 	void setGyroFusionMultiplier(float);
 	void setCalculationsFrequency(uint16_t freq=250);
 	void setInitialZAxisValue(float compassHeading);       // method to set Z axis value to compass measurement at the beginning

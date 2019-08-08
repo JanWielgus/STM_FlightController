@@ -206,11 +206,29 @@ FC_MPU6050Lib::vector3Int FC_MPU6050Lib::getAccelerometerCalibrationValues()
 }
 
 
+FC_MPU6050Lib::vector3Int FC_MPU6050Lib::getGyroCalibrationValues()
+{
+	vector3Int temp;
+	temp.x = gyroCalVal.xPitch;
+	temp.y = gyroCalVal.yRoll;
+	temp.z = gyroCalVal.zYaw;
+	return temp;
+}
+
+
 void FC_MPU6050Lib::setAccelerometerCalibrationValues(int16_t offX, int16_t offY, int16_t offZ)
 {
 	accCalVal.x = offX;
 	accCalVal.y = offY;
 	accCalVal.z = offZ;
+}
+
+
+void FC_MPU6050Lib::setGyroCalibrationValues(int16_t offXpitch, int16_t offYroll, int16_t offZyaw)
+{
+	gyroCalVal.xPitch = offXpitch;
+	gyroCalVal.yRoll = offYroll;
+	gyroCalVal.zYaw = offZyaw;
 }
 
 
