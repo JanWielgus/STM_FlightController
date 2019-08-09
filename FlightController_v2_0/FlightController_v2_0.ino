@@ -323,6 +323,11 @@ void updateReceiving()
 			lastArmingState = 0;
 			motors.setMotorState(false);
 		}
+		
+		
+		// check if received any PID params
+		// ....
+		// ....
 	}
 	
 	
@@ -342,7 +347,7 @@ void updateReceiving()
 	}
 	
 	
-	// light up the red diode if connection stability is greater than 0
+	// light up the red diode
 	digitalWrite(config::pin.redDiode, (com.connectionStability() >= 3) ? HIGH : LOW );
 }
 
