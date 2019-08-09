@@ -151,32 +151,22 @@ void FC_MainCommunication::packAndSendData(uint8_t packetID, uint8_t packetSize)
 	// TYPE 3 - PID parameters
 	else if (packetID == sendPacketTypes.TYPE3_ID)
 	{
-		// leveling
-		for (int i=0; i<4; i++)
-			dpToSend.buffer[2+i] = data.toSend.levelingPID.P.byteArr()[i];
-		for (int i=0; i<4; i++)
-			dpToSend.buffer[6+i] = data.toSend.levelingPID.I.byteArr()[i];
-		for (int i=0; i<4; i++)
-			dpToSend.buffer[10+i] = data.toSend.levelingPID.D.byteArr()[i];
-		dpToSend.buffer[14] = data.toSend.levelingPID.I_max;
+		// There are one place for the PID values and ID of the controller.
+		// If need to send values to multiple controllers, send several times and change the controller ID.
 		
-		// yaw
-		for (int i=0; i<4; i++)
-			dpToSend.buffer[15+i] = data.toSend.yawPID.P.byteArr()[i];
-		for (int i=0; i<4; i++)
-			dpToSend.buffer[19+i] = data.toSend.yawPID.I.byteArr()[i];
-		for (int i=0; i<4; i++)
-			dpToSend.buffer[23+i] = data.toSend.yawPID.D.byteArr()[i];
-		dpToSend.buffer[27] = data.toSend.yawPID.I_max;
 		
-		// altHold
+		dpToSend.buffer[2] = data.toSend.PIDcontrollerID;
+		// pid values - of the controller which ID is above : 
+			// 0 - leveling
+			// 1 - yaw
+			
 		for (int i=0; i<4; i++)
-			dpToSend.buffer[28+i] = data.toSend.altHoldPID.P.byteArr()[i];
+			dpToSend.buffer[3+i] = data.toSend.PIDvalues.P.byteArr()[i];
 		for (int i=0; i<4; i++)
-			dpToSend.buffer[32+i] = data.toSend.altHoldPID.I.byteArr()[i];
+			dpToSend.buffer[7+i] = data.toSend.PIDvalues.I.byteArr()[i];
 		for (int i=0; i<4; i++)
-			dpToSend.buffer[36+i] = data.toSend.altHoldPID.D.byteArr()[i];
-		dpToSend.buffer[40] = data.toSend.altHoldPID.I_max;
+			dpToSend.buffer[11+i] = data.toSend.PIDvalues.D.byteArr()[i];
+		dpToSend.buffer[15] = data.toSend.PIDvalues.I_max;
 		
 		
 		dpToSend.buffer[0] = calcChecksum();

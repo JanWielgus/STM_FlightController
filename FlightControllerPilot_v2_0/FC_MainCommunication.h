@@ -78,7 +78,7 @@ class FC_MainCommunication : private FC_Communication_Base
 		const uint8_t TYPE2_SIZE = 7;
 		// pid params
 		const uint8_t TYPE3_ID = 0x03;
-		const uint8_t TYPE3_SIZE = 41;
+		const uint8_t TYPE3_SIZE = 16;
 		// steering
 		const uint8_t TYPE4_ID = 0x04;
 		const uint8_t TYPE4_SIZE = 10;
@@ -146,9 +146,8 @@ class FC_MainCommunication : private FC_Communication_Base
 		// just part of TYPE1
 		
 		// TYPE3 - PID params
-		comPidPack levelingPID;
-		comPidPack yawPID;
-		comPidPack altHoldPID;
+		uint8_t PIDcontrollerID; // which controller is tuned
+		comPidPack PIDvalues; // PID values of that controller
 	};
 	
 	
