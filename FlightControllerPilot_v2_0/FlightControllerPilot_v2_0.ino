@@ -114,6 +114,21 @@ void updateOtherSending()
 	// send packed data
 	//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
 	com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE);
+	
+	
+	// check if need to send PID tuning values
+	if (btNeedToUpdatePIDFlag)
+	{
+		btNeedToUpdatePIDFlag = false;
+		
+		com.toSend.PIDcontrollerID = btControllerID;
+		com.toSend.PIDvalues.P = btPID_P;
+		com.toSend.PIDvalues.I = btPID_I;
+		com.toSend.PIDvalues.I_max = btPID_Imax;
+		com.toSend.PIDvalues.D = btPID_D;
+		
+		com.packAndSendData(com.sendPacketTypes.TYPE3_ID, com.sendPacketTypes.TYPE3_SIZE);
+	}
 }
 
 
