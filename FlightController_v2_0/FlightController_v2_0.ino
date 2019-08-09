@@ -300,6 +300,7 @@ void updateSending()
 
 void updateReceiving()
 {
+	// If at least one data packet was received
 	if (com.receiveAndUnpackData())
 	{
 		static bool lastArmingState = 0;
@@ -322,8 +323,12 @@ void updateReceiving()
 			lastArmingState = 0;
 			motors.setMotorState(false);
 		}
-		
-		
+	}
+	
+	
+	// Integrate yaw stick value only if connection is stable
+	if (com.connectionStability() > 1)
+	{
 		//headingToHold += ((float)com.received.steer.rotate * 0.04); // if 25Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
 		headingToHold += ((float)com.received.steer.rotate * 0.0125); // if 80Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
 	}
