@@ -267,7 +267,7 @@ bool FC_MainCommunication::checkReceivedDataPacket(uint8_t packetID, uint8_t pac
 // One of the receivedPacketType structure elements can be passed only !!!!!!
 bool FC_MainCommunication::wasReceived(const uint8_t& packetID)
 {
-	uint8_t pos = (int)(&packetID) - (int)(&receivedPacketTypes) + 1; // number of checked type (TYPE1 = 1, TYPE2 = 2,... ONLY IF IN ORDER !!! )
+	uint8_t pos = ((int)(&packetID) - (int)(&receivedPacketTypes))/2 + 1; // number of checked type (TYPE1 = 1, TYPE2 = 2,... ONLY IF IN ORDER !!! )
 	
 	if (pos <= amtOfReceivedDataPackets)
 		return receivedDataPacketsList[pos];
