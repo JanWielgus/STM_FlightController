@@ -11,7 +11,9 @@ FC_Communication_PacketHandler::FC_Communication_PacketHandler(Stream* serial, u
 	conStab = 0;
 	
 	amtOfReceivedDataPackets = (sizeof(receivedPacketTypes) /* / sizeof(uint8_t) */)/2;
-	receivedDataPacketsList = new bool[amtOfReceivedDataPackets+1]; // +1 to use 1 to TYPE1 and so on...
+	
+	if (amtOfReceivedDataPackets > 0)
+		receivedDataPacketsList = new bool[amtOfReceivedDataPackets+1]; // +1 to use 1 to TYPE1 and so on...
 }
 
 

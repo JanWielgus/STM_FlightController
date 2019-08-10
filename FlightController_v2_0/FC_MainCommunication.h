@@ -30,9 +30,12 @@ class FC_MainCommunication : private FC_Communication_Base
 	FC_MainCommunication(Stream* serial, uint8_t bufSize);
 		// bufSize - the size of the largest data packet + ~2 for safety
 	
+	~FC_MainCommunication();
+	
 	bool receiveAndUnpackData();                  // receive proper data packet/packets, returns true if at least one data packet was received
 	void packAndSendData(uint8_t packetID, uint8_t packetSize);       // pack data to the data packet and send it
 	uint8_t connectionStability();                // 0-no connection, 1-minor com.  <---> 3-stable com
+	bool wasReceived(const uint8_t& packerID);    // check whether packetID was received in this receiving (used after receiveAndUnpackData() )
 	
 	
  private:
@@ -42,6 +45,8 @@ class FC_MainCommunication : private FC_Communication_Base
 		// packetSize - check if this data packet has the same size as should have
 		// checkChecksumFlag - if there is a need to check checksum (if not, IDpos is default 0 -> first in buffer)
 		// (in code) IDpos - position of the packetID in buffer (auto: checkChecksum - 1, else - 0)
+	
+	void beforeReceiving(); // do things before receiving
 		
 		
  public:
@@ -169,6 +174,12 @@ class FC_MainCommunication : private FC_Communication_Base
 	bool pastComStatesArr[2] = {}; // 2 because you need 2 past values and one present to have 3 max (read conStab() description), 0-newer, 1-older
 	float conStab; // connectionStability method return this value. Calculated in the receive function
 	bool atLeastOneFlag; // used only in the receiveAndUnpackData() method
+	
+	
+	uint8_t amtOfReceivedDataPackets; // automatically calculated amt of different received data packets
+	bool* receivedDataPacketsList; // true - data packet [x] was received when called receiveAndUnpack()
+		// used to check if specific data packet was received in one receive method call
+		// eg. TYPE1 was received if receivedDataPacketList[1] == true
 	
 	
  public:

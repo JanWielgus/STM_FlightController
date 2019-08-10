@@ -9,6 +9,19 @@ FC_MainCommunication::FC_MainCommunication(Stream* serial, uint8_t bufSize)
 	:FC_Communication_Base(serial, bufSize)
 {
 	conStab = 0;
+	
+	
+	amtOfReceivedDataPackets = (sizeof(receivedPacketTypes) /* / sizeof(uint8_t) */)/2;
+	
+	if (amtOfReceivedDataPackets > 0)
+		receivedDataPacketsList = new bool[amtOfReceivedDataPackets+1]; // +1 to use 1 to TYPE1 and so on...
+}
+
+
+FC_MainCommunication::~FC_MainCommunication()
+{
+	if (amtOfReceivedDataPackets > 0)
+		delete [] receivedDataPacketsList;
 }
 
 
@@ -28,9 +41,20 @@ FC_MainCommunication::FC_MainCommunication(Stream* serial, uint8_t bufSize)
 
 
 
+void FC_MainCommunication::beforeReceiving()
+{
+	// Need to be reset before receiving. Used to calculate connection stability.
+	atLeastOneFlag = false; // at least one packet was received. Needed to return true/false at the end
+	
+	// reset the list of received data packets
+	for (int i=1; i<=amtOfReceivedDataPackets; i++)
+		receivedDataPacketsList[i] = false;
+}
+
+
 bool FC_MainCommunication::receiveAndUnpackData()
 {
-	atLeastOneFlag = false; // at least one packet was received. Needed to return true/false at the end
+	beforeReceiving();
 		
 	while (receiveData())
 	{
@@ -216,20 +240,37 @@ bool FC_MainCommunication::checkReceivedDataPacket(uint8_t packetID, uint8_t pac
 	
 	if (dpReceived.buffer[IDpos] == packetID && dpReceived.size == packetSize)
 	{
-		if (!checkChecksumFlag)
+		// if checkChecksumFlag == false or if checkChecksum==true if checkChecksum()==true
+		if ( !checkChecksumFlag || checkChecksum() )
 		{
-			atLeastOneFlag = true;
-			return true;
-		}
-		
-		//else
-		if (checkChecksum())
-		{
+			// check which packet was received
+			for (uint8_t i=0; i<amtOfReceivedDataPackets; i++)
+			{
+				uint8_t* address = ((uint8_t*)(&receivedPacketTypes)) + (i*2); // ID is every 2nd place in the receivedPacketTypes structure
+				if ( *address == packetID )
+				{
+					receivedDataPacketsList[i+1] = true;
+					break;
+				}
+			}
+			
+			
 			atLeastOneFlag = true;
 			return true;
 		}
 	}
 	
+	return false;
+}
+
+
+// One of the receivedPacketType structure elements can be passed only !!!!!!
+bool FC_MainCommunication::wasReceived(const uint8_t& packetID)
+{
+	uint8_t pos = (int)(&packetID) - (int)(&receivedPacketTypes) + 1; // number of checked type (TYPE1 = 1, TYPE2 = 2,... ONLY IF IN ORDER !!! )
+	
+	if (pos <= amtOfReceivedDataPackets)
+		return receivedDataPacketsList[pos];
 	return false;
 }
 
