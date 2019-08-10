@@ -325,9 +325,34 @@ void updateReceiving()
 		}
 		
 		
-		// check if received any PID params
-		// ....
-		// ....
+		// if any PID params was received
+		if (com.wasReceived(com.receivedPacketTypes.TYPE3_ID))
+		{
+			switch (com.received.PIDcontrollerID)
+			{
+				case 0: // leveling
+					// x
+					levelXpid.set_kP(com.received.PIDvalues.P);
+					levelXpid.set_kI(com.received.PIDvalues.I);
+					levelXpid.set_Imax(com.received.PIDvalues.I_max);
+					levelXpid.set_kD(com.received.PIDvalues.D);
+					// y
+					levelYpid.set_kP(com.received.PIDvalues.P);
+					levelYpid.set_kI(com.received.PIDvalues.I);
+					levelYpid.set_Imax(com.received.PIDvalues.I_max);
+					levelYpid.set_kD(com.received.PIDvalues.D);
+					break;
+					
+				case 1: // yaw
+					break;
+				
+				
+				
+				// other cases.....
+				// ...
+				// ...
+			}
+		}
 	}
 	
 	
