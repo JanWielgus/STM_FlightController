@@ -52,8 +52,10 @@ namespace config
 		
 		// hmc5883l
 		// Default calibration values
-		FC_HMC5883L_Lib::vector3Int compassMin = {-503, -505, -1440};
-		FC_HMC5883L_Lib::vector3Int compassMax = {504, 463, -330};
+// 		FC_HMC5883L_Lib::vector3Int compassMin = {-503, -505, -1440};
+// 		FC_HMC5883L_Lib::vector3Int compassMax = {504, 463, -330};
+		FC_HMC5883L_Lib::vector3Int compassMin = {-312, -804, -2016};
+		FC_HMC5883L_Lib::vector3Int compassMax = {299, -192, -978};
 		
 		
 		
