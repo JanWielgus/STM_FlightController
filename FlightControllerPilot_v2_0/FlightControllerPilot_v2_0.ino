@@ -62,6 +62,12 @@ void setup()
 	rotStick.setOutputValueProperties(-500, 500, config::tiltsRange.rotCen, config::stickDeadZone);
 	TB_Stick.setOutputValueProperties(-500, 500, config::tiltsRange.TB_Cen, config::stickDeadZone);
 	LR_Stick.setOutputValueProperties(-500, 500, config::tiltsRange.LR_Cen, config::stickDeadZone);
+	
+	// set stick filtering
+	thrStick.setFilterIntensity(60);
+	rotStick.setFilterIntensity(60);
+	TB_Stick.setFilterIntensity(60);
+	LR_Stick.setFilterIntensity(60);
 
 	
 	lcdH::initLCD();
