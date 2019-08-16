@@ -20,6 +20,9 @@ void updateReceiving();
 void checkCalibrations(); // Check if there is a need to calibrate one of the module and perform it if needed
 void updateControlDiode(); // built in diode is blinked once per second
 
+// Other functions
+void extrapolateSticks();
+
 
 
 
@@ -176,6 +179,7 @@ void setup()
 	//mpu.setAccelerometerCalibrationValues(....);
 	//setGyroCalibrationMethod here <----
 	compass.setCalibrationValues(config::calibVal.compassMin, config::calibVal.compassMax);
+	//compass.calibrateCompass(15);
 	
 	
 	mpu.setFastClock(); // 400 kHz
@@ -218,8 +222,8 @@ void readXY_angles()
 	
 	mpu.read6AxisMotion();
 	angle = mpu.getFusedXYAngles();
-	heading = mpu.getZAngle(compass.getHeading());
-	
+	//heading = mpu.getZAngle(compass.getHeading()); // Temporary (something bad is happening with the compass)
+	heading = mpu.getZAngle();
 }
 
 
@@ -236,34 +240,48 @@ void stabilize()
 	// use angle and heading variables
 	// use PID class
 	
-	int16_t pidXval, pidYval;
+	
+	extrapolateSticks();
+	
+	
+	int16_t pidXval, pidYval, pidYawVal;
 	
 	// leveling PID
-	pidXval = levelXpid.updateController(angle.x + (com.received.steer.TB/10)) + 0.5;
-	pidYval = levelYpid.updateController(angle.y - (com.received.steer.LR/10)) + 0.5;
+	pidXval = levelXpid.updateController(angle.x + (extrapolatedTBstick/10)) + 0.5;
+	pidYval = levelYpid.updateController(angle.y - (extrapolatedLRstick/10)) + 0.5;
 		
 		
 	// yaw PID
-	// ...
+	float headingError = headingToHold - heading;
 	
+	if (headingError >= 180)
+		headingError -= 360;
+	else if (headingError <= -180)
+		headingError += 360;
+		
+	pidYawVal = yawPID.updateController(headingError);
 	
-	//Serial.println(pidXval);
+	//Serial.println(headingError);
+	
 	
 	
 	if (com.received.steer.throttle < 20)
 	{
 		pidXval = 0;
 		pidYval = 0;
+		pidYawVal = 0;
+		
+		headingToHold = heading;
 	}
 	
 	
 	// when pilot is disarmed motors will not spin
 	// when disconnected form the pilot, motors will stop (not enabled)
 	
- 	motors.setOnTL(com.received.steer.throttle + pidXval + pidYval); // BR (damaged)
- 	motors.setOnTR(com.received.steer.throttle + pidXval - pidYval); // BL
- 	motors.setOnBR(com.received.steer.throttle - pidXval - pidYval); // TL
- 	motors.setOnBL(com.received.steer.throttle - pidXval + pidYval); // TR
+ 	motors.setOnTL(com.received.steer.throttle + pidXval + pidYval - pidYawVal); // BR (damaged)
+ 	motors.setOnTR(com.received.steer.throttle + pidXval - pidYval + pidYawVal); // BL
+ 	motors.setOnBR(com.received.steer.throttle - pidXval - pidYval - pidYawVal); // TL
+ 	motors.setOnBL(com.received.steer.throttle - pidXval + pidYval + pidYawVal); // TR
 	motors.forceMotorsExecution();
 }
 
@@ -295,11 +313,20 @@ void updateSending()
 	//Serial.println(com.toSend.tilt_TB);
 	
 	//Serial.println(MesasureTime::duration());
+	//Serial.println(heading);
 }
 
 
 void updateReceiving()
 {
+	
+	// update temporary previous stick values for extrapolation
+	// those values will be stored if new one will come
+	int16_t tempPreviousTBvalue = com.received.steer.TB;
+	int16_t tempprevioudLRvalue = com.received.steer.LR;
+	
+	
+	
 	// If at least one data packet was received
 	if (com.receiveAndUnpackData())
 	{
@@ -311,6 +338,7 @@ void updateReceiving()
 			lastArmingState = 1;
 			levelXpid.resetController();
 			levelYpid.resetController();
+			yawPID.resetController();
 			//    RESET ALL PID CONTROLLERS  !!!
 			// and do all code when arming
 			
@@ -322,6 +350,16 @@ void updateReceiving()
 		{
 			lastArmingState = 0;
 			motors.setMotorState(false);
+		}
+		
+		
+		// set the extrapolation flag if new stick values was received
+		if (com.wasReceived(com.receivedPacketTypes.TYPE4_ID))
+		{
+			// store previous stick values because new ones was received
+			previousTBvalue = tempPreviousTBvalue;
+			previousLRvalue = tempprevioudLRvalue;
+			needToExtrapolateStickVlauesFlag = false;
 		}
 		
 		
@@ -344,6 +382,10 @@ void updateReceiving()
 					break;
 					
 				case 1: // yaw
+					yawPID.set_kP(com.received.PIDvalues.P);
+					yawPID.set_kI(com.received.PIDvalues.I);
+					yawPID.set_Imax(com.received.PIDvalues.I_max);
+					yawPID.set_kD(com.received.PIDvalues.D);
 					break;
 				
 				
@@ -360,20 +402,20 @@ void updateReceiving()
 	if (com.connectionStability() > 1)
 	{
 		//headingToHold += ((float)com.received.steer.rotate * 0.04); // if 25Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
-		headingToHold += ((float)com.received.steer.rotate * 0.0125); // if 80Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
+		headingToHold += ((float)(com.received.steer.rotate/2) * 0.0125); // if 80Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
 	}
 	
 	
-	
+	/*
 	// WHEN LOST THE SIGNAL, then disable motors
 	if (com.connectionStability() == 0)
 	{
 		motors.setMotorState(false);
-	}
+	}*/
 	
 	
 	// light up the red diode
-	digitalWrite(config::pin.redDiode, (com.connectionStability() >= 3) ? HIGH : LOW );
+	digitalWrite(config::pin.redDiode, (com.connectionStability() >= 1) ? HIGH : LOW );
 }
 
 
@@ -388,4 +430,27 @@ void checkCalibrations()
 	// eg. set fused angle inside the MPU class after accelermeter calibration (may have to write a proper method)
 	// eg. set initial Z axis in the MPU after calibrating the compass
 	// ...
+}
+
+
+void extrapolateSticks()
+{
+	// Extrapolate TB and LR stick values
+	if (needToExtrapolateStickVlauesFlag)
+	{
+		extrapolatedTBstick += (float(com.received.steer.TB - previousTBvalue) * 0.2);
+		extrapolatedLRstick += (float(com.received.steer.LR - previousLRvalue) * 0.2);
+	}
+	else
+	{
+		extrapolatedTBstick = (float)com.received.steer.TB;
+		extrapolatedLRstick = (float)com.received.steer.LR;
+	}
+	// next run should extrapolate sticks values unless communication will reset this flag
+	extrapolatedTBstick = tbFilter.updateFilter(extrapolatedTBstick);
+	extrapolatedLRstick = lrFilter.updateFilter(extrapolatedLRstick);
+	needToExtrapolateStickVlauesFlag = true;
+	//Serial.print(com.received.steer.LR);
+	//Serial.print(" ");
+	//Serial.println(extrapolatedLRstick);
 }

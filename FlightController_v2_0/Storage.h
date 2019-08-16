@@ -43,6 +43,7 @@ FC_Motors motors;
 static float calculationsDeltaTime = 0.00025f; //  = 250Hz / 1'000'000
 MyPID levelXpid(calculationsDeltaTime, 0, 0, 0, 100);
 MyPID levelYpid(calculationsDeltaTime, 0, 0, 0, 100);
+MyPID yawPID(calculationsDeltaTime, 0, 0, 0, 70);
 
 
 
@@ -50,6 +51,16 @@ MyPID levelYpid(calculationsDeltaTime, 0, 0, 0, 100);
 // variables
 float headingToHold = 0; // calculated value based on the pilot rotate stick to hold by the drone
 
+// extrapolation variables
+bool needToExtrapolateStickVlauesFlag = false;
+int16_t previousTBvalue = 0;
+int16_t previousLRvalue = 0;
+float extrapolatedTBstick = 0;
+float extrapolatedLRstick = 0;
+FC_EVA_Filter tbFilter(0.7);
+FC_EVA_Filter lrFilter(0.7);
+
 
 
 #endif /* STORAGE_H_ */
+
