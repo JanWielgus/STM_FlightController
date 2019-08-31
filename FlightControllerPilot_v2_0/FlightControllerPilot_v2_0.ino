@@ -33,6 +33,10 @@ void setup()
 	
 	pinMode(LED_BUILTIN, OUTPUT);
 	
+	//switches
+	pinMode(config::pin.leftSwitch, INPUT_PULLUP);
+	pinMode(config::pin.rightSwitch, INPUT_PULLUP);
+	
 	
 	// TEMPORARY !!!  for the radio module
 	pinMode(config::pin.m0pin, OUTPUT);
@@ -54,14 +58,14 @@ void setup()
 	
 	
 	// init the control sticks
-	thrStick.setInputProperties(config::pin.throttle, true, config::tiltsRange.thrMin, config::tiltsRange.thrMax);
-	rotStick.setInputProperties(config::pin.rotate, true, config::tiltsRange.rotMin, config::tiltsRange.rotMax);
-	TB_Stick.setInputProperties(config::pin.tiltTB, true, config::tiltsRange.TB_Min, config::tiltsRange.TB_Max);
-	LR_Stick.setInputProperties(config::pin.tiltLR, true, config::tiltsRange.LR_Min, config::tiltsRange.LR_Max);
-	thrStick.setOutputValueProperties(0, 1000, config::tiltsRange.thrCen, config::stickDeadZone);
-	rotStick.setOutputValueProperties(-500, 500, config::tiltsRange.rotCen, config::stickDeadZone);
-	TB_Stick.setOutputValueProperties(-500, 500, config::tiltsRange.TB_Cen, config::stickDeadZone);
-	LR_Stick.setOutputValueProperties(-500, 500, config::tiltsRange.LR_Cen, config::stickDeadZone);
+	thrStick.setInputProperties(config::pin.throttle, true, config::sticksCalibVal.thrMin, config::sticksCalibVal.thrMax);
+	rotStick.setInputProperties(config::pin.rotate, true, config::sticksCalibVal.rotMin, config::sticksCalibVal.rotMax);
+	TB_Stick.setInputProperties(config::pin.tiltTB, true, config::sticksCalibVal.TB_Min, config::sticksCalibVal.TB_Max);
+	LR_Stick.setInputProperties(config::pin.tiltLR, true, config::sticksCalibVal.LR_Min, config::sticksCalibVal.LR_Max);
+	thrStick.setOutputValueProperties(0, 1000, config::sticksCalibVal.thrCen, config::stickDeadZone);
+	rotStick.setOutputValueProperties(-500, 500, config::sticksCalibVal.rotCen, config::stickDeadZone);
+	TB_Stick.setOutputValueProperties(-500, 500, config::sticksCalibVal.TB_Cen, config::stickDeadZone);
+	LR_Stick.setOutputValueProperties(-500, 500, config::sticksCalibVal.LR_Cen, config::stickDeadZone);
 	
 	// set stick filtering
 	thrStick.setFilterIntensity(60);
