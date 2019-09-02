@@ -277,10 +277,10 @@ void stabilize()
 	
 	// when pilot is disarmed motors will not spin
 	// when disconnected form the pilot, motors will stop (not enabled)
-	
- 	motors.setOnTL(com.received.steer.throttle + pidXval + pidYval - pidYawVal); // BR (damaged)
+
+	motors.setOnTL(com.received.steer.throttle + pidXval + pidYval - pidYawVal); // BR
  	motors.setOnTR(com.received.steer.throttle + pidXval - pidYval + pidYawVal); // BL
- 	motors.setOnBR(com.received.steer.throttle - pidXval - pidYval - pidYawVal); // TL
+ 	motors.setOnBR((int16_t)((float)com.received.steer.throttle*1.5f) - pidXval - pidYval - pidYawVal); // TL (damaged)
  	motors.setOnBL(com.received.steer.throttle - pidXval + pidYval + pidYawVal); // TR
 	motors.forceMotorsExecution();
 }
