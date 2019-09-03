@@ -55,9 +55,17 @@ void FC_MainCommunication::beforeReceiving()
 bool FC_MainCommunication::receiveAndUnpackData()
 {
 	beforeReceiving();
-		
-	while (receiveData())
+	
+	
+	// Receive only one steering data packet (TYPE4_ID)
+	// This is because radio module send sometimes two steering data packets and sometimes any
+	// If receive only one steering data packet at one function call in next call also will be some steering data (make data continuous)
+	bool receivingResult, receivedSteeringFlag;
+	do 
 	{
+		receivedSteeringFlag = false; // set the flag to false
+		receivingResult = receiveData();
+		
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
@@ -80,8 +88,8 @@ bool FC_MainCommunication::receiveAndUnpackData()
 			data.received.bitSwitches2.byte = dpReceived.buffer[10];
 			data.received.signalLostScenario = dpReceived.buffer[11];
 		}
-	
-	
+		
+		
 		// Check if this packet is TYPE2
 		else if (checkReceivedDataPacket(receivedPacketTypes.TYPE2_ID, receivedPacketTypes.TYPE2_SIZE, true))
 		{
@@ -100,15 +108,15 @@ bool FC_MainCommunication::receiveAndUnpackData()
 			
 			data.received.PIDcontrollerID = dpReceived.buffer[2];
 			// pid values - of the controller which ID is above :
-				// 0 - leveling
-				// 1 - yaw
+			// 0 - leveling
+			// 1 - yaw
 			
 			for (int i=0; i<4; i++)
-				data.received.PIDvalues.P.byteArr()[i] = dpReceived.buffer[i+3];
+			data.received.PIDvalues.P.byteArr()[i] = dpReceived.buffer[i+3];
 			for (int i=0; i<4; i++)
-				data.received.PIDvalues.I.byteArr()[i] = dpReceived.buffer[i+7];
+			data.received.PIDvalues.I.byteArr()[i] = dpReceived.buffer[i+7];
 			for (int i=0; i<4; i++)
-				data.received.PIDvalues.D.byteArr()[i] = dpReceived.buffer[i+11];
+			data.received.PIDvalues.D.byteArr()[i] = dpReceived.buffer[i+11];
 			data.received.PIDvalues.I_max = dpReceived.buffer[15];
 		}
 		
@@ -123,6 +131,8 @@ bool FC_MainCommunication::receiveAndUnpackData()
 			data.received.steer.TB.byteArr()[1] = dpReceived.buffer[7];
 			data.received.steer.LR.byteArr()[0] = dpReceived.buffer[8];
 			data.received.steer.LR.byteArr()[1] = dpReceived.buffer[9];
+			
+			receivedSteeringFlag = true; // change the flag
 		}
 		
 		
@@ -132,7 +142,8 @@ bool FC_MainCommunication::receiveAndUnpackData()
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
-	}
+		
+	} while (receivingResult && receivedSteeringFlag == false); // End receiving on steering data packet (prevent from receiving multiple steering data packets at one function call)
 	
 	
 	// Calculate the connection stability (edit only parameters)
