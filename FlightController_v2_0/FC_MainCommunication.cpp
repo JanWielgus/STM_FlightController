@@ -55,9 +55,15 @@ void FC_MainCommunication::beforeReceiving()
 bool FC_MainCommunication::receiveAndUnpackData()
 {
 	beforeReceiving();
-		
+	
+	
+	// Receive only one steering data packet (TYPE4_ID)
+	// This is because radio module send sometimes two steering data packets and sometimes any
+	// If receive only one steering data packet at one function call in next call also will be some steering data (make data continuous)
 	while (receiveData())
 	{
+		bool receivedSteeringPacketFlag = false; // used to end receiving if steering data packet was received
+		
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
@@ -80,8 +86,8 @@ bool FC_MainCommunication::receiveAndUnpackData()
 			data.received.bitSwitches2.byte = dpReceived.buffer[10];
 			data.received.signalLostScenario = dpReceived.buffer[11];
 		}
-	
-	
+		
+		
 		// Check if this packet is TYPE2
 		else if (checkReceivedDataPacket(receivedPacketTypes.TYPE2_ID, receivedPacketTypes.TYPE2_SIZE, true))
 		{
@@ -123,6 +129,8 @@ bool FC_MainCommunication::receiveAndUnpackData()
 			data.received.steer.TB.byteArr()[1] = dpReceived.buffer[7];
 			data.received.steer.LR.byteArr()[0] = dpReceived.buffer[8];
 			data.received.steer.LR.byteArr()[1] = dpReceived.buffer[9];
+			
+			receivedSteeringPacketFlag = true; // change the flag
 		}
 		
 		
@@ -132,6 +140,12 @@ bool FC_MainCommunication::receiveAndUnpackData()
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
+		
+		
+		// end if steering data packet was received
+		// (prevent from receiving multiple steering data packets at one function call)
+		if (receivedSteeringPacketFlag)
+			break;
 	}
 	
 	

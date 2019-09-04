@@ -49,7 +49,7 @@ void setup()
 	tasker.addFunction(updateSteeringSending, 6000L, 160); // 166.6Hz - higher than drone receiving frequency to make communication uninterrupted !!!!! (tested duration)
 	tasker.addFunction(updateOtherSending, 200000L, 170); // 5Hz (tested duration)
 	tasker.addFunction(updateReceiving, 100000L, 730); // 10Hz (tested duration)
-	tasker.addFunction(readControlSticksValues, 20000L, 730); // 50Hz (tested duration)
+	tasker.addFunction(readControlSticksValues, 6000L, 730); // 166.6Hz (tested duration) ( !!!!  Actual frequency is 140Hz and same as steering sending - TO SOLVE  )
 	tasker.addFunction(lcdH::updateLCD, 100000L, 2002); // 10Hz (tested duration ? not sure if is real)
 	tasker.addFunction(gestureRecognition, 100001L, 20); // 10Hz (without 1 at the end is 7/8Hz) (tested duration)
 	tasker.addFunction(updateControlDiode, 1000000L, 5); // blink built in diode every second
