@@ -106,15 +106,15 @@ bool FC_MainCommunication::receiveAndUnpackData()
 			
 			data.received.PIDcontrollerID = dpReceived.buffer[2];
 			// pid values - of the controller which ID is above :
-			// 0 - leveling
-			// 1 - yaw
+				// 0 - leveling
+				// 1 - yaw
 			
 			for (int i=0; i<4; i++)
-			data.received.PIDvalues.P.byteArr()[i] = dpReceived.buffer[i+3];
+				data.received.PIDvalues.P.byteArr()[i] = dpReceived.buffer[i+3];
 			for (int i=0; i<4; i++)
-			data.received.PIDvalues.I.byteArr()[i] = dpReceived.buffer[i+7];
+				data.received.PIDvalues.I.byteArr()[i] = dpReceived.buffer[i+7];
 			for (int i=0; i<4; i++)
-			data.received.PIDvalues.D.byteArr()[i] = dpReceived.buffer[i+11];
+				data.received.PIDvalues.D.byteArr()[i] = dpReceived.buffer[i+11];
 			data.received.PIDvalues.I_max = dpReceived.buffer[15];
 		}
 		
