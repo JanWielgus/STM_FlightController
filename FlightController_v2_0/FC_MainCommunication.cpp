@@ -60,11 +60,9 @@ bool FC_MainCommunication::receiveAndUnpackData()
 	// Receive only one steering data packet (TYPE4_ID)
 	// This is because radio module send sometimes two steering data packets and sometimes any
 	// If receive only one steering data packet at one function call in next call also will be some steering data (make data continuous)
-	bool receivingResult, receivedSteeringFlag;
-	do 
+	while (receiveData())
 	{
-		receivedSteeringFlag = false; // set the flag to false
-		receivingResult = receiveData();
+		bool receivedSteeringPacketFlag = false; // used to end receiving if steering data packet was received
 		
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
@@ -132,7 +130,7 @@ bool FC_MainCommunication::receiveAndUnpackData()
 			data.received.steer.LR.byteArr()[0] = dpReceived.buffer[8];
 			data.received.steer.LR.byteArr()[1] = dpReceived.buffer[9];
 			
-			receivedSteeringFlag = true; // change the flag
+			receivedSteeringPacketFlag = true; // change the flag
 		}
 		
 		
@@ -143,7 +141,12 @@ bool FC_MainCommunication::receiveAndUnpackData()
 		//////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////
 		
-	} while (receivingResult && receivedSteeringFlag == false); // End receiving on steering data packet (prevent from receiving multiple steering data packets at one function call)
+		
+		// end if steering data packet was received
+		// (prevent from receiving multiple steering data packets at one function call)
+		if (receivedSteeringPacketFlag)
+			break;
+	}
 	
 	
 	// Calculate the connection stability (edit only parameters)

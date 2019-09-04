@@ -102,7 +102,7 @@ void setup()
 	tasker.addFunction(readCompass, 13340L, 492);              // 75Hz  (tested duration)
 	//tasker.addFunction(updateMainCommunication, 20000L, 229);  // 50Hz (tested duration)
 	tasker.addFunction(updateSending, 22000L, 1);              // ~45Hz
-	tasker.addFunction(updateReceiving, 12500L, 1);            // 80Hz
+	tasker.addFunction(updateReceiving, 6667L, 1);             // 150Hz
 	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
 	//tasker.scheduleTasks();
 	
