@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Atmel Studio Solution File, Format Version 11.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "FC_TaskPlanner_example", "FC_TaskPlanner_example.cppproj", "{750B6807-EF22-4DEB-86B7-086A07A7E7AC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{750B6807-EF22-4DEB-86B7-086A07A7E7AC}.Debug|AVR.ActiveCfg = Debug|AVR
+		{750B6807-EF22-4DEB-86B7-086A07A7E7AC}.Debug|AVR.Build.0 = Debug|AVR
+		{750B6807-EF22-4DEB-86B7-086A07A7E7AC}.Release|AVR.ActiveCfg = Release|AVR
+		{750B6807-EF22-4DEB-86B7-086A07A7E7AC}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
