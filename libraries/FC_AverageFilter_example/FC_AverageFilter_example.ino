@@ -6,14 +6,23 @@
 
 #include "FC_AverageFilter.h"
 
+FC_AverageFilter<uint16_t, uint32_t, float> simpleAverageFilter(20);
+// <sample type, sum type, return type>   (averaged samples)
+
 
 void setup()
 {
-	
+	Serial.begin(115200);
+	Serial.println("Program has started.");
 }
 
 
 void loop()
 {
+	uint16_t pinValue = analogRead(A0);
+	simpleAverageFilter.addNewSample(pinValue);
+	Serial.print("Averaged: ");
+	Serial.println(simpleAverageFilter.getAverage());
 	
+	delay(50); // 20Hz
 }
