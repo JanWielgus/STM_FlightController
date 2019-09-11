@@ -34,12 +34,8 @@ void plannedTask1()
 {
 	Serial.println("Planned task 1 has been executed");
 	
-	// Plan second second task execution
-	int randomTime = random(1, 8) * 1000; // execute in between 1 and 8 seconds
-	taskPlanner.scheduleTask(plannedTask2, randomTime);
-	Serial.print("Task 2 has been planned to execute in ");
-	Serial.print(randomTime);
-	Serial.println(" seconds");
+	taskPlanner.scheduleTask(plannedTask2, 3000);
+	Serial.println("Task 2 has been planned to execute in 3 seconds");
 }
 
 
