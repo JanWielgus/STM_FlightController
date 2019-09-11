@@ -20,21 +20,33 @@ template <class SampleType, class SumType, class ReturnType>
 class FC_AverageFilter
 {
  public:
-	FC_AverageFilter<SampleType, SumType, ReturnType>(uint16_t averagedSamples);
+	FC_AverageFilter<SampleType, SumType, ReturnType>(uint16_t averagedSamples)
 		// averagedSamples - how many samples will be averaged
-	~FC_AverageFilter();
+		: AveragedSamples(averagedSamples)
+	{
+		if (AveragedSamples > 0)
+			sampleArray = new SampleType[AveragedSamples];
+		
+		// Reset the array
+		reset();
+	}
+	
+	~FC_AverageFilter();	
 	void addNewSample(SampleType newSample);
-	SampleType getAverage();
+	ReturnType getAverage();
 	void reset();
 	
 	
  private:
-	uint16_t AveragedSamples; // amt of samples to average
-	SumType sum;
-	ReturnType average;
+	const uint16_t AveragedSamples; // amt of samples to average
+	SampleType* sampleArray;
+	uint16_t arrayIndex = 0;
+	SumType sum = 0;
+	ReturnType average = 0;
 };
 
 
+// Temporary example how to create filter for barometer
 typedef FC_AverageFilter<int32_t, int32_t, float> baroAverageFilter;
 
 
