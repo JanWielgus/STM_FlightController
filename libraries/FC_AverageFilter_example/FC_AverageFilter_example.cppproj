@@ -214,6 +214,12 @@
     <Folder Include="__vm\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FC_AverageFilter.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FC_AverageFilter.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="__vm\.FC_AverageFilter_example.vsarduino.h">
       <SubType>compile</SubType>
     </Compile>
