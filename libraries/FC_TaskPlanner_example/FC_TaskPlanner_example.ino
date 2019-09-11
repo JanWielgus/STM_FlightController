@@ -6,6 +6,7 @@
 
 #include "FC_TaskPlanner.h"
 
+FC_TaskPlanner taskPlanner(5);
 
 
 void setup()

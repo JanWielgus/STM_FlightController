@@ -18,7 +18,8 @@ FC_TaskPlanner::FC_TaskPlanner(uint8_t plannedTasksMaxArrSize)
 
 FC_TaskPlanner::~FC_TaskPlanner()
 {
-	delete [] plannedTasksArr;
+	if (MaxPlannedTasks > 0)
+		delete [] plannedTasksArr;
 }
 
 
