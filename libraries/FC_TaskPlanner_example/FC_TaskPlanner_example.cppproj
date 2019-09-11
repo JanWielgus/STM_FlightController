@@ -5,7 +5,7 @@
     <ProjectVersion>7.0</ProjectVersion>
     <ToolchainName>com.Atmel.ARMGCC.CPP</ToolchainName>
     <ProjectGuid>{750b6807-ef22-4deb-86b7-086a07a7e7ac}</ProjectGuid>
-    <avrdevice>ATSAM3X8E</avrdevice>
+    <avrdevice>AT90CAN128</avrdevice>
     <avrdeviceseries>none</avrdeviceseries>
     <OutputType>Executable</OutputType>
     <Language>CPP</Language>
@@ -278,9 +278,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="FC_TaskPlanner.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Queue.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="__vm\.FC_TaskPlanner_example.vsarduino.h">
