@@ -14,8 +14,6 @@
 	#include "WProgram.h"
 #endif
 
-#include "Queue.h"
-
 
 class FC_TaskPlanner
 {
