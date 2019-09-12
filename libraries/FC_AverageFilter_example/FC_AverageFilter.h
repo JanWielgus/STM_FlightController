@@ -51,5 +51,55 @@ typedef FC_AverageFilter<int32_t, int32_t, float> baroAverageFilter;
 
 
 
+//////////////////////////////////////////////////////////////////////////
+
+// IMPLEMENTATION
+
+// I don't know how to make generic code work if it is in separate cpp file
+
+template <class SampleType, class SumType, class ReturnType>
+FC_AverageFilter<SampleType, SumType, ReturnType>::~FC_AverageFilter()
+{
+	if (AveragedSamples > 0)
+	delete [] sampleArray;
+}
+
+
+template <class SampleType, class SumType, class ReturnType>
+void FC_AverageFilter<SampleType, SumType, ReturnType>::addNewSample(SampleType newSample)
+{
+	// Move arrayIndex into the next position
+	arrayIndex++;
+	if (arrayIndex >= AveragedSamples)
+	arrayIndex -= AveragedSamples;
+	
+	// Subtract oldest value from the sum and add the new one
+	sum -= sampleArray[arrayIndex];
+	sum += newSample;
+	sampleArray[arrayIndex] = newSample;
+	
+	average = sum / (ReturnType)AveragedSamples;
+}
+
+
+template <class SampleType, class SumType, class ReturnType>
+ReturnType FC_AverageFilter<SampleType, SumType, ReturnType>::getAverage()
+{
+	return average;
+}
+
+
+template <class SampleType, class SumType, class ReturnType>
+void FC_AverageFilter<SampleType, SumType, ReturnType>::reset()
+{
+	arrayIndex = 0;
+	sum = 0;
+	average = 0;
+	
+	for (int i=0; i<AveragedSamples; i++)
+	sampleArray[i] = 0;
+}
+
+
 #endif
 

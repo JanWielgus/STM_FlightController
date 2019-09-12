@@ -5,7 +5,7 @@
 // 
 // 
 // 
-
+/*
 #include "FC_AverageFilter.h"
 
 
@@ -50,5 +50,5 @@ void FC_AverageFilter<SampleType, SumType, ReturnType>::reset()
 	
 	for (int i=0; i<AveragedSamples; i++)
 		sampleArray[i] = 0;
-}
+}*/
 
