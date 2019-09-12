@@ -19,9 +19,11 @@ void setup()
 
 void loop()
 {
-	uint16_t pinValue = analogRead(A0);
-	simpleAverageFilter.addNewSample(pinValue);
-	Serial.print("Averaged: ");
+	uint16_t rawValue = analogRead(A0);
+	simpleAverageFilter.addNewSample(rawValue);
+	Serial.print("Raw: ");
+	Serial.print(rawValue);
+	Serial.print(" Averaged: ");
 	Serial.println(simpleAverageFilter.getAverage());
 	
 	delay(50); // 20Hz
