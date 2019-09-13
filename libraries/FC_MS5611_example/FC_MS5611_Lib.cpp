@@ -5,7 +5,20 @@
 #include "FC_MS5611_Lib.h"
 
 
+// Have to pre-create an object to use the TaskPlanner
+// Otherwise it will complicate the program very much
+FC_MS5611_Lib baro;
+
+
+// Three functions used in the TaskPlanner
+void requestPressureStartTask();
+void pressureAction();
+void temperatureAction();
+
+
+
 FC_MS5611_Lib::FC_MS5611_Lib()
+	: pressureFilter(20) // average 20 past measurements
 {
 	
 }
@@ -15,6 +28,7 @@ bool FC_MS5611_Lib::initialize(bool needToBeginWire_flag)
 {
 	if (needToBeginWire_flag)
 		Wire.begin();
+	
 	
 	// Check if the baro is responding
 	Wire.beginTransmission(MS5611_Address);
@@ -44,6 +58,13 @@ bool FC_MS5611_Lib::initialize(bool needToBeginWire_flag)
 	SENS_C1 = C[1] * pow(2, 15);
 	
 	
+	
+	
+	// Schedule first baro reading action
+	taskPlanner.scheduleTask(requestPressureStartTask, 8);
+	
+	
+	
 	// The MS5611 needs a few readings to stabilize
 	// Read pressure for 400ms
 	uint32_t readingEndTime = millis() + 400;
@@ -52,6 +73,8 @@ bool FC_MS5611_Lib::initialize(bool needToBeginWire_flag)
 		// as fast as possible
 		runBarometer();
 	}
+	
+	return true;
 }
 
 
@@ -118,6 +141,7 @@ void FC_MS5611_Lib::getRawTemperatreFromDevice()
 void FC_MS5611_Lib::calculatePressureAndTemperatureFromRawData()
 {
 	// Calculate pressure as explained in the datasheet of the MS-5611.
+	// This part is from Joop Brokking YMFC-AL code
 	dT = C[5];
 	dT <<= 8;
 	dT *= -1;
@@ -126,7 +150,12 @@ void FC_MS5611_Lib::calculatePressureAndTemperatureFromRawData()
 	SENS = SENS_C1 + ((int64_t)dT * (int64_t)C[3]) / pow(2, 8);
 	intPressure = ((rawPressure * SENS) / pow(2, 21) - OFF) / pow(2, 15);
 	
-	pressure = (float)intPressure / 100;
+	// Make the average from 20 readings
+	pressureFilter.addNewSample(intPressure);
+	intPressure = int32_t(pressureFilter.getAverage()+0.5);
+	
+	// Store pressure value in the float form (in mbar)
+	pressure = (double)intPressure / 100;
 	
 	
 	///////////////
@@ -134,6 +163,45 @@ void FC_MS5611_Lib::calculatePressureAndTemperatureFromRawData()
 	// Do some other calculations
 	///
 	///////////////
+}
+
+
+
+
+
+void requestPressureStartTask()
+{
+	baro.requestPressureFromDevice();
+	
+	// Schedule first pressure action
+	baro.taskPlanner.scheduleTask(pressureAction, 8);
+}
+
+void pressureAction()
+{
+	baro.actionCounter++;
+	baro.getRawPressureFromDevice();
+	baro.calculatePressureAndTemperatureFromRawData();
+	
+	if (baro.actionCounter == 20)
+	{
+		baro.requestTemperatureFromDevice();
+		baro.taskPlanner.scheduleTask(temperatureAction, 8);
+	}
+	else
+	{
+		baro.requestPressureFromDevice();
+		baro.taskPlanner.scheduleTask(pressureAction, 8);
+	}
+}
+
+void temperatureAction()
+{
+	baro.getRawTemperatreFromDevice();
+	baro.calculatePressureAndTemperatureFromRawData();
+	baro.requestPressureFromDevice();
+	baro.actionCounter = 0;
+	baro.taskPlanner.scheduleTask(pressureAction, 8);
 }
 
 

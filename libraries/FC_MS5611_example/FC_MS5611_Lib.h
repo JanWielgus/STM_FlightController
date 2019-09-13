@@ -13,6 +13,7 @@
 
 #include <Wire.h>
 #include <FC_TaskPlanner.h>
+#include <FC_AverageFilter.h>
 
 
 class FC_MS5611_Lib
@@ -23,6 +24,11 @@ class FC_MS5611_Lib
 	void setFastClock();
 	float getPressure(); // new pressure value is about 80 times per second
 	void runBarometer(); // called in the main loop() AS FAST AS POSSIBLE
+	
+	// friend functions used in the TaskPlanner
+	friend void requestPressureStartTask();
+	friend void pressureAction();
+	friend void temperatureAction();
 	
  private:
 	void requestPressureFromDevice();
@@ -35,7 +41,8 @@ class FC_MS5611_Lib
 	
 	
  private:
-	FC_TaskPlanner taskPlanner(2); // max 2 tasks will be planned at single moment
+	FC_TaskPlanner taskPlanner = FC_TaskPlanner(3); // max 3 tasks will be planned at single moment
+	FC_AverageFilter<int32_t, int32_t, double> pressureFilter; // initialized in the constructor
 	
 	static const uint8_t MS5611_Address = 0x77;
 	static const uint8_t AFTER_REQUEST_WAIT_TIME = 8;
@@ -52,9 +59,14 @@ class FC_MS5611_Lib
 	uint32_t rawPressure;
 	uint32_t rawTemperature;
 	int32_t intPressure; // (float)pressure * 100
-	float pressure; // intPressure / 100
+	float pressure; // intPressure / 100 (in mbar)
+	
+	// this counter is used to get temperature every 20 readings
+	uint8_t actionCounter = 0;
 };
 
+
+extern FC_MS5611_Lib baro;
 
 
 #endif
