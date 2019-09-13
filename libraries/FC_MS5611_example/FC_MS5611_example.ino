@@ -55,6 +55,8 @@ void showPressure()
 {
 	Serial.print("Pressure: ");
 	Serial.print(baro.getPressure());
+	Serial.print(" SmoothPres: ");
+	Serial.print(baro.getSmoothPressure());
 	Serial.println();
 }
 

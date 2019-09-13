@@ -90,6 +90,12 @@ float FC_MS5611_Lib::getPressure()
 }
 
 
+float FC_MS5611_Lib::getSmoothPressure()
+{
+	return smoothPressure;
+}
+
+
 void FC_MS5611_Lib::runBarometer()
 {
 	taskPlanner.runPlanner();
@@ -156,11 +162,12 @@ void FC_MS5611_Lib::calculatePressureAndTemperatureFromRawData()
 	pressure = pressureFilter.getAverage();
 	
 	
-	///////////////
-	///
-	// Do some other calculations
-	///
-	///////////////
+	// Smooth the value
+	if (abs(lastSmoothPressure - pressure) > 1)
+		smoothPressure = smoothPressure*0.72f + pressure*0.28f;
+	else
+		smoothPressure = smoothPressure*0.96f + pressure*0.04f;
+	lastSmoothPressure = smoothPressure;
 }
 
 

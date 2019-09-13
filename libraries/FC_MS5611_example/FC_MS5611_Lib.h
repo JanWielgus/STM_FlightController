@@ -23,6 +23,7 @@ class FC_MS5611_Lib
 	bool initialize(bool needToBeginWire_flag = true);
 	void setFastClock();
 	float getPressure(); // new pressure value is updated about 111 times per second
+	float getSmoothPressure(); // same as getPressure but smoother
 	void runBarometer(); // called in the main loop() AS FAST AS POSSIBLE
 	
 	// friend functions used in the TaskPlanner
@@ -59,6 +60,8 @@ class FC_MS5611_Lib
 	uint32_t rawPressure;
 	uint32_t rawTemperature;
 	int32_t intPressure; // temp pressure value (before average pressure is in integer)
+	float smoothPressure; // smoother pressure value (in mbar*100)
+	float lastSmoothPressure; // used to calculate the smooth pressure value
 	float pressure; // pressure in mbar*100
 	
 	// this counter is used to get temperature every 20 readings
