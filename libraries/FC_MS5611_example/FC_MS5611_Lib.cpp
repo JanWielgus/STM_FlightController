@@ -150,12 +150,10 @@ void FC_MS5611_Lib::calculatePressureAndTemperatureFromRawData()
 	SENS = SENS_C1 + ((int64_t)dT * (int64_t)C[3]) / pow(2, 8);
 	intPressure = ((rawPressure * SENS) / pow(2, 21) - OFF) / pow(2, 15);
 	
+	
 	// Make the average from 20 readings
 	pressureFilter.addNewSample(intPressure);
-	intPressure = int32_t(pressureFilter.getAverage()+0.5);
-	
-	// Store pressure value in the float form (in mbar)
-	pressure = (double)intPressure / 100;
+	pressure = pressureFilter.getAverage();
 	
 	
 	///////////////
@@ -174,7 +172,7 @@ void requestPressureStartTask()
 	baro.requestPressureFromDevice();
 	
 	// Schedule first pressure action
-	baro.taskPlanner.scheduleTask(pressureAction, 8);
+	baro.taskPlanner.scheduleTask(pressureAction, 9);
 }
 
 void pressureAction()
@@ -186,12 +184,12 @@ void pressureAction()
 	if (baro.actionCounter == 20)
 	{
 		baro.requestTemperatureFromDevice();
-		baro.taskPlanner.scheduleTask(temperatureAction, 8);
+		baro.taskPlanner.scheduleTask(temperatureAction, 9);
 	}
 	else
 	{
 		baro.requestPressureFromDevice();
-		baro.taskPlanner.scheduleTask(pressureAction, 8);
+		baro.taskPlanner.scheduleTask(pressureAction, 9);
 	}
 }
 
@@ -200,8 +198,8 @@ void temperatureAction()
 	baro.getRawTemperatreFromDevice();
 	baro.calculatePressureAndTemperatureFromRawData();
 	baro.requestPressureFromDevice();
-	baro.actionCounter = 0;
-	baro.taskPlanner.scheduleTask(pressureAction, 8);
+	baro.actionCounter = 1;
+	baro.taskPlanner.scheduleTask(pressureAction, 9);
 }
 
 

@@ -12,6 +12,7 @@
 FC_SimpleTasker tasker;
 
 void showPressure(); // this function show pressure in 80Hz
+void blink(); // control diode blinking
 
 
 void setup()
@@ -20,11 +21,15 @@ void setup()
 	Serial.println("Program has started.");
 	
 	delay(200);
+	pinMode(LED_BUILTIN, OUTPUT);
 	
 	// Add tasker function to show pressure
-	tasker.addFunction(showPressure, 12500, 10); // 80Hz
+	tasker.addFunction(showPressure, 9090, 10); // 110Hz
+	tasker.addFunction(blink, 100000, 10); // 10Hz (control blinking)
 	
 	
+	// Set I2C 400kHz clock
+	baro.setFastClock();
 	
 	while (!baro.initialize())
 	{
@@ -33,8 +38,6 @@ void setup()
 		delay(500);
 	}
 	
-	// Set I2C 400kHz clock
-	baro.setFastClock();
 	
 	Serial.println("Setup completed");
 }
@@ -53,4 +56,11 @@ void showPressure()
 	Serial.print("Pressure: ");
 	Serial.print(baro.getPressure());
 	Serial.println();
+}
+
+void blink()
+{
+	static bool ledState = false;
+	digitalWrite(LED_BUILTIN, ledState);
+	ledState = !ledState;
 }
