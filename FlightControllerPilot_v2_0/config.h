@@ -24,6 +24,10 @@ namespace config
 		uint8_t tiltTB = A2;
 		uint8_t tiltLR = A3;
 		
+		// switches
+		uint8_t leftSwitch = 3;
+		uint8_t rightSwitch = 4;
+		
 		
 		// radio module
 		uint8_t m0pin = 7;
@@ -44,22 +48,22 @@ namespace config
 	struct
 	{
 		// throttle
-		uint16_t thrMin = 65;
-		uint16_t thrCen = 65; // throttle center is the same as the min value
-		uint16_t thrMax = 960;
+		uint16_t thrMin = 84;
+		uint16_t thrCen = 84; // throttle center is the same as the min value
+		uint16_t thrMax = 965;
 		// rotate
-		uint16_t rotMin = 48;
-		uint16_t rotCen = 514; // center
+		uint16_t rotMin = 50;
+		uint16_t rotCen = 515; // center
 		uint16_t rotMax = 970;
 		// TB tilt
-		uint16_t TB_Min = 14;
-		uint16_t TB_Cen = 487;
-		uint16_t TB_Max = 893;
+		uint16_t TB_Min = 37;
+		uint16_t TB_Cen = 439;
+		uint16_t TB_Max = 835;
 		// LR tilt
 		uint16_t LR_Min = 65;
-		uint16_t LR_Cen = 526;
-		uint16_t LR_Max = 984;
-	} tiltsRange;
+		uint16_t LR_Cen = 521;
+		uint16_t LR_Max = 980;
+	} sticksCalibVal;
 	
 	uint8_t stickDeadZone = 20;
 }

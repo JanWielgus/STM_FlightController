@@ -57,8 +57,8 @@ int16_t previousTBvalue = 0;
 int16_t previousLRvalue = 0;
 float extrapolatedTBstick = 0;
 float extrapolatedLRstick = 0;
-FC_EVA_Filter tbFilter(0.7);
-FC_EVA_Filter lrFilter(0.7);
+FC_EVA_Filter tbFilter(0.4);
+FC_EVA_Filter lrFilter(0.4);
 
 
 
