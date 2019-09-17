@@ -20,22 +20,22 @@ namespace config
 	{
 		/* not used in the code
 		// motors
-		uint8_t mTL = PA6;
-		uint8_t mTR = PA7;
-		uint8_t mBR = PB0;
-		uint8_t mBL = PB1;
+		const uint8_t mTL = PA6;
+		const uint8_t mTR = PA7;
+		const uint8_t mBR = PB0;
+		const uint8_t mBL = PB1;
 		*/
 		
 		
 		// diodes
-		uint8_t redDiode = PB15;
-		uint8_t blueDiode = PB14;
+		const uint8_t redDiode = PB15;
+		const uint8_t blueDiode = PB14;
 		
 		
 		// radio module
-		uint8_t m0pin = PA1;
-		uint8_t m1pin = PA0;
-		uint8_t aux = PB5;
+		const uint8_t m0pin = PA1;
+		const uint8_t m1pin = PA0;
+		const uint8_t aux = PB5;
 		
 		
 	} pin;
@@ -45,7 +45,7 @@ namespace config
 	struct 
 	{
 		// mpu6050
-		FC_MPU6050Lib::vector3Int accelerometer;
+		//FC_MPU6050Lib::vector3Int accelerometer;
 		
 		// GYRO CALIBRATION VALUES
 		
@@ -60,6 +60,11 @@ namespace config
 		
 		
 	} calibVal;
+
+
+	// flight modes config values
+	const uint16_t ZeroG_throttle = 500; // throttle value when motors power compensate the gravity force
+	const uint8_t AltHoldMaxAddedThrottle = 60;
 }
 
 
