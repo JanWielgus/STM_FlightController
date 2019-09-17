@@ -16,6 +16,7 @@
 #include <FC_Tasker.h>
 #include <MyPID.h>
 #include <FC_Communication_Base.h>
+#include "FC_MainCommunication.h"
 #include <FC_MPU6050Lib.h>
 #include <FC_HMC5883L_Lib.h>
 #include <FC_EVA_Filter.h>
@@ -44,6 +45,7 @@ static float calculationsDeltaTime = 0.00025f; //  = 250Hz / 1'000'000
 MyPID levelXpid(calculationsDeltaTime, 0, 0, 0, 100);
 MyPID levelYpid(calculationsDeltaTime, 0, 0, 0, 100);
 MyPID yawPID(calculationsDeltaTime, 0, 0, 0, 70);
+MyPID altHoldPID(calculationsDeltaTime, 0, 0, 0, 50);
 
 
 
@@ -59,6 +61,19 @@ float extrapolatedTBstick = 0;
 float extrapolatedLRstick = 0;
 FC_EVA_Filter tbFilter(0.4);
 FC_EVA_Filter lrFilter(0.4);
+
+
+// flight modes
+bool needToUpdateAltHoldPID_flag = false;
+int16_t pidXval, pidYval, pidYawVal; // PID controllers results
+
+
+
+// typedefs (not necessary to compile)
+typedef uint8 uint8_t;
+typedef int8 int8_t;
+typedef uint16 uint16_t;
+typedef int16 int16_t;
 
 
 

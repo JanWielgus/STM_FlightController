@@ -65,6 +65,10 @@ namespace config
 	// flight modes config values
 	const uint16_t ZeroG_throttle = 500; // throttle value when motors power compensate the gravity force
 	const uint8_t AltHoldMaxAddedThrottle = 60;
+
+
+	// other
+	const uint8_t ZeroActionThrottle = 20;
 }
 
 
