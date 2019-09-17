@@ -40,7 +40,7 @@ namespace gr // gesture recognition
 					state = disarmed;
 					
 					// Idle position
-					if (thr==0 && rot==0 && tb==0 && lr==0)
+					if (thr==0 && rot==0 && tb==0 && lr==0 && (digitalRead(config::pin.rightSwitch) == LOW))
 					step1Passed = true;
 				}
 				

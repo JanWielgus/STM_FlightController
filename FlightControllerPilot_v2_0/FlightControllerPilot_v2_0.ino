@@ -120,6 +120,13 @@ void updateSteeringSending()
 void updateOtherSending()
 {
 	com.toSend.arming = state==armed ? 1 : 0;
+
+	// Set the flight modes
+	if (digitalRead(config::pin.rightSwitch) == LOW)
+		com.toSend.flightMode = 0; // satbilize
+	else
+		com.toSend.flightMode = 1; // altHold
+
 	// OTHER DATA !!!
 	// send packed data
 	//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);

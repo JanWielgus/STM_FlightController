@@ -1,4 +1,3 @@
-#include "FC_MainCommunication.h"
 /*
     Name:       FlightController_v2_0.ino
     Created:	30/05/2019 22:12:18
@@ -9,6 +8,7 @@
 
 
 #include "Storage.h"
+#include "FlightModes.h"
 
 
 // Functions run by Tasker
@@ -19,6 +19,7 @@ void updateSending();
 void updateReceiving();
 void checkCalibrations(); // Check if there is a need to calibrate one of the module and perform it if needed
 void updateControlDiode(); // built in diode is blinked once per second
+void updatePressureAndAltHold(); // update altHold PID if needed and do other baro stuff
 
 // Other functions
 void extrapolateSticks();
@@ -104,6 +105,7 @@ void setup()
 	tasker.addFunction(updateSending, 22000L, 1);              // ~45Hz
 	tasker.addFunction(updateReceiving, 7142L, 1);             // 140Hz
 	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
+	tasker.addFunction(updatePressureAndAltHold, 9090, 1);     // 110Hz
 	//tasker.scheduleTasks();
 	
 	delay(300);
@@ -236,53 +238,37 @@ void readCompass()
 void stabilize()
 {
 	counter++;
-	//...
-	// use angle and heading variables
-	// use PID class
 	
 	
 	extrapolateSticks();
-	
-	
-	int16_t pidXval, pidYval, pidYawVal;
-	
-	// leveling PID
-	pidXval = levelXpid.updateController(angle.x + (extrapolatedTBstick/10)) + 0.5;
-	pidYval = levelYpid.updateController(angle.y - (extrapolatedLRstick/10)) + 0.5;
-		
-		
-	// yaw PID
-	float headingError = headingToHold - heading;
-	
-	if (headingError >= 180)
-		headingError -= 360;
-	else if (headingError <= -180)
-		headingError += 360;
-		
-	pidYawVal = yawPID.updateController(headingError);
-	
-	//Serial.println(headingError);
-	
-	
-	
-	if (com.received.steer.throttle < 20)
-	{
-		pidXval = 0;
-		pidYval = 0;
-		pidYawVal = 0;
-		
-		headingToHold = heading;
-	}
+	fModes::runVirtualPilot();
 	
 	
 	// when pilot is disarmed motors will not spin
 	// when disconnected form the pilot, motors will stop (not enabled)
 
-	motors.setOnTL(com.received.steer.throttle + pidXval + pidYval - pidYawVal); // BR
- 	motors.setOnTR(com.received.steer.throttle + pidXval - pidYval + pidYawVal); // BL
- 	motors.setOnBR((int16_t)((float)com.received.steer.throttle*1.5f) - pidXval - pidYval - pidYawVal); // TL (damaged)
- 	motors.setOnBL(com.received.steer.throttle - pidXval + pidYval + pidYawVal); // TR
+	motors.setOnTL(fModes::vSticks.throttle + pidXval + pidYval - pidYawVal); // BR
+ 	motors.setOnTR(fModes::vSticks.throttle + pidXval - pidYval + pidYawVal); // BL
+ 	motors.setOnBR((int16_t)(fModes::vSticks.throttle*1.5f) - pidXval - pidYval - pidYawVal); // TL (damaged)
+ 	motors.setOnBL(fModes::vSticks.throttle - pidXval + pidYval + pidYawVal); // TR
 	motors.forceMotorsExecution();
+}
+
+
+void updatePressureAndAltHold()
+{
+	if (needToUpdateAltHoldPID_flag)
+	{
+		int16_t pidAltHoldVal;
+		pidAltHoldVal = altHoldPID.updateController(/* ERROR */);
+		// keep pid value in a border
+		pidAltHoldVal = constrain(pidAltHoldVal, -config::AltHoldMaxAddedThrottle, config::AltHoldMaxAddedThrottle);
+
+		// apply pid results to the virtual throttle stick
+		fModes::vSticks.throttle = config::ZeroG_throttle + pidAltHoldVal;
+		
+		// other pressure actions if needed
+	}
 }
 
 
@@ -339,6 +325,7 @@ void updateReceiving()
 			levelXpid.resetController();
 			levelYpid.resetController();
 			yawPID.resetController();
+			
 			//    RESET ALL PID CONTROLLERS  !!!
 			// and do all code when arming
 			
@@ -381,12 +368,20 @@ void updateReceiving()
 					levelYpid.set_kD(com.received.PIDvalues.D);
 					break;
 					
+
 				case 1: // yaw
 					yawPID.set_kP(com.received.PIDvalues.P);
 					yawPID.set_kI(com.received.PIDvalues.I);
 					yawPID.set_Imax(com.received.PIDvalues.I_max);
 					yawPID.set_kD(com.received.PIDvalues.D);
 					break;
+
+
+				case 2: // altHold
+					altHoldPID.set_kP(com.received.PIDvalues.P);
+					altHoldPID.set_kI(com.received.PIDvalues.I);
+					altHoldPID.set_Imax(com.received.PIDvalues.I_max);
+					altHoldPID.set_kD(com.received.PIDvalues.D);
 				
 				
 				
