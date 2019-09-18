@@ -64,7 +64,9 @@ namespace config
 
 	// flight modes config values
 	const uint16_t ZeroG_throttle = 500; // throttle value when motors power compensate the gravity force
-	const uint8_t AltHoldMaxAddedThrottle = 60;
+	const uint8_t AltHoldMaxAddedThrottle = 90;
+	const uint8_t AltHoldStickDeadZone = 90; // value from the stick center which cause altitude change
+	const uint8_t PosHoldStickDeadZone = 60; // value from the stick center which cause position change
 
 
 	// other

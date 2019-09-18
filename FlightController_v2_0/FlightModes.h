@@ -63,23 +63,21 @@ namespace fModes
 			// set up the flight modes
 			switch (flightMode)
 			{
-			/* by now, for this flight modes there is no need to do anything
 			case POS_HOLD:
 				// position hold flight mode code
 
-				// CALCULATE THERE vStick.TB and vStick.LR
+				// CALCULATE THERE lat to hold and long to hold
+				// create pid controller in the tasker function in ino file
 				
 				// do not break to keep altitude and stabilize
-				
-				
+
 			case ALT_HOLD:
 				// altHold pid controller is updated in the ino file in 110Hz
 				// flag to update is changed when setting the new flight mode
 
-				// CALCULATE THERE pressure to hold
+				// pressureToHold is calculated in function in the ino file
 				
 				// do not break to keep stabilize
-			*/
 				
 			case STABILIZE:
 				// leveling PID
@@ -136,6 +134,7 @@ namespace fModes
 				
 				case ALT_HOLD:
 					altHoldPID.resetController();
+					pressureToHold = baro.getSmoothPressure(); // reset pressureToHold value
 					needToUpdateAltHoldPID_flag = true;
 				
 					// do other necessary actions

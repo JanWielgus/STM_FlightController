@@ -103,7 +103,7 @@ void setup()
 	tasker.addFunction(readCompass, 13340L, 492);              // 75Hz  (tested duration)
 	//tasker.addFunction(updateMainCommunication, 20000L, 229);  // 50Hz (tested duration)
 	tasker.addFunction(updateSending, 22000L, 1);              // ~45Hz
-	tasker.addFunction(updateReceiving, 7142L, 1);             // 140Hz
+	tasker.addFunction(updateReceiving, 7142L, 1);             // 140Hz      (! UPDATE the body if frequency chanded !!!)
 	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
 	tasker.addFunction(updatePressureAndAltHold, 9090, 1);     // 110Hz
 	//tasker.scheduleTasks();
@@ -269,21 +269,31 @@ void stabilize()
 
 void updatePressureAndAltHold()
 {
+	// If altHold flight mode is enabled (this flag is set in the flight modes header file
 	if (needToUpdateAltHoldPID_flag)
 	{
-		int16_t pidAltHoldVal;
+		// calculate pressureToHold
+		int16_t rawAltHoldThrottle = com.received.steer.throttle - config::ZeroG_throttle;
+		// integrate the stick value only if 
+		if (com.connectionStability() > 1)
+		{
+			// if raw throttle stick is out of the dead zone, integrate pressureToHold
+			// !!  1/100Hz ~= 0.009   !!!  ONLY IF 110Hz  !!!
+			if (rawAltHoldThrottle > config::AltHoldStickDeadZone)
+				pressureToHold += ((float)(rawAltHoldThrottle - config::AltHoldStickDeadZone) / 50.0f) * 0.009f;
+			else if (rawAltHoldThrottle < -config::AltHoldStickDeadZone)
+				pressureToHold += ((float)(rawAltHoldThrottle + config::AltHoldStickDeadZone) / 50.0f) * 0.009f;
+		}
 
-		//baro.getSmoothPressure();
 
-		pidAltHoldVal = altHoldPID.updateController(/* ERROR */);
+		float altError = baro.getSmoothPressure() - pressureToHold;
+		pidAltHoldVal = altHoldPID.updateController(altError);
 
 		// keep pid value in a border
 		pidAltHoldVal = constrain(pidAltHoldVal, -config::AltHoldMaxAddedThrottle, config::AltHoldMaxAddedThrottle);
 
 		// apply pid results to the virtual throttle stick
 		fModes::vSticks.throttle = config::ZeroG_throttle + pidAltHoldVal;
-		
-		// other pressure actions if needed
 	}
 }
 
@@ -412,8 +422,9 @@ void updateReceiving()
 	// Integrate yaw stick value only if connection is stable
 	if (com.connectionStability() > 1)
 	{
-		//headingToHold += ((float)com.received.steer.rotate * 0.04); // if 25Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
-		headingToHold += ((float)(com.received.steer.rotate/2) * 0.0125); // if 80Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
+		//headingToHold += ((float)com.received.steer.rotate * 0.04f); // if 25Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
+		//headingToHold += ((float)(com.received.steer.rotate/2) * 0.0125f); // if 80Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
+		headingToHold += ((float)(com.received.steer.rotate / 2) * 0.0071f); // if 140Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
 	}
 	
 	

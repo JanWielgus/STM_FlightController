@@ -43,7 +43,7 @@ FC_HMC5883L_Lib compass;
 FC_Motors motors;
 
 // PID objects
-static float calculationsDeltaTime = 0.00025f; //  = 250Hz / 1'000'000
+static float calculationsDeltaTime = 0.004f; //  = 1/250
 MyPID levelXpid(calculationsDeltaTime, 0, 0, 0, 100);
 MyPID levelYpid(calculationsDeltaTime, 0, 0, 0, 100);
 MyPID yawPID(calculationsDeltaTime, 0, 0, 0, 70);
@@ -72,7 +72,7 @@ FC_EVA_Filter lrFilter(0.4);
 enum FlightMode { STABILIZE = 0, ALT_HOLD = 1, POS_HOLD = 2 }; // list of all flight modes (special flight modes in the different emum)
 //enum SpecialFlightModes {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
 bool needToUpdateAltHoldPID_flag = false;
-int16_t pidXval, pidYval, pidYawVal; // PID controllers results
+int16_t pidXval, pidYval, pidYawVal, pidAltHoldVal; // PID controllers results
 
 
 
