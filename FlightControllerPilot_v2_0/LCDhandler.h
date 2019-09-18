@@ -95,6 +95,9 @@ namespace lcdH // LCD handler
 		//lcd.print(temp_counter);
 		//lcd.print(MesasureTime::duration());
 		lcd.print(btPID_P);
+
+		lcd.setCursor(15, 1);
+		lcd.print(digitalRead(config::pin.rightSwitch));
 	}
 }
 
