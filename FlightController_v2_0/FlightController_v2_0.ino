@@ -273,16 +273,16 @@ void updatePressureAndAltHold()
 	if (needToUpdateAltHoldPID_flag)
 	{
 		// calculate pressureToHold
-		int16_t rawAltHoldThrottle = com.received.steer.throttle - config::ZeroG_throttle;
+		int16_t rawAltHoldThrottle = com.received.steer.throttle - altHoldBaseThrottle;
 		// integrate the stick value only if 
 		if (com.connectionStability() > 1)
 		{
 			// if raw throttle stick is out of the dead zone, integrate pressureToHold
 			// !!  1/100Hz ~= 0.009   !!!  ONLY IF 110Hz  !!!
 			if (rawAltHoldThrottle > config::AltHoldStickDeadZone)
-				pressureToHold += ((float)(rawAltHoldThrottle - config::AltHoldStickDeadZone) / 50.0f) * 0.009f;
+				pressureToHold -= ((float)(rawAltHoldThrottle - config::AltHoldStickDeadZone) / 50.0f) * 0.009f;
 			else if (rawAltHoldThrottle < -config::AltHoldStickDeadZone)
-				pressureToHold += ((float)(rawAltHoldThrottle + config::AltHoldStickDeadZone) / 50.0f) * 0.009f;
+				pressureToHold -= ((float)(rawAltHoldThrottle + config::AltHoldStickDeadZone) / 50.0f) * 0.009f;
 		}
 
 
@@ -293,7 +293,10 @@ void updatePressureAndAltHold()
 		pidAltHoldVal = constrain(pidAltHoldVal, -config::AltHoldMaxAddedThrottle, config::AltHoldMaxAddedThrottle);
 
 		// apply pid results to the virtual throttle stick
-		fModes::vSticks.throttle = config::ZeroG_throttle + pidAltHoldVal;
+		int16_t throttleStickSigned = altHoldBaseThrottle + pidAltHoldVal;
+		fModes::vSticks.throttle = constrain(throttleStickSigned,
+											config::AltHoldMinTotalFinal,
+											config::AltHoldMaxTotalFinal);
 	}
 }
 

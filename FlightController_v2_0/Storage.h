@@ -46,7 +46,8 @@ FC_Motors motors;
 static float calculationsDeltaTime = 0.004f; //  = 1/250
 MyPID levelXpid(calculationsDeltaTime, 0, 0, 0, 100);
 MyPID levelYpid(calculationsDeltaTime, 0, 0, 0, 100);
-MyPID yawPID(calculationsDeltaTime, 0, 0, 0, 70);
+//MyPID yawPID(calculationsDeltaTime, 0, 0, 0, 70);
+MyPID yawPID(calculationsDeltaTime, 3.8f, 1.2f, 0.8f, 95); // Temp start value
 MyPID altHoldPID(calculationsDeltaTime, 0, 0, 0, 50);
 
 
@@ -73,6 +74,7 @@ enum FlightMode { STABILIZE = 0, ALT_HOLD = 1, POS_HOLD = 2 }; // list of all fl
 //enum SpecialFlightModes {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
 bool needToUpdateAltHoldPID_flag = false;
 int16_t pidXval, pidYval, pidYawVal, pidAltHoldVal; // PID controllers results
+uint16_t altHoldBaseThrottle; // throttle value in which drone should keep its own altitude
 
 
 
