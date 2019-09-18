@@ -27,7 +27,7 @@ namespace fModes
 		int16Byte LR;
 	} vSticks; // virtual sticks
 	
-	FlightMode flightMode = 0;
+	FlightMode flightMode = STABILIZE;
 	
 	
 	void runVirtualPilot(); // !!! run this in the same frequency as stabilize() (can be inside)
@@ -123,7 +123,7 @@ namespace fModes
 		
 		if (com.received.flightMode <= POS_HOLD) // other flight modes will be handled in a different way
 		{
-			flightMode = com.received.flightMode;
+			flightMode = (FlightMode)com.received.flightMode;
 			
 			switch (flightMode)
 			{
