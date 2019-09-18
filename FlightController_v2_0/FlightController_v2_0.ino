@@ -173,6 +173,17 @@ void setup()
 	
 	compass.setCompassDeclination(5.0);
 	Serial.println("compass initialized");
+
+
+	// MS5611
+	while (!baro.initialize())
+	{
+		// If gets stuck here, there is an error
+		Serial.println("cannot initialize baro");
+		delay(200);
+	}
+
+	Serial.println("baro initialized");
 	
 	
 	// Default calibration values
@@ -201,6 +212,7 @@ void setup()
 void loop()
 {
 	tasker.runTasker();
+	baro.runBarometer(); // this method uses planned tasks which need to be checked as fast as possible
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -260,7 +272,11 @@ void updatePressureAndAltHold()
 	if (needToUpdateAltHoldPID_flag)
 	{
 		int16_t pidAltHoldVal;
+
+		//baro.getSmoothPressure();
+
 		pidAltHoldVal = altHoldPID.updateController(/* ERROR */);
+
 		// keep pid value in a border
 		pidAltHoldVal = constrain(pidAltHoldVal, -config::AltHoldMaxAddedThrottle, config::AltHoldMaxAddedThrottle);
 

@@ -19,6 +19,7 @@
 #include "FC_MainCommunication.h"
 #include <FC_MPU6050Lib.h>
 #include <FC_HMC5883L_Lib.h>
+#include <FC_MS5611_Lib.h>
 #include <FC_EVA_Filter.h>
 #include <FC_Motors.h>
 #include "config.h"
@@ -34,8 +35,9 @@ FC_MainCommunication com(&Serial1, 45);
 // create sensors objects
 FC_MPU6050Lib mpu;
 FC_HMC5883L_Lib compass;
-FC_MPU6050Lib::vector3Float angle; // X and Y angles
-float heading;
+// Baro object is created indeide the library
+
+
 
 // create motors object
 FC_Motors motors;
@@ -51,7 +53,10 @@ MyPID altHoldPID(calculationsDeltaTime, 0, 0, 0, 50);
 
 
 // variables
+FC_MPU6050Lib::vector3Float angle; // X and Y angles
+float heading;
 float headingToHold = 0; // calculated value based on the pilot rotate stick to hold by the drone
+float pressureToHold;
 
 // extrapolation variables
 bool needToExtrapolateStickVlauesFlag = false;
@@ -64,6 +69,8 @@ FC_EVA_Filter lrFilter(0.4);
 
 
 // flight modes
+enum FlightMode { STABILIZE = 0, ALT_HOLD = 1, POS_HOLD = 2 }; // list of all flight modes (special flight modes in the different emum)
+//enum SpecialFlightModes {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
 bool needToUpdateAltHoldPID_flag = false;
 int16_t pidXval, pidYval, pidYawVal; // PID controllers results
 
