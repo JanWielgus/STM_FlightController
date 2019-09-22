@@ -73,6 +73,7 @@ namespace config
 
 	// other
 	const uint8_t ZeroActionThrottle = 20;
+	const float CutOffAngle = 40; // Angle from which motors are immediately disabled
 }
 
 

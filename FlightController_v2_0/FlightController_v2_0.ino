@@ -264,6 +264,13 @@ void stabilize()
 {
 	counter++;
 	
+
+	// Cut-off all motors if the angle is too high
+	using namespace config;
+	if (angle.x > CutOffAngle || angle.x < -CutOffAngle ||
+		angle.y > CutOffAngle || angle.y < -CutOffAngle)
+		motors.setMotorState(false);
+
 	
 	extrapolateSticks();
 	fModes::runVirtualPilot();
