@@ -3,9 +3,22 @@
     Created:	30/05/2019 22:12:18
     Author:     Jan Wielgus
 	
-	Source code of second version of the FlightController on the STM BluePill microcontroller.
+	Source code of second version of the FlightController on the STM BluePill micro-controller.
 */
 
+
+#include <FC_Tasker.h>
+#include <MyPID.h>
+#include <FC_Communication_Base.h>
+#include <FC_MPU6050Lib.h>
+#include <FC_HMC5883L_Lib.h>
+#include <FC_MS5611_Lib.h>
+#include <FC_EVA_Filter.h>
+#include <FC_Motors.h>
+#include <Wire.h>
+#include <FC_CustomDataTypes.h>
+#include <FC_TaskPlanner.h>
+#include <FC_AverageFilter.h>
 
 #include "Storage.h"
 #include "FlightModes.h"
