@@ -323,14 +323,20 @@ void updatePressureAndAltHold()
 
 void updateSending()
 {
-	// send proper data packet: TYPE1-full, TYPE2-basic
+	// Pack all data to the toSend variables
 	com.toSend.tilt_TB = (int8_t)angle.x;
 	com.toSend.tilt_LR = (int8_t)angle.y;
 	com.toSend.altitude = (int16_t)(baro.getSmoothPressure() - 90000);
+
+
+	// Send proper data packet: TYPE1-full, TYPE2-basic
 	//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE); // basic
 	com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE); // full
 	
-	/*
+
+
+
+	/* /////////////////////////
 	Serial.print("H: ");
 	Serial.print(heading);
 	Serial.println();
