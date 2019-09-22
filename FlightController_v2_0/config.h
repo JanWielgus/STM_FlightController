@@ -64,11 +64,27 @@ namespace config
 
 	// flight modes config values
 	//const uint16_t ZeroG_throttle = 500; // throttle value when motors power compensate the gravity force
-	const uint8_t AltHoldMaxAddedThrottle = 90;
-	const uint16_t AltHoldMaxTotalFinal = 700;
+	const uint8_t AltHoldMaxAddedThrottle = 150;
+	const uint16_t AltHoldMaxTotalFinal = 720;
 	const uint16_t AltHoldMinTotalFinal = 20;
 	const uint8_t AltHoldStickDeadZone = 90; // value from the stick center which cause altitude change
 	const uint8_t PosHoldStickDeadZone = 60; // value from the stick center which cause position change
+
+
+	// PID default values
+	struct pidSet
+	{
+		float p;
+		float i;
+		uint8_t imax;
+		float d;
+	};
+	struct
+	{
+		const pidSet leveling = { 2.14f, 2.5f, 110, 0.64f };
+		const pidSet yaw = { 3.8f, 1.2f, 90, 0.8f };
+		const pidSet altHold = { 0, 0, 0, 0 };
+	}defPID;
 
 
 	// other

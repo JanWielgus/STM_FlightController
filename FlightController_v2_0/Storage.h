@@ -24,7 +24,7 @@
 #include <FC_Motors.h>
 #include "config.h"
 
-
+using namespace config;
 
 // create the tasker object
 FC_SimpleTasker tasker;
@@ -44,11 +44,10 @@ FC_Motors motors;
 
 // PID objects
 static float calculationsDeltaTime = 0.004f; //  = 1/250
-MyPID levelXpid(calculationsDeltaTime, 0, 0, 0, 100);
-MyPID levelYpid(calculationsDeltaTime, 0, 0, 0, 100);
-//MyPID yawPID(calculationsDeltaTime, 0, 0, 0, 70);
-MyPID yawPID(calculationsDeltaTime, 3.8f, 1.2f, 0.8f, 95); // Temp start value
-MyPID altHoldPID(calculationsDeltaTime, 0, 0, 0, 50);
+MyPID levelXpid(calculationsDeltaTime, defPID.leveling.p, defPID.leveling.i, defPID.leveling.d, defPID.leveling.imax);
+MyPID levelYpid(calculationsDeltaTime, defPID.leveling.p, defPID.leveling.i, defPID.leveling.d, defPID.leveling.imax);
+MyPID yawPID(calculationsDeltaTime, defPID.yaw.p, defPID.yaw.i, defPID.yaw.d, defPID.yaw.imax);
+MyPID altHoldPID(calculationsDeltaTime, defPID.altHold.p, defPID.altHold.i, defPID.altHold.d, defPID.altHold.imax);
 
 
 

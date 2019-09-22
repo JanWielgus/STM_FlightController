@@ -134,7 +134,7 @@ void setup()
 	}
 	
 	mpu.setCalculationsFrequency(250);
-	mpu.setGyroFusionMultiplier(0.996); // CHANGED TO TEST
+	mpu.setGyroFusionMultiplier(0.999); // CHANGED TO TEST
 	
 	
 	
@@ -152,7 +152,7 @@ void setup()
 	Serial.print(" Z: ");
 	Serial.print(mpu.getAccelerometerCalibrationValues().z);
 	Serial.println();*/
-	mpu.setAccelerometerCalibrationValues(397, 99, -227);
+	mpu.setAccelerometerCalibrationValues(78, -3, -243);
 	
 	
 	/*
@@ -164,7 +164,7 @@ void setup()
 	Serial.print(" Z: ");
 	Serial.print(mpu.getGyroCalibrationValues().z);
 	Serial.println();*/
-	mpu.setGyroCalibrationValues(-104, -159, -9);
+	mpu.setGyroCalibrationValues(-108, -156, 0);
 	
 	Serial.println(" OK");
 	
@@ -326,8 +326,9 @@ void updateSending()
 	// send proper data packet: TYPE1-full, TYPE2-basic
 	com.toSend.tilt_TB = (int8_t)angle.x;
 	com.toSend.tilt_LR = (int8_t)angle.y;
-	//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
-	com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE);
+	com.toSend.altitude = (int16_t)(baro.getSmoothPressure() - 90000);
+	//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE); // basic
+	com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE); // full
 	
 	/*
 	Serial.print("H: ");
