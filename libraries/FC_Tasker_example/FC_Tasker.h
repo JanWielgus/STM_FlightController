@@ -55,36 +55,36 @@ class FC_SimpleTasker
 
 
 
-class FC_Tasker : public FC_SimpleTasker
-{
- public:
-	FC_Tasker( void (*mainFuncPointer)(), long interv, uint16_t maxDur );
-	//void addMainFunction( void (*mainFuncPointer)(), long interv, uint16_t maxDur ); // - now in the constructor
-	void runTasker(); // (virtual) should be the only function in loop. Execute tasks like in SimpleTasker and one main task
-
- private:
-	HardwareTimer* timer2;
-	
-	const uint32_t BASE_INTERVAL; // in milliseconds, loop run by Timer2 to set baseLoopFlag. Now it is just interval of the main function
-	
-	static volatile bool baseLoopFlag; // Timer change this variable to true if base loop have to be executed
-	
-	// Now do not used
-	//static volatile uint32_t baseLoopCounter; // Timer increment it. It is reset by runTasker() when reach main function
-	//static volatile uint32_t mainLoopCounter;
-	
-	struct
-	{
-		bool systemOverloaded = false; // true when function doesn't finished when Timer ticked again
-		bool systemUnstable = false; // true forever when at least once systemOverloadedFlag will be true
-	}flag;
-	
-	uint32_t mainTaskDuration = 0; // main function end time minus next main function start time
-
-	Task mainTask; // the main task
-	
-	friend void baseLoopTimerHandler(); // executed by Timer every BASE_INTERVAL
-};
+//class FC_Tasker : public FC_SimpleTasker
+//{
+// public:
+//	FC_Tasker( void (*mainFuncPointer)(), long interv, uint16_t maxDur );
+//	//void addMainFunction( void (*mainFuncPointer)(), long interv, uint16_t maxDur ); // - now in the constructor
+//	void runTasker(); // (virtual) should be the only function in loop. Execute tasks like in SimpleTasker and one main task
+//
+// private:
+//	HardwareTimer* timer2;
+//	
+//	const uint32_t BASE_INTERVAL; // in milliseconds, loop run by Timer2 to set baseLoopFlag. Now it is just interval of the main function
+//	
+//	static volatile bool baseLoopFlag; // Timer change this variable to true if base loop have to be executed
+//	
+//	// Now do not used
+//	//static volatile uint32_t baseLoopCounter; // Timer increment it. It is reset by runTasker() when reach main function
+//	//static volatile uint32_t mainLoopCounter;
+//	
+//	struct
+//	{
+//		bool systemOverloaded = false; // true when function doesn't finished when Timer ticked again
+//		bool systemUnstable = false; // true forever when at least once systemOverloadedFlag will be true
+//	}flag;
+//	
+//	uint32_t mainTaskDuration = 0; // main function end time minus next main function start time
+//
+//	Task mainTask; // the main task
+//	
+//	friend void baseLoopTimerHandler(); // executed by Timer every BASE_INTERVAL
+//};
 
 
 #endif
