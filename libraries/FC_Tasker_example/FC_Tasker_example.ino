@@ -17,8 +17,10 @@ void func3();
 
 
 // !!! Only one: FC_SimpleTasker or FC_Tasker can be used at the same time !!! (when using Simple, constructor have no parameters)
-//FC_SimpleTasker() sTasker;
-FC_Tasker tasker(func1, 500000L, 15); // main function, 2Hz
+FC_SimpleTasker tasker;
+
+// Only SimpleTasker works for now (problem with the timer)
+//FC_Tasker tasker(func1, 500000L, 15); // main function, 2Hz
 
 
 
@@ -31,7 +33,7 @@ void setup()
 	tasker.addFunction(func3, 1000000L, 15); // 1 Hz
 	// add other functions
 	
-	tasker.scheduleTasks();
+	//tasker.scheduleTasks(); // This function is not working for now
 	
 	Serial.println("End on setup!");
 }
