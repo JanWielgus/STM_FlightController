@@ -13,51 +13,40 @@
 #ifndef STORAGE_H_
 #define STORAGE_H_
 
-
-// Include files
-	#include <FC_Tasker.h>
-	#include "FC_MainCommunication.h"
-	#include "FC_ControlStick.h"
-	#include <LiquidCrystal_I2C.h>
-	#include <SoftwareSerial.h>
-	#include "config.h"
+#include <FC_Tasker.h>
+#include "FC_MainCommunication.h"
+#include "FC_ControlStick.h"
+#include <LiquidCrystal_I2C.h>
+#include <SoftwareSerial.h>
 
 
+// New data types
+enum armStateType { disarmed, arming1, arming2, armed };
 
 
 // Objects
-	FC_SimpleTasker tasker;
+extern FC_SimpleTasker tasker;
+extern FC_MainCommunication com;
+extern LiquidCrystal_I2C lcd;
+extern SoftwareSerial bluetoothSoftwareSerial;
 
-	FC_MainCommunication com(&Serial, 100);
-
-	LiquidCrystal_I2C lcd(config::LCD_ADDRESS, 16, 2);
-	
-	SoftwareSerial bluetoothSoftwareSerial(config::pin.btRX, config::pin.btTX); // RX, TX
-	
-	// control sticks
-	FC_ControlStick thrStick;
-	FC_ControlStick rotStick;
-	FC_ControlStick TB_Stick;
-	FC_ControlStick LR_Stick;
-
-
-
+// control sticks
+extern FC_ControlStick thrStick;
+extern FC_ControlStick rotStick;
+extern FC_ControlStick TB_Stick;
+extern FC_ControlStick LR_Stick;
 
 // Other types
-	enum stateType {disarmed, arming1, arming2, armed};
-	stateType state = disarmed;
-	
-	
-	
+extern armStateType armState; // old "state"
+
 // Bluetooth app received data
-	bool btNeedToUpdatePIDFlag = false; // if this is true - need to send new PID data to the drone
-	// RESET THIS TO false AFTER SENDING TO THE DRONE
-	
-	uint8_t btControllerID;
-	float btPID_P;
-	float btPID_I;
-	uint8_t btPID_Imax;
-	float btPID_D;
+extern bool btNeedToUpdatePIDFlag;
+
+extern uint8_t btControllerID;
+extern float btPID_P;
+extern float btPID_I;
+extern uint8_t btPID_Imax;
+extern float btPID_D;
 
 
 
