@@ -9,6 +9,7 @@
 #ifndef LCDHANDLER_H_
 #define LCDHANDLER_H_
 
+#include <Arduino.h>
 
 
 ////////////////

@@ -1,5 +1,7 @@
-#pragma once
+#ifndef MEASURETIME_H_
+#define MEASURETIME_H_
 
+#include <Arduino.h>
 
 class MeasureTime
 {
@@ -12,4 +14,6 @@ public:
 	static void end();
 	static uint16_t getDuration();
 };
+
+#endif /* MEASURETIME_H_ */
 

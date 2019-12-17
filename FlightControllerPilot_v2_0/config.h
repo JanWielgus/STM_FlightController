@@ -63,7 +63,7 @@ namespace config
 		uint16_t LR_Min = 65;
 		uint16_t LR_Cen = 521;
 		uint16_t LR_Max = 980;
-	} const sticksCalibVal;
+	} sticksCalibVal;
 	
 	const uint8_t stickDeadZone = 20;
 }

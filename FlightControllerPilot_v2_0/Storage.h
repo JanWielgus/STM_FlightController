@@ -17,18 +17,33 @@
 #include "FC_MainCommunication.h"
 #include "FC_ControlStick.h"
 #include <LiquidCrystal_I2C.h>
+#include "LCDhandler.h"
 #include <SoftwareSerial.h>
+#include "AndroidCommunication.h"
+#include "GestureRecognizer.h"
 
 
 // New data types
 enum armStateType { disarmed, arming1, arming2, armed };
 
 
+// All global flags
+struct
+{
+	bool btNeedToUpdatePID = false; // if this is true - need to send new PID data to the drone
+	// RESET THIS TO false AFTER SENDING TO THE DRONE
+} flags;
+
+
 // Objects
 extern FC_SimpleTasker tasker;
 extern FC_MainCommunication com;
 extern LiquidCrystal_I2C lcd;
+extern LcdHandler display;
 extern SoftwareSerial bluetoothSoftwareSerial;
+extern AndroidCommunication androidCom;
+extern GestureRecognizer gestureRecognizer;
+
 
 // control sticks
 extern FC_ControlStick thrStick;
@@ -36,17 +51,20 @@ extern FC_ControlStick rotStick;
 extern FC_ControlStick TB_Stick;
 extern FC_ControlStick LR_Stick;
 
+
 // Other types
 extern armStateType armState; // old "state"
 
-// Bluetooth app received data
-extern bool btNeedToUpdatePIDFlag;
 
-extern uint8_t btControllerID;
-extern float btPID_P;
-extern float btPID_I;
-extern uint8_t btPID_Imax;
-extern float btPID_D;
+struct
+{
+	// Bluetooth app received data
+	uint8_t controllerID;
+	float PID_P;
+	float PID_I;
+	uint8_t PID_Imax;
+	float PID_D;
+} androidData;
 
 
 

@@ -82,7 +82,7 @@ void LcdHandler::updateLCD_slowParts()
 	//lcd.print(com.connectionStability());
 	//lcd.print(temp_counter);
 	//lcd.print(MesasureTime::duration());
-	lcd.print(btPID_P);
+	lcd.print(androidData.PID_P);
 }
 
 
