@@ -19,7 +19,6 @@
 #include <FC_CustomDataTypes.h>
 #include <FC_TaskPlanner.h>
 #include <FC_AverageFilter.h>
-
 #include "Storage.h"
 #include "FlightModes.h"
 
