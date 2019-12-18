@@ -22,6 +22,7 @@
 #include <FC_MS5611_Lib.h>
 #include <FC_EVA_Filter.h>
 #include <FC_Motors.h>
+#include "DebugSystem.h"
 
 
 // Only for STM32 (maybe not necessary)
@@ -32,6 +33,8 @@ typedef int16 int16_t;
 
 enum FlightMode { STABILIZE = 0, ALT_HOLD = 1, POS_HOLD = 2 }; // list of all flight modes (special flight modes in the different emum)
 //enum SpecialFlightModes {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
+
+enum BaudRates { BAUD_9600 = 9600, BAUD_19200 = 19200, BAUD_38400 = 38400, BAUD_57600 = 57600, BAUD_115200 = 115200};
 
 
 // Flags
@@ -49,6 +52,7 @@ extern FC_MainCommunication com;
 extern FC_MPU6050Lib mpu;
 extern FC_HMC5883L_Lib compass;
 extern FC_Motors motors;
+extern DebugSystem debug;
 
 // PID objects
 extern MyPID levelXpid;

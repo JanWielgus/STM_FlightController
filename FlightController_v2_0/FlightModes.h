@@ -136,14 +136,14 @@ namespace fModes
 					altHoldPID.resetController();
 					pressureToHold = baro.getSmoothPressure(); // reset pressureToHold value
 					altHoldBaseThrottle = com.received.steer.throttle; // altHold base throttle is set to current throttle value
-					needToUpdateAltHoldPID_flag = true;
+					flags.needToUpdateAltHoldPID = true;
 				
 					// do other necessary actions
 					break;
 				
 				
 				case STABILIZE:
-					needToUpdateAltHoldPID_flag = false;
+					flags.needToUpdateAltHoldPID = false;
 			}
 			
 		}

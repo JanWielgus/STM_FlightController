@@ -11,6 +11,7 @@ FC_MPU6050Lib mpu;
 FC_HMC5883L_Lib compass;
 // Barometer object is created inside the library
 FC_Motors motors;
+DebugSystem debug(&Serial);
 
 
 // PID objects
@@ -23,8 +24,8 @@ MyPID altHoldPID(calculationsDeltaTime, defPID.altHold.p, defPID.altHold.i, defP
 
 
 // Variables
-FC_MPU6050Lib::vector3Float angle; // X and Y angles
-float heading;
+FC_MPU6050Lib::vector3Float angle = { 0, 0, 0 }; // X and Y angles
+float heading = 0;
 float headingToHold = 0; // calculated value based on the pilot rotate stick to hold by the drone
 float pressureToHold;
 

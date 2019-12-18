@@ -15,32 +15,6 @@
 
 namespace config
 {
-	// pins
-	struct 
-	{
-		/* not used in the code
-		// motors
-		uint8_t mTL = PA6;
-		uint8_t mTR = PA7;
-		uint8_t mBR = PB0;
-		uint8_t mBL = PB1;
-		*/
-		
-		
-		// diodes
-		uint8_t redDiode = PB15;
-		uint8_t blueDiode = PB14;
-		
-		
-		// radio module
-		uint8_t m0pin = PA1;
-		uint8_t m1pin = PA0;
-		uint8_t aux = PB5;
-		
-		
-	} const pin;
-	
-	
 	// mpu6050
 	struct 
 	{
@@ -94,6 +68,33 @@ namespace config
 	// other
 	const uint8_t ZeroActionThrottle = 20;
 	const float CutOffAngle = 46; // Angle from which motors are immediately disabled
+
+
+
+	// pins
+	struct
+	{
+		/* not used in the code
+		// motors
+		uint8_t mTL = PA6;
+		uint8_t mTR = PA7;
+		uint8_t mBR = PB0;
+		uint8_t mBL = PB1;
+		*/
+
+
+		// diodes
+		uint8_t redDiode = PB15;
+		uint8_t blueDiode = PB14;
+
+
+		// radio module
+		uint8_t m0pin = PA1;
+		uint8_t m1pin = PA0;
+		uint8_t aux = PB5;
+
+
+	} const pin;
 }
 
 
