@@ -13,51 +13,58 @@
 #ifndef STORAGE_H_
 #define STORAGE_H_
 
+#include <FC_Tasker.h>
+#include "FC_MainCommunication.h"
+#include "FC_ControlStick.h"
+#include <LiquidCrystal_I2C.h>
+#include "LCDhandler.h"
+#include <SoftwareSerial.h>
+#include "AndroidCommunication.h"
+#include "GestureRecognizer.h"
 
-// Include files
-	#include <FC_Tasker.h>
-	#include "FC_MainCommunication.h"
-	#include "FC_ControlStick.h"
-	#include <LiquidCrystal_I2C.h>
-	#include <SoftwareSerial.h>
-	#include "config.h"
+
+// New data types
+enum armStateType { disarmed, arming1, arming2, armed };
 
 
+// All global flags
+struct
+{
+	bool btNeedToUpdatePID = false; // if this is true - need to send new PID data to the drone
+	// RESET THIS TO false AFTER SENDING TO THE DRONE
+} flags;
 
 
 // Objects
-	FC_SimpleTasker tasker;
-
-	FC_MainCommunication com(&Serial, 100);
-
-	LiquidCrystal_I2C lcd(config::LCD_ADDRESS, 16, 2);
-	
-	SoftwareSerial bluetoothSoftwareSerial(config::pin.btRX, config::pin.btTX); // RX, TX
-	
-	// control sticks
-	FC_ControlStick thrStick;
-	FC_ControlStick rotStick;
-	FC_ControlStick TB_Stick;
-	FC_ControlStick LR_Stick;
+extern FC_SimpleTasker tasker;
+extern FC_MainCommunication com;
+extern LiquidCrystal_I2C lcd;
+extern LcdHandler display;
+extern SoftwareSerial bluetoothSoftwareSerial;
+extern AndroidCommunication androidCom;
+extern GestureRecognizer gestureRecognizer;
 
 
+// control sticks
+extern FC_ControlStick thrStick;
+extern FC_ControlStick rotStick;
+extern FC_ControlStick TB_Stick;
+extern FC_ControlStick LR_Stick;
 
 
 // Other types
-	enum stateType {disarmed, arming1, arming2, armed};
-	stateType state = disarmed;
-	
-	
-	
-// Bluetooth app received data
-	bool btNeedToUpdatePIDFlag = false; // if this is true - need to send new PID data to the drone
-	// RESET THIS TO false AFTER SENDING TO THE DRONE
-	
-	uint8_t btControllerID;
-	float btPID_P;
-	float btPID_I;
-	uint8_t btPID_Imax;
-	float btPID_D;
+extern armStateType armState; // old "state"
+
+
+struct
+{
+	// Bluetooth app received data
+	uint8_t controllerID;
+	float PID_P;
+	float PID_I;
+	uint8_t PID_Imax;
+	float PID_D;
+} androidData;
 
 
 

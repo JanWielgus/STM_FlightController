@@ -70,7 +70,7 @@ bool FC_MainCommunication::receiveAndUnpackData()
 		// Check if this packet is the specific one (TYPE1)
 		if (checkReceivedDataPacket(receivedPacketTypes.TYPE1_ID, receivedPacketTypes.TYPE1_SIZE, true))
 		{
-			// vlotage 6 cells
+			// voltage 6 cells
 			data.received.tilt_TB = dpReceived.buffer[8];
 			data.received.tilt_LR = dpReceived.buffer[9];
 			data.received.heading.byteArr()[0] = dpReceived.buffer[10];

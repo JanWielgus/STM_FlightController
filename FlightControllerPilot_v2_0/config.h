@@ -37,11 +37,11 @@ namespace config
 		// bluetooth
 		uint8_t btRX = 10;
 		uint8_t btTX = 9;
-	} pin;
+	} const pin;
 	
 	
 	// Addresses
-	uint8_t LCD_ADDRESS = 0x3F;
+	const uint8_t LCD_ADDRESS = 0x3F;
 	
 	
 	// Stick default border values (maximum tilts)
@@ -65,7 +65,7 @@ namespace config
 		uint16_t LR_Max = 980;
 	} sticksCalibVal;
 	
-	uint8_t stickDeadZone = 20;
+	const uint8_t stickDeadZone = 20;
 }
 
 
