@@ -4,10 +4,12 @@
 */
 
 #include <SoftwareSerial.h>
+#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <FC_Tasker.h>
 #include <FC_Communication_Base.h>
 #include <FC_CustomDataTypes.h>
+#include <FC_EVA_Filter.h>
 #include "Storage.h"
 #include "config.h"
 #include "LCDhandler.h"

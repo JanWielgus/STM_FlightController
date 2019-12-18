@@ -3,9 +3,22 @@
     Created:	30/05/2019 22:12:18
     Author:     Jan Wielgus
 	
-	Source code of second version of the FlightController on the STM BluePill microcontroller.
+	Source code of second version of the FlightController on the STM BluePill micro-controller.
 */
 
+
+#include <FC_Tasker.h>
+#include <MyPID.h>
+#include <FC_Communication_Base.h>
+#include <FC_MPU6050Lib.h>
+#include <FC_HMC5883L_Lib.h>
+#include <FC_MS5611_Lib.h>
+#include <FC_EVA_Filter.h>
+#include <FC_Motors.h>
+#include <Wire.h>
+#include <FC_CustomDataTypes.h>
+#include <FC_TaskPlanner.h>
+#include <FC_AverageFilter.h>
 
 #include "Storage.h"
 #include "FlightModes.h"
@@ -103,7 +116,7 @@ void setup()
 	tasker.addFunction(readCompass, 13340L, 492);              // 75Hz  (tested duration)
 	//tasker.addFunction(updateMainCommunication, 20000L, 229);  // 50Hz (tested duration)
 	tasker.addFunction(updateSending, 22000L, 1);              // ~45Hz
-	tasker.addFunction(updateReceiving, 7142L, 1);             // 140Hz
+	tasker.addFunction(updateReceiving, 7142L, 1);             // 140Hz      (! UPDATE the body if frequency chanded !!!)
 	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
 	tasker.addFunction(updatePressureAndAltHold, 9090, 1);     // 110Hz
 	//tasker.scheduleTasks();
@@ -121,7 +134,7 @@ void setup()
 	}
 	
 	mpu.setCalculationsFrequency(250);
-	mpu.setGyroFusionMultiplier(0.996); // CHANGED TO TEST
+	mpu.setGyroFusionMultiplier(0.999); // CHANGED TO TEST
 	
 	
 	
@@ -139,7 +152,7 @@ void setup()
 	Serial.print(" Z: ");
 	Serial.print(mpu.getAccelerometerCalibrationValues().z);
 	Serial.println();*/
-	mpu.setAccelerometerCalibrationValues(397, 99, -227);
+	mpu.setAccelerometerCalibrationValues(78, -3, -243);
 	
 	
 	/*
@@ -151,7 +164,7 @@ void setup()
 	Serial.print(" Z: ");
 	Serial.print(mpu.getGyroCalibrationValues().z);
 	Serial.println();*/
-	mpu.setGyroCalibrationValues(-104, -159, -9);
+	mpu.setGyroCalibrationValues(-108, -156, 0);
 	
 	Serial.println(" OK");
 	
@@ -173,6 +186,17 @@ void setup()
 	
 	compass.setCompassDeclination(5.0);
 	Serial.println("compass initialized");
+
+
+	// MS5611
+	while (!baro.initialize())
+	{
+		// If gets stuck here, there is an error
+		Serial.println("cannot initialize baro");
+		delay(200);
+	}
+
+	Serial.println("baro initialized");
 	
 	
 	// Default calibration values
@@ -201,6 +225,7 @@ void setup()
 void loop()
 {
 	tasker.runTasker();
+	baro.runBarometer(); // this method uses planned tasks which need to be checked as fast as possible
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -239,6 +264,13 @@ void stabilize()
 {
 	counter++;
 	
+
+	// Cut-off all motors if the angle is too high
+	using namespace config;
+	if (angle.x > CutOffAngle || angle.x < -CutOffAngle ||
+		angle.y > CutOffAngle || angle.y < -CutOffAngle)
+		motors.setMotorState(false);
+
 	
 	extrapolateSticks();
 	fModes::runVirtualPilot();
@@ -257,30 +289,54 @@ void stabilize()
 
 void updatePressureAndAltHold()
 {
+	// If altHold flight mode is enabled (this flag is set in the flight modes header file
 	if (needToUpdateAltHoldPID_flag)
 	{
-		int16_t pidAltHoldVal;
-		pidAltHoldVal = altHoldPID.updateController(/* ERROR */);
+		// calculate pressureToHold
+		int16_t rawAltHoldThrottle = com.received.steer.throttle - altHoldBaseThrottle;
+		// integrate the stick value only if 
+		if (com.connectionStability() > 1)
+		{
+			// if raw throttle stick is out of the dead zone, integrate pressureToHold
+			// !!  1/100Hz ~= 0.009   !!!  ONLY IF 110Hz  !!!
+			if (rawAltHoldThrottle > config::AltHoldStickDeadZone)
+				pressureToHold -= ((float)(rawAltHoldThrottle - config::AltHoldStickDeadZone) / 50.0f) * 0.009f;
+			else if (rawAltHoldThrottle < -config::AltHoldStickDeadZone)
+				pressureToHold -= ((float)(rawAltHoldThrottle + config::AltHoldStickDeadZone) / 50.0f) * 0.009f;
+		}
+
+
+		float altError = baro.getSmoothPressure() - pressureToHold;
+		pidAltHoldVal = altHoldPID.updateController(altError);
+
 		// keep pid value in a border
 		pidAltHoldVal = constrain(pidAltHoldVal, -config::AltHoldMaxAddedThrottle, config::AltHoldMaxAddedThrottle);
 
 		// apply pid results to the virtual throttle stick
-		fModes::vSticks.throttle = config::ZeroG_throttle + pidAltHoldVal;
-		
-		// other pressure actions if needed
+		int16_t throttleStickSigned = altHoldBaseThrottle + pidAltHoldVal;
+		fModes::vSticks.throttle = constrain(throttleStickSigned,
+											config::AltHoldMinTotalFinal,
+											config::AltHoldMaxTotalFinal);
 	}
 }
 
 
 void updateSending()
 {
-	// send proper data packet: TYPE1-full, TYPE2-basic
+	// Pack all data to the toSend variables
 	com.toSend.tilt_TB = (int8_t)angle.x;
 	com.toSend.tilt_LR = (int8_t)angle.y;
-	//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE);
-	com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE);
+	com.toSend.altitude = (int16_t)(baro.getSmoothPressure() - 90000);
+
+
+	// Send proper data packet: TYPE1-full, TYPE2-basic
+	//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE); // basic
+	com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE); // full
 	
-	/*
+
+
+
+	/* /////////////////////////
 	Serial.print("H: ");
 	Serial.print(heading);
 	Serial.println();
@@ -396,8 +452,9 @@ void updateReceiving()
 	// Integrate yaw stick value only if connection is stable
 	if (com.connectionStability() > 1)
 	{
-		//headingToHold += ((float)com.received.steer.rotate * 0.04); // if 25Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
-		headingToHold += ((float)(com.received.steer.rotate/2) * 0.0125); // if 80Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
+		//headingToHold += ((float)com.received.steer.rotate * 0.04f); // if 25Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
+		//headingToHold += ((float)(com.received.steer.rotate/2) * 0.0125f); // if 80Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
+		headingToHold += ((float)(com.received.steer.rotate / 2) * 0.0071f); // if 140Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
 	}
 	
 	

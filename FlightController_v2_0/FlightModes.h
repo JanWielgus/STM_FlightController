@@ -27,7 +27,7 @@ namespace fModes
 		int16Byte LR;
 	} vSticks; // virtual sticks
 	
-	uint8_t flightMode = 0;
+	FlightMode flightMode = STABILIZE;
 	
 	
 	void runVirtualPilot(); // !!! run this in the same frequency as stabilize() (can be inside)
@@ -43,19 +43,19 @@ namespace fModes
 		detectFlightModeChange();
 		
 		
-		if (flightMode <= 2)
+		if (flightMode <= POS_HOLD)
 		{
 			// copy raw stick variables for proper flight modes
 			switch (flightMode)
 			{
-			case 0:
+			case STABILIZE:
 				vSticks.throttle = com.received.steer.throttle;
 				// do not break
-			case 1:
+			case ALT_HOLD:
 				vSticks.TB = extrapolatedTBstick;
 				vSticks.LR = extrapolatedLRstick;
 				// do not break
-			case 2:
+			case POS_HOLD:
 				vSticks.rotate = com.received.steer.rotate;
 			}
 			
@@ -63,25 +63,23 @@ namespace fModes
 			// set up the flight modes
 			switch (flightMode)
 			{
-			/* by now, for this flight modes there is no need to do anything
-			case 2: // posHold
+			case POS_HOLD:
 				// position hold flight mode code
 
-				// CALCULATE THERE vStick.TB and vStick.LR
+				// CALCULATE THERE lat to hold and long to hold
+				// create pid controller in the tasker function in ino file
 				
 				// do not break to keep altitude and stabilize
-				
-				
-			case 1: // altHold
+
+			case ALT_HOLD:
 				// altHold pid controller is updated in the ino file in 110Hz
 				// flag to update is changed when setting the new flight mode
 
-				// CALCULATE THERE vStick.throttle
+				// pressureToHold is calculated in function in the ino file
 				
 				// do not break to keep stabilize
-			*/
 				
-			case 0: // stabilize
+			case STABILIZE:
 				// leveling PID
 				pidXval = levelXpid.updateController(angle.x + (vSticks.TB/10)) + 0.5;
 				pidYval = levelYpid.updateController(angle.y - (vSticks.LR/10)) + 0.5;
@@ -116,33 +114,35 @@ namespace fModes
 	
 	void detectFlightModeChange()
 	{
-		static uint8_t lastFlightMode = 0; // to enable setting fMode 0 for the first times
+		static FlightMode lastFlightMode = STABILIZE; // to enable setting fMode 0 for the first times
 		
 		if (com.received.flightMode == lastFlightMode) // if flight mode has not changed then do nothing
 			return;
 		
-		if (com.received.flightMode <= 2) // other flight modes will be handled in a different way
+		if (com.received.flightMode <= POS_HOLD) // other flight modes will be handled in a different way
 		{
-			flightMode = com.received.flightMode;
+			flightMode = (FlightMode)com.received.flightMode;
 			
 			switch (flightMode)
 			{
-				case 2: // posHold
+				case POS_HOLD:
 					// RESET THE POS HOLD PID CONTROLLER
 				
-					if (lastFlightMode == 1) // break if changing from altHold to posHold (do not need to reset altHold controller)
+					if (lastFlightMode == ALT_HOLD) // break if changing from altHold to posHold (do not need to reset altHold controller)
 						break;
 				
 				
-				case 1: // altHold
+				case ALT_HOLD:
 					altHoldPID.resetController();
+					pressureToHold = baro.getSmoothPressure(); // reset pressureToHold value
+					altHoldBaseThrottle = com.received.steer.throttle; // altHold base throttle is set to current throttle value
 					needToUpdateAltHoldPID_flag = true;
 				
 					// do other necessary actions
 					break;
 				
 				
-				case 0:
+				case STABILIZE:
 					needToUpdateAltHoldPID_flag = false;
 			}
 			
