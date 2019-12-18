@@ -45,11 +45,13 @@ uint16_t temp_counter = 0;
 
 
 
-
-
-
 namespace lcdH // LCD handler
-{	
+{
+	void initLCD();
+	void updateLCD();
+	char stickToChar(int16_t value, bool horizontal=true);
+
+
 	void initLCD()
 	{
 		lcd.init(); // Wire.begin() is here
@@ -68,12 +70,21 @@ namespace lcdH // LCD handler
 		// Print the throttle value
 		lcd.clear();
 		//lcd.setCursor(0, 0);
-		lcd.print("Thr: ");
+
+		// Print sticks
 		lcd.print(thrStick.getValue());
+		lcd.setCursor(4, 0);
+		lcd.print(stickToChar(rotStick.getValue()));
+		lcd.print(stickToChar(TB_Stick.getValue(), false));
+		lcd.print(stickToChar(LR_Stick.getValue()));
+
+		// print drone angle
+		lcd.setCursor(8, 0);
+		lcd.print(com.received.tilt_TB);
 		
 		// print the state
 		lcd.setCursor(0, 1);
-		lcd.print("state: ");
+		lcd.print("s:");
 		switch (state)
 		{
 			case disarmed:
@@ -89,12 +100,40 @@ namespace lcdH // LCD handler
 			lcd.print("arm");
 			break;
 		}
+
+		lcd.setCursor(7, 1);
+		lcd.print(com.received.altitude);
 		
-		lcd.setCursor(10, 0);
+		lcd.setCursor(12, 0);
 		//lcd.print(com.connectionStability());
 		//lcd.print(temp_counter);
 		//lcd.print(MesasureTime::duration());
 		lcd.print(btPID_P);
+
+		lcd.setCursor(15, 1);
+		lcd.print(digitalRead(config::pin.rightSwitch));
+	}
+
+
+	// Change stick value to the '\' or '|' or '/'
+	char stickToChar(int16_t value, bool horizontal)
+	{
+		if (horizontal)
+		{
+			if (value > 0)
+				return '>';
+			if (value < 0)
+				return '<';
+			return '|';
+		}
+		else
+		{
+			if (value > 0)
+				return '^';
+			if (value < 0)
+				return 'v';
+			return '-';
+		}
 	}
 }
 
