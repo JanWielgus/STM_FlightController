@@ -117,14 +117,14 @@ namespace TaskerFunction
 
 	void box_updateDisplayFast()
 	{
-		display.updateLCD_fastParts();
+		display.updateFastParts();
 	}
 
 
 
 	void box_updateDisplaySlow()
 	{
-		display.updateLCD_slowParts();
+		display.updateSlowParts();
 	}
 
 
