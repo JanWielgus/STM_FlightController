@@ -25,6 +25,11 @@
 #include "TaskerFunctions.h"
 #include "DebugSystem.h"
 #include "config.h"
+#include "VirtualPilot.h"
+#include "FlightMode.h"
+#include "StabilizeFlightMode.h"
+#include "AltHoldFlightMode.h"
+#include "PosHoldFlightMode.h"
 
 
 
