@@ -48,7 +48,7 @@ private:
 
 	char stickValueToSymbolHorizontal(int16_t value);
 	char stickValueToSymbolVertical(int16_t value);
-	void intToSizedString(String* outString, int16_t value, uint8_t length); // eg. value = 15, length = 4  ->  output: "  15"
+	void intToSizedString(String& outString, int16_t value, uint8_t length); // eg. value = 15, length = 4  ->  output: "  15"
 
 	String fastShowLine; // string used for the fast show values with right alignment
 };

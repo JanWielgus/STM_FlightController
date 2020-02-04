@@ -45,8 +45,8 @@ void LcdHandler::updateNonStaticParts()
 void LcdHandler::updateFastParts()
 {
 	// Throttle
-	intToSizedString(&fastShowLine, thrStick.getValue(), 4);
-	print(fastShowLine, 4, 0);
+	intToSizedString(fastShowLine, thrStick.getValue(), 4);
+	print(fastShowLine, 0, 0);
 
 	// Other sticks
 	lcd.setCursor(4, 0);
@@ -137,9 +137,9 @@ char LcdHandler::stickValueToSymbolVertical(int16_t value)
 
 
 // Int to right aligned string
-void LcdHandler::intToSizedString(String* outString, int16_t value, uint8_t length)
+void LcdHandler::intToSizedString(String& outString, int16_t value, uint8_t length)
 {
-	*outString = String(value);
-	while ((*outString).length() < length)
-		(*outString) = " " + (*outString);
+	outString = String(value);
+	while ((outString).length() < length)
+		(outString) = " " + (outString);
 }
