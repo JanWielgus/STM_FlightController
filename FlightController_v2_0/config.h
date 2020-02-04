@@ -15,32 +15,6 @@
 
 namespace config
 {
-	// pins
-	struct 
-	{
-		/* not used in the code
-		// motors
-		const uint8_t mTL = PA6;
-		const uint8_t mTR = PA7;
-		const uint8_t mBR = PB0;
-		const uint8_t mBL = PB1;
-		*/
-		
-		
-		// diodes
-		const uint8_t redDiode = PB15;
-		const uint8_t blueDiode = PB14;
-		
-		
-		// radio module
-		const uint8_t m0pin = PA1;
-		const uint8_t m1pin = PA0;
-		const uint8_t aux = PB5;
-		
-		
-	} pin;
-	
-	
 	// mpu6050
 	struct 
 	{
@@ -63,12 +37,15 @@ namespace config
 
 
 	// flight modes config values
-	//const uint16_t ZeroG_throttle = 500; // throttle value when motors power compensate the gravity force
-	const uint8_t AltHoldMaxAddedThrottle = 150;
-	const uint16_t AltHoldMaxTotalFinal = 720;
-	const uint16_t AltHoldMinTotalFinal = 20;
-	const uint8_t AltHoldStickDeadZone = 90; // value from the stick center which cause altitude change
-	const uint8_t PosHoldStickDeadZone = 60; // value from the stick center which cause position change
+	struct
+	{
+		//const uint16_t ZeroG_throttle = 500; // throttle value when motors power compensate the gravity force
+		uint8_t AltHoldMaxAddedThrottle = 150;
+		uint16_t AltHoldMaxTotalFinal = 720;
+		uint16_t AltHoldMinTotalFinal = 20;
+		uint8_t AltHoldStickDeadZone = 90; // value from the stick center which cause altitude change
+		uint8_t PosHoldStickDeadZone = 60; // value from the stick center which cause position change
+	} const flModeConfig; // flight mode config
 
 
 	// PID default values
@@ -79,6 +56,7 @@ namespace config
 		uint8_t imax;
 		float d;
 	};
+
 	struct
 	{
 		const pidSet leveling = { 2.14f, 2.5f, 110, 0.64f };
@@ -90,6 +68,33 @@ namespace config
 	// other
 	const uint8_t ZeroActionThrottle = 20;
 	const float CutOffAngle = 46; // Angle from which motors are immediately disabled
+
+
+
+	// pins
+	struct
+	{
+		/* not used in the code
+		// motors
+		uint8_t mTL = PA6;
+		uint8_t mTR = PA7;
+		uint8_t mBR = PB0;
+		uint8_t mBL = PB1;
+		*/
+
+
+		// diodes
+		uint8_t redDiode = PB15;
+		uint8_t blueDiode = PB14;
+
+
+		// radio module
+		uint8_t m0pin = PA1;
+		uint8_t m1pin = PA0;
+		uint8_t aux = PB5;
+
+
+	} const pin;
 }
 
 

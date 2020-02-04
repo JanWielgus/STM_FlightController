@@ -1,5 +1,6 @@
 #include "LCDhandler.h"
 #include "Storage.h"
+#include "config.h"
 
 
 
@@ -18,7 +19,7 @@ void LcdHandler::initLCD()
 	lcd.print("FC Pilot");
 	lcd.setCursor(0, 1);
 	lcd.print("v 2.0");
-	delay(700);
+	delay(400);
 	lcd.clear();
 
 	showStaticParts();
@@ -29,36 +30,39 @@ void LcdHandler::showStaticParts()
 {
 	lcd.clear();
 
-	lcd.setCursor(0, 0);
-	lcd.print("Thr: ");
-
 	lcd.setCursor(0, 1);
-	lcd.print("State: ");
+	lcd.print("S:");
 }
 
 
-void LcdHandler::updateLCD_nonStaticParts()
+void LcdHandler::updateNonStaticParts()
 {
-	updateLCD_fastParts();
-	updateLCD_slowParts();
+	updateFastParts();
+	updateSlowParts();
 }
 
 
-void LcdHandler::updateLCD_fastParts()
+void LcdHandler::updateFastParts()
 {
-	String toShow;
+	// Throttle
+	intToSizedString(fastShowLine, thrStick.getValue(), 4);
+	print(fastShowLine, 0, 0);
 
-	toShow = String(thrStick.getValue());
-	while (toShow.length() < 4)
-		toShow = " " + toShow;
-	print(toShow, 4, 0);
+	// Other sticks
+	lcd.setCursor(4, 0);
+	lcd.print(stickValueToSymbolHorizontal(rotStick.getValue()));
+	lcd.print(stickValueToSymbolVertical(TB_Stick.getValue()));
+	lcd.print(stickValueToSymbolHorizontal(LR_Stick.getValue()));
+	
+	// Altitude
+	print(com.received.altitude, 8, 0);
 }
 
 
-void LcdHandler::updateLCD_slowParts()
+void LcdHandler::updateSlowParts()
 {
 	// print the state
-	lcd.setCursor(7, 1);
+	lcd.setCursor(2, 1);
 	switch (armState)
 	{
 	case disarmed:
@@ -78,16 +82,64 @@ void LcdHandler::updateLCD_slowParts()
 
 	// Other slow parts
 
-	lcd.setCursor(10, 0);
-	//lcd.print(com.connectionStability());
-	//lcd.print(temp_counter);
-	//lcd.print(MesasureTime::duration());
-	lcd.print(androidData.PID_P);
+	// Drone angle
+	print(com.received.tilt_TB, 8, 0);
+
+	// P PID value from the android
+	print(androidData.PID_P, 12, 0);
+
+	// Right switch
+	bool swState = digitalRead(config::pin.rightSwitch);
+	print(swState, 15, 1);
 }
 
-
+/*
 void LcdHandler::print(const String& str, uint8_t col, uint8_t row)
 {
 	lcd.setCursor(col, row);
 	lcd.print(str);
+}
+
+
+void LcdHandler::print(char symbol, uint8_t col, uint8_t row)
+{
+	lcd.setCursor(col, row);
+	lcd.print
+}*/
+
+
+template <class T>
+void LcdHandler::print(T toPrint, uint8_t col, uint8_t row)
+{
+	lcd.setCursor(col, row);
+	lcd.print(toPrint);
+}
+
+
+char LcdHandler::stickValueToSymbolHorizontal(int16_t value)
+{
+	if (value > 0)
+		return '>';
+	if (value < 0)
+		return '<';
+	return '|';
+}
+
+
+char LcdHandler::stickValueToSymbolVertical(int16_t value)
+{
+	if (value > 0)
+		return '^';
+	if (value < 0)
+		return 'v';
+	return '-';
+}
+
+
+// Int to right aligned string
+void LcdHandler::intToSizedString(String& outString, int16_t value, uint8_t length)
+{
+	outString = String(value);
+	while ((outString).length() < length)
+		(outString) = " " + (outString);
 }

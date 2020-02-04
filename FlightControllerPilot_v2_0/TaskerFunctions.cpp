@@ -18,7 +18,7 @@ void addTaskerFunctionsToTasker()
 
 	// Display
 	tasker.addFunction(box_updateDisplayFast, 100000L, 2002); // 10Hz (tested duration ? not sure if is real)
-	tasker.addFunction(box_updateDisplaySlow, 333333L, 0);
+	tasker.addFunction(box_updateDisplaySlow, 333333L, 0); // 3Hz
 
 	// Others
 	tasker.addFunction(updateControlDiode, 1000000L, 5); // blink built in diode every second
@@ -117,14 +117,14 @@ namespace TaskerFunction
 
 	void box_updateDisplayFast()
 	{
-		display.updateLCD_fastParts();
+		display.updateFastParts();
 	}
 
 
 
 	void box_updateDisplaySlow()
 	{
-		display.updateLCD_slowParts();
+		display.updateSlowParts();
 	}
 
 
