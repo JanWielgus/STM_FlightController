@@ -17,7 +17,8 @@ void addTaskerFunctionsToTasker()
 	tasker.addFunction(updateSending, 22000L, 1);              // ~45Hz
 	tasker.addFunction(updateReceiving, 7142L, 1);             // 140Hz      (! UPDATE the body if frequency chanded !!!)
 	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
-	tasker.addFunction(updatePressureAndAltHold, 9090, 1);     // 110Hz
+	//tasker.addFunction(updatePressureAndAltHold, 9090, 1);     // 110Hz
+
 	//tasker.scheduleTasks();
 }
 
@@ -104,6 +105,7 @@ namespace TaskerFunction
 
 
 
+		/* OVERRIDE THAT CODE WITH THE NEW FLIGHT MODES 
 
 		fModes::runVirtualPilot();
 
@@ -116,8 +118,21 @@ namespace TaskerFunction
 		motors.setOnBR((int16_t)(fModes::vSticks.throttle * 1.5f) - pidXval - pidYval - pidYawVal); // TL (damaged)
 		motors.setOnBL(fModes::vSticks.throttle - pidXval + pidYval + pidYawVal); // TR
 		motors.forceMotorsExecution();
+
+		*/
+
+
 	}
 
+
+
+
+
+
+	/*
+
+	!!!
+	THIS HAVE TO BE IMPLEMENTED IN THE NEW FLIGHT MODE CLASSES
 
 
 	void updatePressureAndAltHold()
@@ -142,18 +157,26 @@ namespace TaskerFunction
 
 
 			float altError = baro.getSmoothPressure() - pressureToHold;
-			pidAltHoldVal = altHoldPID.updateController(altError);
+			lastPID_AltHold_value = altHoldPID.updateController(altError);
 
 			// keep pid value in a border
-			pidAltHoldVal = constrain(pidAltHoldVal, -flModeConfig.AltHoldMaxAddedThrottle, flModeConfig.AltHoldMaxAddedThrottle);
+			lastPID_AltHold_value = constrain(lastPID_AltHold_value, -flModeConfig.AltHoldMaxAddedThrottle, flModeConfig.AltHoldMaxAddedThrottle);
 
 			// apply pid results to the virtual throttle stick
-			int16_t throttleStickSigned = altHoldBaseThrottle + pidAltHoldVal;
+			int16_t throttleStickSigned = altHoldBaseThrottle + lastPID_AltHold_value;
 			fModes::vSticks.throttle = constrain(throttleStickSigned,
 				flModeConfig.AltHoldMinTotalFinal,
 				flModeConfig.AltHoldMaxTotalFinal);
 		}
 	}
+
+
+
+	*/
+
+
+
+
 
 
 

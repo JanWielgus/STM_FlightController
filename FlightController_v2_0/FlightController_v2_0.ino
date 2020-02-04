@@ -20,10 +20,11 @@
 #include <FC_TaskPlanner.h>
 #include <FC_AverageFilter.h>
 #include "Storage.h"
-#include "FlightModes.h"
+//#include "FlightModes.h" // THIS FILE IS NO LONGER USED !!!
 #include "MeasureTime.h"
 #include "TaskerFunctions.h"
 #include "DebugSystem.h"
+#include "config.h"
 
 
 

@@ -15,7 +15,7 @@ namespace TaskerFunction
 	void readXY_angles();
 	void readCompass();
 	void stabilize();
-	void updatePressureAndAltHold(); // update altHold PID if needed and do other baro stuff
+	//void updatePressureAndAltHold(); // update altHold PID if needed and do other baro stuff
 
 	// Communication
 	void updateSending();

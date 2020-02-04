@@ -31,7 +31,8 @@ typedef int8 int8_t;
 typedef uint16 uint16_t;
 typedef int16 int16_t;
 
-enum FlightMode { STABILIZE = 0, ALT_HOLD = 1, POS_HOLD = 2 }; // list of all flight modes (special flight modes in the different emum)
+enum FlightMode { STABILIZE = 0, ALT_HOLD = 1, POS_HOLD = 2 }; // list of all flight modes
+// Do not use separate flight modes type. ADD ALL FLIGHT MODES TO THE ENUM ABOVE !!!
 //enum SpecialFlightModes {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
 
 enum BaudRates { BAUD_9600 = 9600, BAUD_19200 = 19200, BAUD_38400 = 38400, BAUD_57600 = 57600, BAUD_115200 = 115200};
@@ -41,7 +42,6 @@ enum BaudRates { BAUD_9600 = 9600, BAUD_19200 = 19200, BAUD_38400 = 38400, BAUD_
 struct
 {
 	bool needToExtrapolateStickVlaues = false;
-	bool needToUpdateAltHoldPID = false;
 } flags;
 
 
@@ -53,6 +53,7 @@ extern FC_MPU6050Lib mpu;
 extern FC_HMC5883L_Lib compass;
 extern FC_Motors motors;
 extern DebugSystem debug;
+
 
 // PID objects
 extern MyPID levelXpid;
@@ -78,12 +79,11 @@ extern FC_EVA_Filter lrFilter;
 
 
 // Flight modes
-extern int16_t pidXval;
-extern int16_t pidYval;
-extern int16_t pidYawVal;
-extern int16_t pidAltHoldVal;
+extern int16_t lastPID_LevelX_value;
+extern int16_t lastPID_LevelY_value;
+extern int16_t lastPID_Yaw_value;
+extern int16_t lastPID_AltHold_value;
 
-extern uint16_t altHoldBaseThrottle;
 
 
 #endif /* STORAGE_H_ */

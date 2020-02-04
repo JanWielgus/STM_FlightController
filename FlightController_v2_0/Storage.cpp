@@ -16,6 +16,8 @@ DebugSystem debug(&Serial);
 
 // PID objects
 static const float calculationsDeltaTime = 0.004f; //  = 1/250
+
+
 MyPID levelXpid(calculationsDeltaTime, defPID.leveling.p, defPID.leveling.i, defPID.leveling.d, defPID.leveling.imax);
 MyPID levelYpid(calculationsDeltaTime, defPID.leveling.p, defPID.leveling.i, defPID.leveling.d, defPID.leveling.imax);
 MyPID yawPID(calculationsDeltaTime, defPID.yaw.p, defPID.yaw.i, defPID.yaw.d, defPID.yaw.imax);
@@ -39,12 +41,11 @@ FC_EVA_Filter tbFilter(0.4);
 FC_EVA_Filter lrFilter(0.4);
 
 
-// Flight modes
-// PID controllers results
-int16_t pidXval;
-int16_t pidYval;
-int16_t pidYawVal;
-int16_t pidAltHoldVal;
 
-uint16_t altHoldBaseThrottle; // throttle value in which drone should keep its own altitude
+// PID controllers results
+int16_t lastPID_LevelX_value;
+int16_t lastPID_LevelY_value;
+int16_t lastPID_Yaw_value;
+int16_t lastPID_AltHold_value;
+
 
