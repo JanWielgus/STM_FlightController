@@ -31,9 +31,9 @@ typedef int8 int8_t;
 typedef uint16 uint16_t;
 typedef int16 int16_t;
 
-enum FlightMode { STABILIZE = 0, ALT_HOLD = 1, POS_HOLD = 2 }; // list of all flight modes
+enum FlightModeType { STABILIZE = 0, ALT_HOLD = 1, POS_HOLD = 2 }; // list of all flight modes
 // Do not use separate flight modes type. ADD ALL FLIGHT MODES TO THE ENUM ABOVE !!!
-//enum SpecialFlightModes {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
+// {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
 
 enum BaudRates { BAUD_9600 = 9600, BAUD_19200 = 19200, BAUD_38400 = 38400, BAUD_57600 = 57600, BAUD_115200 = 115200};
 

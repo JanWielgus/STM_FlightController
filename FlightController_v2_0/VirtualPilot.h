@@ -9,6 +9,7 @@
 class VirtualPilot
 {
 public:
+	VirtualPilot();
 	// public methods
 
 

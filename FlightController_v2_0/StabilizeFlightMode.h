@@ -10,9 +10,17 @@
 class StabilizeFlightMode: public FlightMode
 {
 public:
-	StabilizeFlightMode(MyPID* levelX_controller, MyPID* levelY_controller);
+	StabilizeFlightMode();
 	void execute();
 	void reset();
+
+
+private:
+	// PID controllers objects are created inside the Storage files
+	// Use that objects. This will speed up the program and eliminate
+	// multiple copies of objects and addidional pointers to that objects
+
+	float headingError;
 };
 
 #endif

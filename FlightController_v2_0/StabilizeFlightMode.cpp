@@ -6,7 +6,7 @@
 #include "Storage.h"
 
 
-StabilizeFlightMode::StabilizeFlightMode(MyPID* levelX_controller, MyPID* levelY_controller)
+StabilizeFlightMode::StabilizeFlightMode()
 {
 
 }

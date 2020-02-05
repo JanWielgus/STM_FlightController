@@ -15,6 +15,9 @@
 
 namespace config
 {
+	const float calculationsDeltaTime = 0.004f; //  = 1/250  (250Hz)
+
+
 	// mpu6050
 	struct 
 	{
