@@ -25,64 +25,75 @@
 #include "DebugSystem.h"
 
 
-// Only for STM32 (maybe not necessary)
-typedef uint8 uint8_t;
-typedef int8 int8_t;
-typedef uint16 uint16_t;
-typedef int16 int16_t;
 
-enum FlightModeType { STABILIZE = 0, ALT_HOLD = 1, POS_HOLD = 2 }; // list of all flight modes
-// Do not use separate flight modes type. ADD ALL FLIGHT MODES TO THE ENUM ABOVE !!!
-// {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
+// New data types
 
-enum BaudRates { BAUD_9600 = 9600, BAUD_19200 = 19200, BAUD_38400 = 38400, BAUD_57600 = 57600, BAUD_115200 = 115200};
+    // Only for STM32 (maybe not necessary)
+    typedef uint8 uint8_t;
+    typedef int8 int8_t;
+    typedef uint16 uint16_t;
+    typedef int16 int16_t;
+
+    enum FlightModeType { STABILIZE = 0, ALT_HOLD = 1, POS_HOLD = 2 }; // list of all flight modes
+    // Do not use separate flight modes type. ADD ALL FLIGHT MODES TO THE ENUM ABOVE !!!
+    // {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
+
+    enum BaudRates { BAUD_9600 = 9600, BAUD_19200 = 19200, BAUD_38400 = 38400, BAUD_57600 = 57600, BAUD_115200 = 115200};
 
 
-// Flags
-struct
+
+
+// Variables and changing state stuff
+
+namespace Storage
 {
-	bool needToExtrapolateStickVlaues = false;
-} flags;
+    // Flags
+    struct
+    {
+        bool needToExtrapolateStickVlaues = false;
+    } flags;
 
 
 
-// Objects
-extern FC_SimpleTasker tasker;
-extern FC_MainCommunication com;
-extern FC_MPU6050Lib mpu;
-extern FC_HMC5883L_Lib compass;
-extern FC_Motors motors;
-extern DebugSystem debug;
+    // Objects
+    extern FC_SimpleTasker tasker;
+    extern FC_MainCommunication com;
+    extern FC_MPU6050Lib mpu;
+    extern FC_HMC5883L_Lib compass;
+    extern FC_Motors motors;
+    extern DebugSystem debug;
 
 
-// PID objects
-extern MyPID levelXpid;
-extern MyPID levelYpid;
-extern MyPID yawPID;
-extern MyPID altHoldPID;
+    // PID objects
+    extern MyPID levelXpid;
+    extern MyPID levelYpid;
+    extern MyPID yawPID;
+    extern MyPID altHoldPID;
 
 
-// Variables
-extern FC_MPU6050Lib::vector3Float angle;
-extern float heading;
-extern float headingToHold;
-extern float pressureToHold;
+    // Variables
+    extern FC_MPU6050Lib::vector3Float angle;
+    extern float heading;
+    extern float headingToHold;
+    extern float pressureToHold;
 
 
-// Extrapolation variables
-extern int16_t previousTBvalue;
-extern int16_t previousLRvalue;
-extern float extrapolatedTBstick;
-extern float extrapolatedLRstick;
-extern FC_EVA_Filter tbFilter;
-extern FC_EVA_Filter lrFilter;
+    // Extrapolation variables
+    extern int16_t previousTBvalue;
+    extern int16_t previousLRvalue;
+    extern float extrapolatedTBstick;
+    extern float extrapolatedLRstick;
+    extern FC_EVA_Filter tbFilter;
+    extern FC_EVA_Filter lrFilter;
 
 
-// Flight modes
-extern int16_t lastPID_LevelX_value;
-extern int16_t lastPID_LevelY_value;
-extern int16_t lastPID_Yaw_value;
-extern int16_t lastPID_AltHold_value;
+    // Flight modes
+    extern int16_t lastPID_LevelX_value;
+    extern int16_t lastPID_LevelY_value;
+    extern int16_t lastPID_Yaw_value;
+    extern int16_t lastPID_AltHold_value;
+}
+
 
 
 

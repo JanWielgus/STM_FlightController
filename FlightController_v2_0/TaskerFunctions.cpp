@@ -3,11 +3,22 @@
 #include "config.h"
 #include "FlightModes.h"
 
+/*
+using Storage::levelXpid;
+using Storage::levelYpid;
+using Storage::yawPID;
+using Storage::altHoldPID;
+using Storage::motors;
+using Storage::com;
+using Storage::flags;*/
+using namespace Storage;
+
 
 
 void addTaskerFunctionsToTasker()
 {
 	using namespace TaskerFunction;
+	using Storage::tasker;
 
 	tasker.addFunction(stabilize, 4000L, 31);                  // 250Hz (duration tested only with leveling)
 	tasker.addFunction(updateControlDiode, 1000000L, 2);       // 1Hz (tested duration)
@@ -218,10 +229,8 @@ namespace TaskerFunction
 	}
 
 
-
 	void updateReceiving()
 	{
-
 		// update temporary previous stick values for extrapolation
 		// those values will be stored if new one will come
 		int16_t tempPreviousTBvalue = com.received.steer.TB;
@@ -260,8 +269,8 @@ namespace TaskerFunction
 			if (com.wasReceived(com.receivedPacketTypes.TYPE4_ID))
 			{
 				// store previous stick values because new ones was received
-				previousTBvalue = tempPreviousTBvalue;
-				previousLRvalue = tempprevioudLRvalue;
+				Storage::previousTBvalue = tempPreviousTBvalue;
+				Storage::previousLRvalue = tempprevioudLRvalue;
 				flags.needToExtrapolateStickVlaues = false;
 			}
 
@@ -314,7 +323,7 @@ namespace TaskerFunction
 		{
 			//headingToHold += ((float)com.received.steer.rotate * 0.04f); // if 25Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
 			//headingToHold += ((float)(com.received.steer.rotate/2) * 0.0125f); // if 80Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
-			headingToHold += ((float)(com.received.steer.rotate / 2) * 0.0071f); // if 140Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
+			Storage::headingToHold += ((float)(com.received.steer.rotate / 2) * 0.0071f); // if 140Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
 		}
 
 

@@ -31,6 +31,8 @@
 #include "AltHoldFlightMode.h"
 #include "PosHoldFlightMode.h"
 
+using namespace Storage;
+
 
 
 
