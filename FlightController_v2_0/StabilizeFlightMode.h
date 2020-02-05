@@ -5,6 +5,7 @@
 
 #include "arduino.h"
 #include <MyPID.h>
+#include "FlightMode.h"
 
 
 class StabilizeFlightMode: public FlightMode
