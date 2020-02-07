@@ -28,12 +28,6 @@
 
 // New data types
 
-    // Only for STM32 (maybe not necessary)
-    typedef uint8 uint8_t;
-    typedef int8 int8_t;
-    typedef uint16 uint16_t;
-    typedef int16 int16_t;
-
     enum FlightModeType { STABILIZE = 0, ALT_HOLD = 1, POS_HOLD = 2 }; // list of all flight modes
     // Do not use separate flight modes type. ADD ALL FLIGHT MODES TO THE ENUM ABOVE !!!
     // {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
