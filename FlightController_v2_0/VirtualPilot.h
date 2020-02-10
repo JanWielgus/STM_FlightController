@@ -9,19 +9,11 @@
 #include "StabilizeFlightMode.h"
 #include "AltHoldFlightMode.h"
 #include "PosHoldFlightMode.h"
-#include "Storage.h"
+#include "CustomDataTypes.h"
 
 
 class VirtualPilot
 {
-private:
-	struct flightModePackageType
-	{
-		FlightMode* objPtr = nullptr; // flight mode pointer
-		uint8_t layer; // layer of the flight mode
-	};
-
-
 public:
 	VirtualPilot();
 	~VirtualPilot();
@@ -29,25 +21,19 @@ public:
 	// public methods
 	void runVirtualPilot();
 	void setFlightMode(FlightModeType flightModeToSet);
+	void addFlightMode(FlightMode* flightModeToAdd);
 	FlightModeType getCurrentFlightMode();
 	
 
 
 private:
-	flightModePackageType* currentFlightMode; // pointer to the current flight mode (abstract type)
+	FlightMode* currentFlightMode; // pointer to the current flight mode (abstract type)
 
 	static const uint8_t amtOfFlightModes = (uint8_t)FlightModeType::LAST_FLIGHT_MODE + 1;
-	flightModePackageType flightModesArray[amtOfFlightModes]; // array of all available flight modes
-
-	// Used flight modes
-	StabilizeFlightMode stabilizeFlightMode = StabilizeFlightMode();
-	AltHoldFlightMode altHoldFlightMode = AltHoldFlightMode(&stabilizeFlightMode);
-	PosHoldFlightMode posHoldFlightMode = PosHoldFlightMode(&altHoldFlightMode);
-	// other flight modes ...
+	FlightMode* flightModesArray[amtOfFlightModes]; // array of all available flight modes pointers
 
 
 private:
-	bool fillFlightModesArrayRow(uint8_t layer, FlightMode* ptr);
 	FlightMode* getFlightModePtrByType(FlightModeType flightModeType);
 };
 

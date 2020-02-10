@@ -30,6 +30,7 @@
 #include "StabilizeFlightMode.h"
 #include "AltHoldFlightMode.h"
 #include "PosHoldFlightMode.h"
+#include "CustomDataTypes.h"
 
 using namespace Storage;
 
@@ -61,6 +62,13 @@ void setup()
 	pinMode(config::pin.aux, INPUT);
 	digitalWrite(config::pin.m0pin, HIGH);
 	digitalWrite(config::pin.m1pin, LOW);
+
+
+	// Set up a virtual pilot
+	virtualPilot.addFlightMode(&stabilizeFlightMode);
+	virtualPilot.addFlightMode(&altHoldFlightMode);
+	virtualPilot.addFlightMode(&posHoldFlightMode);
+
 	
 	
 	// set motors to zero power

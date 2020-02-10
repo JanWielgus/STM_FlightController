@@ -23,6 +23,15 @@ namespace Storage
 	MyPID altHoldPID(calculationsDeltaTime, defPID.altHold.p, defPID.altHold.i, defPID.altHold.d, defPID.altHold.imax);
 
 
+	// Used flight modes
+	StabilizeFlightMode stabilizeFlightMode;
+	AltHoldFlightMode altHoldFlightMode(&stabilizeFlightMode);
+	PosHoldFlightMode posHoldFlightMode(&altHoldFlightMode);
+
+
+	// VirtualPilot object
+	VirtualPilot virtualPilot;
+
 
 	// Variables
 	FC_MPU6050Lib::vector3Float angle = { 0, 0, 0 }; // X and Y angles

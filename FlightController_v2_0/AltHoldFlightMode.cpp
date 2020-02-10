@@ -3,7 +3,8 @@
 // 
 
 #include "AltHoldFlightMode.h"
-#include "Storage.h"
+#include "StabilizeFlightMode.h"
+#include "CustomDataTypes.h"
 
 
 AltHoldFlightMode::AltHoldFlightMode(StabilizeFlightMode* stabilizeFM)

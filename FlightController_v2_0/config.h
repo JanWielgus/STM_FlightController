@@ -13,13 +13,6 @@
 #include <FC_HMC5883L_Lib.h>
 
 
-// Only for STM32 (maybe not necessary)
-typedef uint8 uint8_t;
-typedef int8 int8_t;
-typedef uint16 uint16_t;
-typedef int16 int16_t;
-
-
 namespace config
 {
 	const float calculationsDeltaTime = 0.004f; //  = 1/250  (250Hz)

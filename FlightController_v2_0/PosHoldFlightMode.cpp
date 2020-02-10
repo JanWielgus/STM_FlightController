@@ -3,6 +3,8 @@
 // 
 
 #include "PosHoldFlightMode.h"
+#include "AltHoldFlightMode.h"
+#include "CustomDataTypes.h"
 
 
 PosHoldFlightMode::PosHoldFlightMode(AltHoldFlightMode* altHoldFM)

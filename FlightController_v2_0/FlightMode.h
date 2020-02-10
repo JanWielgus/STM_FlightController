@@ -4,7 +4,7 @@
 #define _FLIGHTMODE_h
 
 #include "arduino.h"
-#include "Storage.h"
+#include "CustomDataTypes.h"
 
 
 class FlightMode

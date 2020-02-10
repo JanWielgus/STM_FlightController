@@ -23,24 +23,11 @@
 #include <FC_EVA_Filter.h>
 #include <FC_Motors.h>
 #include "DebugSystem.h"
-
-
-
-// New data types
-
-    // list of all flight modes
-    enum FlightModeType
-    {
-        STABILIZE,
-        ALT_HOLD,
-        POS_HOLD,
-        LAST_FLIGHT_MODE = POS_HOLD // !!! REMEMBER TO SET THE HIGHEST VALUE !!!
-    };
-    // Do not use separate flight modes type. ADD ALL FLIGHT MODES TO THE ENUM ABOVE !!!
-    // {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
-
-    enum BaudRates { BAUD_9600 = 9600, BAUD_19200 = 19200, BAUD_38400 = 38400, BAUD_57600 = 57600, BAUD_115200 = 115200};
-
+#include "FlightMode.h"
+#include "StabilizeFlightMode.h"
+#include "AltHoldFlightMode.h"
+#include "PosHoldFlightMode.h"
+#include "VirtualPilot.h"
 
 
 
@@ -70,6 +57,16 @@ namespace Storage
     extern MyPID levelYpid;
     extern MyPID yawPID;
     extern MyPID altHoldPID;
+
+
+    // Used flight modes
+    extern StabilizeFlightMode stabilizeFlightMode;
+    extern AltHoldFlightMode altHoldFlightMode;
+    extern PosHoldFlightMode posHoldFlightMode;
+
+
+    // VirtualPilot object
+    extern VirtualPilot virtualPilot;
 
 
     // Variables
