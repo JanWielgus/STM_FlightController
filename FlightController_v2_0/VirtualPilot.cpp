@@ -33,17 +33,21 @@ void VirtualPilot::runVirtualPilot()
 
 void VirtualPilot::setFlightMode(FlightModeType flightModeToSet)
 {
-	// Uzyj metody checkIfFromThisBranch w celu sprawdzenia czy
-	// obecnie przegladana klasa jest z tej galezi trybow lotu
-	// (inaczej czy jest powiazana z klasa ktora chcemy ustawic)
-	// jesli nie jest to mozna resetowac jej stan
-
-	// Za kazdym razem sprawdzaj czy objPtr nie jest nullptr
-
-
-
+	// Find and set the current flight mode
+	for (int i = 0; i < amtOfFlightModes; i++)
+		if (flightModesArray[i].objPtr->getType() == flightModeToSet)
+		{
+			currentFlightMode = &flightModesArray[i];
+			break;
+		}
 
 
+	// Reset other flight modes (not involved in the current flight mode)
+	for (int i = 0; i < amtOfFlightModes; i++)
+		// If pointer is not null AND checked flight mode is not from current flight mode branch
+		if (flightModesArray[i].objPtr != nullptr &&
+			!currentFlightMode->objPtr->checkIfFromThisBranch(flightModesArray[i].objPtr))
+			flightModesArray[i].objPtr->reset();
 }
 
 
