@@ -17,7 +17,7 @@ class VirtualPilot
 private:
 	struct flightModePackageType
 	{
-		FlightMode* objPtr; // flight mode pointer
+		FlightMode* objPtr = nullptr; // flight mode pointer
 		uint8_t layer; // layer of the flight mode
 	};
 
@@ -36,8 +36,8 @@ public:
 private:
 	flightModePackageType* currentFlightMode; // pointer to the current flight mode (abstract type)
 
-	flightModePackageType* flightModesArray; // array of all available flight modes
-	uint8_t amtOfFlightModes = 0;
+	static const uint8_t amtOfFlightModes = (uint8_t)FlightModeType::LAST_FLIGHT_MODE + 1;
+	flightModePackageType flightModesArray[amtOfFlightModes]; // array of all available flight modes
 
 	// Used flight modes
 	StabilizeFlightMode stabilizeFlightMode = StabilizeFlightMode();

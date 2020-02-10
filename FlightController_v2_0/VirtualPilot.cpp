@@ -8,11 +8,7 @@
 
 VirtualPilot::VirtualPilot()
 {
-	// Create an array for all flight modes used by the VirtualPilot
-	amtOfFlightModes = 3;
-	flightModesArray = new flightModePackageType[amtOfFlightModes];
-
-	// Fill that array     ( id, layer, pointer, type )
+	// Fill flight modes array  ( id, layer, pointer )
 	fillFlightModesArrayRow(0, &stabilizeFlightMode);
 	fillFlightModesArrayRow(1, &altHoldFlightMode);
 	fillFlightModesArrayRow(2, &posHoldFlightMode);
@@ -41,6 +37,8 @@ void VirtualPilot::setFlightMode(FlightModeType flightModeToSet)
 	// obecnie przegladana klasa jest z tej galezi trybow lotu
 	// (inaczej czy jest powiazana z klasa ktora chcemy ustawic)
 	// jesli nie jest to mozna resetowac jej stan
+
+	// Za kazdym razem sprawdzaj czy objPtr nie jest nullptr
 
 
 

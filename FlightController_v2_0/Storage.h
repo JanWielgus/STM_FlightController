@@ -28,7 +28,14 @@
 
 // New data types
 
-    enum FlightModeType { STABILIZE = 0, ALT_HOLD = 1, POS_HOLD = 2 }; // list of all flight modes
+    // list of all flight modes
+    enum FlightModeType
+    {
+        STABILIZE,
+        ALT_HOLD,
+        POS_HOLD,
+        LAST_FLIGHT_MODE = POS_HOLD // !!! REMEMBER TO SET THE HIGHEST VALUE !!!
+    };
     // Do not use separate flight modes type. ADD ALL FLIGHT MODES TO THE ENUM ABOVE !!!
     // {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
 
