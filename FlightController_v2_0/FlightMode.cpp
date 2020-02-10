@@ -23,12 +23,6 @@ bool FlightMode::checkIfFromThisBranch(FlightMode* toCheck)
 }
 
 
-void FlightMode::setBaseFlightMode(FlightMode* baseFlightMode)
-{
-	this->baseFlightMode = baseFlightMode;
-}
-
-
 void FlightMode::executeBaseFlightMode()
 {
 	if (baseFlightMode != nullptr)

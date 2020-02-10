@@ -20,7 +20,6 @@ public:
 protected:
 	FlightMode* baseFlightMode = nullptr;
 
-	void setBaseFlightMode(FlightMode* baseFlightMode);
 	void executeBaseFlightMode();
 
 

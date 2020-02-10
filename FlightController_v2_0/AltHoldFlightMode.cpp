@@ -8,7 +8,7 @@
 
 AltHoldFlightMode::AltHoldFlightMode(StabilizeFlightMode* stabilizeFM)
 {
-	setBaseFlightMode(stabilizeFM);
+	this->baseFlightMode = stabilizeFM;
 
 	//...
 }
