@@ -16,9 +16,6 @@ public:
 	void execute();
 	void reset(); // reset only the AltHold part
 
-	
-private:
-	StabilizeFlightMode* stabilizeFM;
 };
 
 #endif

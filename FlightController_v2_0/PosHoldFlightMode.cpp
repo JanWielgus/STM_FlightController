@@ -7,7 +7,7 @@
 
 PosHoldFlightMode::PosHoldFlightMode(AltHoldFlightMode* altHoldFM)
 {
-	this->altHoldFM = altHoldFM;
+	setBaseFlightMode(altHoldFM);
 
 	//...
 }

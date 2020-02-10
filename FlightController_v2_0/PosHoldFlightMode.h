@@ -18,9 +18,6 @@ public:
 	void execute();
 	void reset();
 
-
-private:
-	AltHoldFlightMode* altHoldFM;
 };
 
 #endif
