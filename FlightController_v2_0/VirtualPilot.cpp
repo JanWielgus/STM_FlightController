@@ -13,9 +13,9 @@ VirtualPilot::VirtualPilot()
 	flightModesArray = new flightModePackageType[amtOfFlightModes];
 
 	// Fill that array     ( id, layer, pointer, type )
-	fillFlightModesArrayRow(0, &stabilizeFlightMode, FlightModeType::STABILIZE);
-	fillFlightModesArrayRow(1, &altHoldFlightMode, FlightModeType::ALT_HOLD);
-	fillFlightModesArrayRow(2, &posHoldFlightMode, FlightModeType::POS_HOLD);
+	fillFlightModesArrayRow(0, &stabilizeFlightMode);
+	fillFlightModesArrayRow(1, &altHoldFlightMode);
+	fillFlightModesArrayRow(2, &posHoldFlightMode);
 	// NEXT FLIGHT MODES GOES HERE (remember to increase amtOfFlightModes!)
 
 
@@ -37,26 +37,34 @@ void VirtualPilot::runVirtualPilot()
 
 void VirtualPilot::setFlightMode(FlightModeType flightModeToSet)
 {
+	// Uzyj metody checkIfFromThisBranch w celu sprawdzenia czy
+	// obecnie przegladana klasa jest z tej galezi trybow lotu
+	// (inaczej czy jest powiazana z klasa ktora chcemy ustawic)
+	// jesli nie jest to mozna resetowac jej stan
+
+
+
+
 
 }
 
 
 FlightModeType VirtualPilot::getCurrentFlightMode()
 {
-	return currentFlightMode->type;
+	return currentFlightMode->objPtr->getType();
 }
 
 
-bool VirtualPilot::fillFlightModesArrayRow(uint8_t layer, FlightMode* ptr, FlightModeType type)
+bool VirtualPilot::fillFlightModesArrayRow(uint8_t layer, FlightMode* ptr)
 {
-	// 'type' is the index in the array 
+	// 'type' is the index in the array
+	uint8_t type = (uint8_t)ptr->getType();
 
-	if ((uint8_t)type >= amtOfFlightModes)
+	if (type >= amtOfFlightModes)
 		return false;
 
 	flightModesArray[type].layer = layer;
 	flightModesArray[type].objPtr = ptr;
-	flightModesArray[type].type = type;
 	
 	return true;
 }
@@ -66,7 +74,7 @@ FlightMode* VirtualPilot::getFlightModePtrByType(FlightModeType flightModeType)
 {
 	for (int i = 0; i < amtOfFlightModes; i++)
 	{
-		if (flightModeType == this->flightModesArray[i].type)
+		if (flightModeType == this->flightModesArray[i].objPtr->getType())
 			return this->flightModesArray[i].objPtr;
 	}
 }

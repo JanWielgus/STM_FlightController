@@ -17,7 +17,6 @@ class VirtualPilot
 private:
 	struct flightModePackageType
 	{
-		FlightModeType type;
 		FlightMode* objPtr; // flight mode pointer
 		uint8_t layer; // layer of the flight mode
 	};
@@ -48,7 +47,7 @@ private:
 
 
 private:
-	bool fillFlightModesArrayRow(uint8_t layer, FlightMode* ptr, FlightModeType type);
+	bool fillFlightModesArrayRow(uint8_t layer, FlightMode* ptr);
 	FlightMode* getFlightModePtrByType(FlightModeType flightModeType);
 };
 

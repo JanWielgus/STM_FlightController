@@ -5,6 +5,12 @@
 #include "FlightMode.h"
 
 
+FlightMode::FlightMode(FlightModeType typeToSet)
+	: type(typeToSet)
+{
+}
+
+
 bool FlightMode::checkIfFromThisBranch(FlightMode* toCheck)
 {
 	// Sprawdz czy ten tryb lotu to jest ten albo wywolaj dla bazowego trybu lotu sprawdzenie
@@ -28,3 +34,10 @@ void FlightMode::executeBaseFlightMode()
 	if (baseFlightMode != nullptr)
 		baseFlightMode->execute();
 }
+
+
+FlightModeType FlightMode::getType()
+{
+	return this->type;
+}
+

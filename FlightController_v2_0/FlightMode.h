@@ -4,21 +4,24 @@
 #define _FLIGHTMODE_h
 
 #include "arduino.h"
+#include "Storage.h"
 
 
 class FlightMode
 {
 public:
+	FlightMode(FlightModeType typeToSet);
 	virtual void execute() = 0;
 	virtual void reset() = 0;
 
-	// Ta funkcja ma sprawdzac czy jakis tryb lotu jest z tej galezi
 	bool checkIfFromThisBranch(FlightMode* toCheck);
+	FlightModeType getType();
 
 
 	// protected components
 protected:
 	FlightMode* baseFlightMode = nullptr;
+	const FlightModeType type;
 
 	void executeBaseFlightMode();
 

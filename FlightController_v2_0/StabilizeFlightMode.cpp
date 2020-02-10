@@ -7,6 +7,7 @@
 
 
 StabilizeFlightMode::StabilizeFlightMode()
+	: FlightMode(FlightModeType::STABILIZE)
 {
 
 }

@@ -6,6 +6,7 @@
 
 
 PosHoldFlightMode::PosHoldFlightMode(AltHoldFlightMode* altHoldFM)
+	: FlightMode(FlightModeType::POS_HOLD)
 {
 	this->baseFlightMode = altHoldFM;
 
