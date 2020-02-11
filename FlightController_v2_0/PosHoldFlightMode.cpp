@@ -4,7 +4,7 @@
 
 #include "PosHoldFlightMode.h"
 #include "AltHoldFlightMode.h"
-#include "CustomDataTypes.h"
+#include "SharedDataTypes.h"
 
 
 PosHoldFlightMode::PosHoldFlightMode(AltHoldFlightMode* altHoldFM)

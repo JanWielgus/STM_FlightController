@@ -30,7 +30,7 @@
 #include "StabilizeFlightMode.h"
 #include "AltHoldFlightMode.h"
 #include "PosHoldFlightMode.h"
-#include "CustomDataTypes.h"
+#include "SharedDataTypes.h"
 
 using namespace Storage;
 

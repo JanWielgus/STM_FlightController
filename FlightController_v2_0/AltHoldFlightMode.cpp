@@ -4,7 +4,7 @@
 
 #include "AltHoldFlightMode.h"
 #include "StabilizeFlightMode.h"
-#include "CustomDataTypes.h"
+#include "SharedDataTypes.h"
 
 
 AltHoldFlightMode::AltHoldFlightMode(StabilizeFlightMode* stabilizeFM)

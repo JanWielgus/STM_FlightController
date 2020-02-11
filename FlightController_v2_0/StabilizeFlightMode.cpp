@@ -4,6 +4,7 @@
 
 #include "StabilizeFlightMode.h"
 #include "Storage.h"
+#include "SharedDataTypes.h"
 
 
 StabilizeFlightMode::StabilizeFlightMode()
