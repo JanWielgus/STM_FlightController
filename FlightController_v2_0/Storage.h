@@ -21,7 +21,7 @@
 #include <FC_HMC5883L_Lib.h>
 #include <FC_MS5611_Lib.h>
 #include <FC_EVA_Filter.h>
-#include <FC_Motors.h>
+#include "FC_Motors.h"
 #include "DebugSystem.h"
 #include "FlightMode.h"
 #include "StabilizeFlightMode.h"

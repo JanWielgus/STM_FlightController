@@ -14,13 +14,13 @@
 #include <FC_HMC5883L_Lib.h>
 #include <FC_MS5611_Lib.h>
 #include <FC_EVA_Filter.h>
-#include <FC_Motors.h>
 #include <Wire.h>
 #include <FC_CustomDataTypes.h>
 #include <FC_TaskPlanner.h>
 #include <FC_AverageFilter.h>
 #include "Storage.h"
 //#include "FlightModes.h" // THIS FILE IS NO LONGER USED !!!
+#include "FC_Motors.h"
 #include "MeasureTime.h"
 #include "TaskerFunctions.h"
 #include "DebugSystem.h"
