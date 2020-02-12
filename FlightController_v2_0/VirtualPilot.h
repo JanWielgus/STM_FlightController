@@ -16,7 +16,7 @@
 class VirtualPilot
 {
 public:
-	VirtualPilot(const FC_SimpleTasker* taskerPointer);
+	VirtualPilot(FC_SimpleTasker* taskerPointer);
 	~VirtualPilot();
 
 	// public methods
@@ -33,7 +33,7 @@ private:
 	static const uint8_t amtOfFlightModes = (uint8_t)FlightModeType::LAST_FLIGHT_MODE + 1;
 	FlightMode* flightModesArray[amtOfFlightModes]; // array of all available flight modes pointers
 
-	const FC_SimpleTasker& tasker; // reference to the global tasker
+	FC_SimpleTasker& tasker; // reference to the global tasker
 
 
 private:
