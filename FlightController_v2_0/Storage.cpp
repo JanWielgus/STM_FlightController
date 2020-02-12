@@ -30,7 +30,7 @@ namespace Storage
 
 
 	// VirtualPilot object
-	VirtualPilot virtualPilot;
+	VirtualPilot virtualPilot(&tasker);
 
 
 	// Variables

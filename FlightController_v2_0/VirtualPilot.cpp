@@ -3,10 +3,10 @@
 // 
 
 #include "VirtualPilot.h"
-#include "Storage.h"
 
 
-VirtualPilot::VirtualPilot()
+VirtualPilot::VirtualPilot(const FC_SimpleTasker* taskerPointer)
+	: tasker(*taskerPointer)
 {
 	// Set each pointer to nullptr
 	for (int i = 0; i < amtOfFlightModes; i++)
@@ -54,6 +54,8 @@ void VirtualPilot::addFlightMode(FlightMode* flightModeToAdd)
 	uint8_t type = (uint8_t)flightModeToAdd->getType();
 
 	flightModesArray[type] = flightModeToAdd;
+
+	//tasker.addFunction([flightModeToAdd]() { flightModeToAdd->execute(); }, 1000, 0);
 }
 
 
