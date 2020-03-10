@@ -17,6 +17,8 @@ namespace config
 {
 	const float calculationsDeltaTime = 0.004f; //  = 1/250  (250Hz)
 
+	const uint8_t MaxAmtOfTaskerTasks = 20; // tasks array size inside tasker
+
 
 	// mpu6050
 	struct 

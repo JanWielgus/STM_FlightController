@@ -7,7 +7,7 @@ using namespace config;
 namespace Storage
 {
 	// Objects
-	FC_SimpleTasker tasker;
+	FC_ObjectTasker tasker(MaxAmtOfTaskerTasks);
 	FC_MainCommunication com(&Serial1, 45);
 	FC_MPU6050Lib mpu;
 	FC_HMC5883L_Lib compass;

@@ -20,33 +20,37 @@ void addTaskerFunctionsToTasker()
 	using namespace TaskerFunction;
 	using Storage::tasker;
 
-	tasker.addFunction(stabilize, 4000L, 31);                  // 250Hz (duration tested only with leveling)
-	tasker.addFunction(updateControlDiode, 1000000L, 2);       // 1Hz (tested duration)
-	tasker.addFunction(readXY_angles, 4000L, 639);             // 250Hz (tested duration)
-	tasker.addFunction(readCompass, 13340L, 492);              // 75Hz  (tested duration)
-	//tasker.addFunction(updateMainCommunication, 20000L, 229);  // 50Hz (tested duration)
-	tasker.addFunction(updateSending, 22000L, 1);              // ~45Hz
-	tasker.addFunction(updateReceiving, 7142L, 1);             // 140Hz      (! UPDATE the body if frequency chanded !!!)
-	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
-	//tasker.addFunction(updatePressureAndAltHold, 9090, 1);     // 110Hz
 
-	//tasker.scheduleTasks();
+	// Maximum tasker tasks amt is set in config::MaxAmtOfTaskerTasks
+	// Tasks are not added only here (also in the VirtualPilot class)!
+
+
+	// General
+	tasker.addTask(new UpdateControlDiode, 100000L, 2);		// 1Hz (tested duration)
+	tasker.addTask(new CheckCalibrations, 700000L, 7);		// 1.4Hz
+
+	// Steering
+	tasker.addTask(new ReadXY_angles, 4000L, 639);			// 250Hz (tested duration)
+	tasker.addTask(new ReadCompass, 13340L, 492);			// 75Hz  (tested duration)
+	tasker.addTask(new Stabilize, 4000L, 31);				// 250Hz (duration tested only with leveling)
+
+	// Communication
+	tasker.addTask(new UpdateSending, 22000L, 1);			// ~45Hz
+	tasker.addTask(new UpdateReceiving, 7142L, 1);			// 140Hz (! UPDATE the body if frequency chanded !!!)
 }
 
 
 
 namespace TaskerFunction
 {
-	void updateControlDiode()
+	void UpdateControlDiode::execute()
 	{
-		static bool ledState = LOW;
 		digitalWrite(LED_BUILTIN, ledState);
 		ledState = !ledState;
 	}
 
 
-
-	void checkCalibrations()
+	void CheckCalibrations::execute()
 	{
 		//...
 		// accelerometer calibration
@@ -60,10 +64,8 @@ namespace TaskerFunction
 	}
 
 
-
-	void readXY_angles()
+	void ReadXY_angles::execute()
 	{
-
 		mpu.read6AxisMotion();
 		angle = mpu.getFusedXYAngles();
 		//heading = mpu.getZAngle(compass.getHeading()); // Temporary (something bad is happening with the compass)
@@ -71,15 +73,15 @@ namespace TaskerFunction
 	}
 
 
-
-	void readCompass()
+	void ReadCompass::execute()
 	{
 		compass.readCompassData(angle.x, angle.y);
 	}
 
 
-
-	void stabilize()
+	// !!!!!
+	// THIS PART HAVE TO BE REMOVED (ONLY VIRTUAL PILOT USE FLIGHT MODES)
+	void Stabilize::execute()
 	{
 		// Cut-off all motors if the angle is too high
 		using namespace config;
@@ -88,7 +90,7 @@ namespace TaskerFunction
 			motors.setMotorState(false);
 
 
-	
+
 
 
 		// Extrapolate sticks
@@ -116,7 +118,7 @@ namespace TaskerFunction
 
 
 
-		/* OVERRIDE THAT CODE WITH THE NEW FLIGHT MODES 
+		/* OVERRIDE THAT CODE WITH THE NEW FLIGHT MODES
 
 		fModes::runVirtualPilot();
 
@@ -131,8 +133,6 @@ namespace TaskerFunction
 		motors.forceMotorsExecution();
 
 		*/
-
-
 	}
 
 
@@ -142,7 +142,8 @@ namespace TaskerFunction
 
 	/*
 
-	!!!
+	!!!!!!!!!!!!!
+
 	THIS HAVE TO BE IMPLEMENTED IN THE NEW FLIGHT MODE CLASSES
 
 
@@ -189,9 +190,7 @@ namespace TaskerFunction
 
 
 
-
-
-	void updateSending()
+	void UpdateSending::execute()
 	{
 		// Pack all data to the toSend variables
 		com.toSend.tilt_TB = (int8_t)angle.x;
@@ -229,7 +228,7 @@ namespace TaskerFunction
 	}
 
 
-	void updateReceiving()
+	void UpdateReceiving::execute()
 	{
 		// update temporary previous stick values for extrapolation
 		// those values will be stored if new one will come
@@ -338,5 +337,8 @@ namespace TaskerFunction
 		// light up the red diode
 		digitalWrite(config::pin.redDiode, (com.connectionStability() >= 1) ? HIGH : LOW);
 	}
+
+
+
 }
 

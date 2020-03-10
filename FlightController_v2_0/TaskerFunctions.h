@@ -7,19 +7,59 @@ void addTaskerFunctionsToTasker();
 
 namespace TaskerFunction
 {
-	// General
-	void updateControlDiode(); // built in diode is blinked once per second
-	void checkCalibrations(); // Check if there is a need to calibrate one of the module and perform it if needed
+// General
+
+	// built in diode is blinked once per second
+	class UpdateControlDiode : public FC_Task
+	{
+		bool ledState = LOW;
+		void execute() override;
+	};
+
+	// Check if there is a need to calibrate one of the module and perform it if needed
+	class CheckCalibrations : public FC_Task
+	{
+		void execute() override;
+	};
 	
-	// Steering
-	void readXY_angles();
-	void readCompass();
-	void stabilize();
+
+
+
+// Steering
+
+	class ReadXY_angles : public FC_Task
+	{
+		void execute() override;
+	};
+
+	class ReadCompass : public FC_Task
+	{
+		void execute() override;
+	};
+
+	// !!!!!
+	// THIS PART HAVE TO BE REMOVED (ONLY VIRTUAL PILOT USE FLIGHT MODES)
+	class Stabilize : public FC_Task
+	{
+		void execute() override;
+	};
+
 	//void updatePressureAndAltHold(); // update altHold PID if needed and do other baro stuff
 
-	// Communication
-	void updateSending();
-	void updateReceiving();
+
+
+
+// Communication
+
+	class UpdateSending : public FC_Task
+	{
+		void execute() override;
+	};
+
+	class UpdateReceiving : public FC_Task
+	{
+		void execute() override;
+	};
 }
 
 

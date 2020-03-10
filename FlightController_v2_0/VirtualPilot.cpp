@@ -5,7 +5,7 @@
 #include "VirtualPilot.h"
 
 
-VirtualPilot::VirtualPilot(FC_SimpleTasker* taskerPointer)
+VirtualPilot::VirtualPilot(FC_ObjectTasker* taskerPointer)
 	: tasker(*taskerPointer)
 {
 	// Set each pointer to nullptr
@@ -60,7 +60,6 @@ void VirtualPilot::addFlightMode(FlightMode* flightModeToAdd)
 	//void(*flightModeExecuteLambda)() = [=]() { flightModeToAdd->execute();}; // pass lambda directly inside
 	tasker.addFunction(flightModeExecuteLambda, 1000L, 0);
 	*/
-
 
 }
 
