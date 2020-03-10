@@ -13,7 +13,8 @@
 #define STORAGE_H_
 
 
-#include <FC_Tasker.h>
+#include <FC_ObjectTasker.h>
+#include <FC_Task.h>
 #include <MyPID.h>
 #include <FC_Communication_Base.h>
 #include "FC_MainCommunication.h"
@@ -44,7 +45,7 @@ namespace Storage
 
 
     // Objects
-    extern FC_SimpleTasker tasker;
+    extern FC_ObjectTasker tasker;
     extern FC_MainCommunication com;
     extern FC_MPU6050Lib mpu;
     extern FC_HMC5883L_Lib compass;
