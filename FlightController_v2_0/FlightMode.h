@@ -8,12 +8,23 @@
 #include <FC_Task.h>
 
 
-class FlightMode : public FC_Task // something like implementing FC_Task interface
-								  // this will allow to add flight mode to the tasker
+/*
+	!!!!!
+
+	All flight modes are running at 250Hz (if they are active ones)
+	Make it to work well at that speed
+	For example use extrapolations or interpolations
+
+	!!!!!
+*/
+
+
+
+class FlightMode
 {
 public:
 	FlightMode(FlightModeType typeToSet);
-	virtual void execute() override = 0;
+	virtual void execute() = 0;
 	virtual void reset() = 0;
 
 	bool checkIfFromThisBranch(FlightMode* toCheck);
