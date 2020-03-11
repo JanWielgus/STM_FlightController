@@ -70,7 +70,7 @@ namespace Storage
     extern VirtualPilot virtualPilot;
 
 
-    // Variables
+    // Global sensor readings
     extern FC_MPU6050Lib::vector3Float angle;
     extern float heading;
 

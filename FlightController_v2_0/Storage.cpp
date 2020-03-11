@@ -33,7 +33,7 @@ namespace Storage
 	VirtualPilot virtualPilot(&tasker);
 
 
-	// Variables
+	// Global sensor readings
 	FC_MPU6050Lib::vector3Float angle = { 0, 0, 0 }; // X and Y angles
 	float heading = 0;
 
