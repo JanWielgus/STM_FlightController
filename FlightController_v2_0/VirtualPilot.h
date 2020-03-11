@@ -14,7 +14,7 @@
 #include <FC_Task.h>
 
 
-class VirtualPilot
+class VirtualPilot : public FC_Task
 {
 public:
 	VirtualPilot(FC_ObjectTasker* taskerPointer);
@@ -38,6 +38,7 @@ private:
 
 
 private:
+	void execute() override;
 	FlightMode* getFlightModePtrByType(FlightModeType flightModeType);
 	bool isNotNullptr(FlightMode* flightMode);
 };

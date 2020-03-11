@@ -22,7 +22,13 @@ VirtualPilot::~VirtualPilot()
 
 void VirtualPilot::runVirtualPilot()
 {
+	currentFlightMode->execute();
+}
 
+
+void VirtualPilot::execute()
+{
+	runVirtualPilot();
 }
 
 
@@ -57,9 +63,6 @@ bool VirtualPilot::addFlightMode(FlightMode* flightModeToAdd, bool isDefault)
 	if (flightModesArray[type] == nullptr)
 	{
 		flightModesArray[type] = flightModeToAdd;
-
-		// FlightMode inherits from FC_Task so it can be added to the tasker tasks array
-		tasker.addTask(flightModeToAdd, config::MainInterval, 0);
 
 		// check if this flight mode is default one
 		if (isDefault)
