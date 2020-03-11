@@ -186,8 +186,8 @@ void setup()
 	
 	// set initial Z axis value
 	mpu.read6AxisMotion();
-	angle = mpu.getFusedXYAngles();
-	compass.readCompassData(angle.x, angle.y);
+	reading.angle = mpu.getFusedXYAngles();
+	compass.readCompassData(reading.angle.x, reading.angle.y);
 	mpu.setInitialZAxisValue(compass.getHeading());
 	
 	Serial.println("setup done");

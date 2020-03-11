@@ -40,6 +40,8 @@ namespace TaskerFunction
 		void execute() override;
 	};
 
+	void newBaroReadingEvent(); // Function called by the baro instance
+
 	class ProcessSlowerReadings : public FC_Task
 	{
 		void execute() override;
