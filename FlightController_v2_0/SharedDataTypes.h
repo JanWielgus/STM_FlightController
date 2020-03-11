@@ -12,6 +12,8 @@
 #ifndef CUSTOMDATATYPES_H_
 #define CUSTOMDATATYPES_H_
 
+#include <FC_MPU6050Lib.h>
+
 
 
  // list of all flight modes
@@ -26,6 +28,24 @@ enum FlightModeType
 // {LANDING=3, RETURN_TO_LAUNCH=4, RETURN_OVER_PILOT=5};
 
 enum BaudRates { BAUD_9600 = 9600, BAUD_19200 = 19200, BAUD_38400 = 38400, BAUD_57600 = 57600, BAUD_115200 = 115200 };
+
+
+struct virtualSticksType
+{
+    uint16_t throttle;
+    int16_t rotate;
+    int16_t TB;
+    int16_t LR;
+};
+
+
+struct readingsType
+{
+    FC_MPU6050Lib::vector3Float angle = { 0, 0, 0 }; // X and Y angles
+    float heading = 0;
+    float pressure = 0; // not extrapolated value (about 110 Hz)
+    float smoothPressure = 0;
+};
 
 
 

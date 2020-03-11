@@ -40,17 +40,10 @@ namespace TaskerFunction
 		void execute() override;
 	};
 
-
-	/*
-	// !!!!!
-	// THIS PART HAVE TO BE REMOVED (ONLY VIRTUAL PILOT USE FLIGHT MODES)
-	class Stabilize : public FC_Task
+	class ProcessSlowerReadings : public FC_Task
 	{
 		void execute() override;
-	};*/
-
-
-	//void updatePressureAndAltHold(); // update altHold PID if needed and do other baro stuff
+	};
 
 
 

@@ -29,6 +29,7 @@
 #include "AltHoldFlightMode.h"
 #include "PosHoldFlightMode.h"
 #include "VirtualPilot.h"
+#include "SharedDataTypes.h"
 
 
 
@@ -68,11 +69,11 @@ namespace Storage
 
     // VirtualPilot object
     extern VirtualPilot virtualPilot;
+    extern virtualSticksType virtualStick;
 
 
     // Global sensor readings
-    extern FC_MPU6050Lib::vector3Float angle;
-    extern float heading;
+    extern readingsType reading;
 
 
     // Flight modes
