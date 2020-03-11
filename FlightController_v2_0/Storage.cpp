@@ -36,18 +36,6 @@ namespace Storage
 	// Variables
 	FC_MPU6050Lib::vector3Float angle = { 0, 0, 0 }; // X and Y angles
 	float heading = 0;
-	float headingToHold = 0; // calculated value based on the pilot rotate stick to hold by the drone
-	float pressureToHold;
-
-
-	// Extrapolation variables
-	int16_t previousTBvalue = 0;
-	int16_t previousLRvalue = 0;
-	float extrapolatedTBstick = 0;
-	float extrapolatedLRstick = 0;
-	FC_EVA_Filter tbFilter(0.4);
-	FC_EVA_Filter lrFilter(0.4);
-
 
 
 	// PID controllers results

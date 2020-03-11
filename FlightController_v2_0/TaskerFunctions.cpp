@@ -268,16 +268,6 @@ namespace TaskerFunction
 			}
 
 
-			// set the extrapolation flag if new stick values was received
-			if (com.wasReceived(com.receivedPacketTypes.TYPE4_ID))
-			{
-				// store previous stick values because new ones was received
-				Storage::previousTBvalue = tempPreviousTBvalue;
-				Storage::previousLRvalue = tempprevioudLRvalue;
-				flags.needToExtrapolateStickVlaues = false;
-			}
-
-
 			// if any PID params was received
 			if (com.wasReceived(com.receivedPacketTypes.TYPE3_ID))
 			{
@@ -321,17 +311,11 @@ namespace TaskerFunction
 		}
 
 
-		// Integrate yaw stick value only if connection is stable
-		if (com.connectionStability() > 1)
-		{
-			//headingToHold += ((float)com.received.steer.rotate * 0.04f); // if 25Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
-			//headingToHold += ((float)(com.received.steer.rotate/2) * 0.0125f); // if 80Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
-			Storage::headingToHold += ((float)(com.received.steer.rotate / 2) * 0.0071f); // if 140Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
-		}
-
-
 		/*
 		// WHEN LOST THE SIGNAL, then disable motors
+
+		IMPLEMENT THIS INSIDE THE NEW FAILSAFE CLASS   !!!!!
+
 		if (com.connectionStability() == 0)
 		{
 			motors.setMotorState(false);

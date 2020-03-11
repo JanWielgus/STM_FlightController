@@ -39,7 +39,7 @@ namespace Storage
     // Flags
     struct
     {
-        bool needToExtrapolateStickVlaues = false;
+        bool thereIsNoFlags = true;
     } flags;
 
 
@@ -73,17 +73,6 @@ namespace Storage
     // Variables
     extern FC_MPU6050Lib::vector3Float angle;
     extern float heading;
-    extern float headingToHold;
-    extern float pressureToHold;
-
-
-    // Extrapolation variables
-    extern int16_t previousTBvalue;
-    extern int16_t previousLRvalue;
-    extern float extrapolatedTBstick;
-    extern float extrapolatedLRstick;
-    extern FC_EVA_Filter tbFilter;
-    extern FC_EVA_Filter lrFilter;
 
 
     // Flight modes

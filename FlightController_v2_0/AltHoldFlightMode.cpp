@@ -29,3 +29,10 @@ void AltHoldFlightMode::reset()
 {
 
 }
+
+
+
+float AltHoldFlightMode::getPressureToHold()
+{
+	return pressureToHold;
+}

@@ -16,6 +16,13 @@ public:
 	void execute() override;
 	void reset() override; // reset only the AltHold part
 
+public:
+	float getPressureToHold();
+
+
+private:
+	float pressureToHold = 0;
+
 };
 
 #endif

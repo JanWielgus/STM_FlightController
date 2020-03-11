@@ -16,6 +16,9 @@ StabilizeFlightMode::StabilizeFlightMode()
 
 void StabilizeFlightMode::execute()
 {
+	updateHeadingToHold();
+
+
 
 }
 
@@ -23,4 +26,21 @@ void StabilizeFlightMode::execute()
 void StabilizeFlightMode::reset()
 {
 
+}
+
+
+
+float StabilizeFlightMode::getHeadingToHold()
+{
+	return headingToHold;
+}
+
+
+void StabilizeFlightMode::updateHeadingToHold()
+{
+	// Integrate yaw stick value only if connection is stable
+	if (com.connectionStability() > 1)
+	{
+		headingToHold += ((float)(com.received.steer.rotate / 2) * config::MainDeltaTimeInSeconds);
+	}
 }
