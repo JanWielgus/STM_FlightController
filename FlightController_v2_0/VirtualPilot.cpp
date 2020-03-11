@@ -5,15 +5,12 @@
 #include "VirtualPilot.h"
 
 
-VirtualPilot::VirtualPilot(FC_ObjectTasker* taskerPointer, FlightMode* defaultFlightMode)
+VirtualPilot::VirtualPilot(FC_ObjectTasker* taskerPointer)
 	: tasker(*taskerPointer)
 {
 	// Set each pointer to nullptr
 	for (int i = 0; i < AmtOfFlightModes; i++)
 		flightModesArray[i] = nullptr;
-
-	addFlightMode(defaultFlightMode);
-	setFlightMode(defaultFlightMode->getType()); // default flight mode
 }
 
 
@@ -51,17 +48,27 @@ bool VirtualPilot::setFlightMode(FlightModeType flightModeToSet)
 
 
 // This method adds flight mode to it's fixed position in array
-void VirtualPilot::addFlightMode(FlightMode* flightModeToAdd)
+bool VirtualPilot::addFlightMode(FlightMode* flightModeToAdd, bool isDefault)
 {
 	// 'type' is the index in the array
 	uint8_t type = (uint8_t)flightModeToAdd->getType();
-	bool wasEmpty = flightModesArray[type] == nullptr ? true : false; // checks if this array row was empty
-	flightModesArray[type] = flightModeToAdd;
 
-	// FlightMode inherits from FC_Task so it can be added to the tasker tasks array
-	// Add to the tasker only if it was empty before
-	if (wasEmpty)
+	// if this flight mode is null (was not added before)
+	if (flightModesArray[type] == nullptr)
+	{
+		flightModesArray[type] = flightModeToAdd;
+
+		// FlightMode inherits from FC_Task so it can be added to the tasker tasks array
 		tasker.addTask(flightModeToAdd, config::MainInterval, 0);
+
+		// check if this flight mode is default one
+		if (isDefault)
+			setFlightMode(flightModeToAdd->getType());
+
+		return true;
+	}
+
+	return false;
 }
 
 

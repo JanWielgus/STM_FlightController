@@ -17,13 +17,13 @@
 class VirtualPilot
 {
 public:
-	VirtualPilot(FC_ObjectTasker* taskerPointer, FlightMode* defaultFlightMode);
+	VirtualPilot(FC_ObjectTasker* taskerPointer);
 	~VirtualPilot();
 
 	// public methods
 	void runVirtualPilot();
 	bool setFlightMode(FlightModeType flightModeToSet); // return true if setting new flight mode was successful
-	void addFlightMode(FlightMode* flightModeToAdd);
+	bool addFlightMode(FlightMode* flightModeToAdd, bool isDefault = false); // return false if there already was flight mode with the same type added
 	FlightModeType getCurrentFlightMode();
 	
 
