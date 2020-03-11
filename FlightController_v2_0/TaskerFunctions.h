@@ -3,6 +3,9 @@
 #ifndef _TASKERFUNCTIONS_h
 #define _TASKERFUNCTIONS_h
 
+#include <FC_Task.h>
+
+
 void addTaskerFunctionsToTasker();
 
 namespace TaskerFunction
