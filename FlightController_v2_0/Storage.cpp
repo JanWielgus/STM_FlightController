@@ -17,10 +17,10 @@ namespace Storage
 
 
 	// PID objects
-	MyPID levelXpid(calculationsDeltaTime, defPID.leveling.p, defPID.leveling.i, defPID.leveling.d, defPID.leveling.imax);
-	MyPID levelYpid(calculationsDeltaTime, defPID.leveling.p, defPID.leveling.i, defPID.leveling.d, defPID.leveling.imax);
-	MyPID yawPID(calculationsDeltaTime, defPID.yaw.p, defPID.yaw.i, defPID.yaw.d, defPID.yaw.imax);
-	MyPID altHoldPID(calculationsDeltaTime, defPID.altHold.p, defPID.altHold.i, defPID.altHold.d, defPID.altHold.imax);
+	MyPID levelXpid(MainDeltaTimeInSeconds, defPID.leveling.p, defPID.leveling.i, defPID.leveling.d, defPID.leveling.imax);
+	MyPID levelYpid(MainDeltaTimeInSeconds, defPID.leveling.p, defPID.leveling.i, defPID.leveling.d, defPID.leveling.imax);
+	MyPID yawPID(MainDeltaTimeInSeconds, defPID.yaw.p, defPID.yaw.i, defPID.yaw.d, defPID.yaw.imax);
+	MyPID altHoldPID(MainDeltaTimeInSeconds, defPID.altHold.p, defPID.altHold.i, defPID.altHold.d, defPID.altHold.imax);
 
 
 	// Used flight modes
