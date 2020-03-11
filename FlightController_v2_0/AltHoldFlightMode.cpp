@@ -18,6 +18,9 @@ AltHoldFlightMode::AltHoldFlightMode(StabilizeFlightMode* stabilizeFM)
 
 void AltHoldFlightMode::execute()
 {
+	this->baseFlightMode->execute();
+
+
 
 }
 

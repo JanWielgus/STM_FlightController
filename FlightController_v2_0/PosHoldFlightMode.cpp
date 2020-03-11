@@ -18,6 +18,9 @@ PosHoldFlightMode::PosHoldFlightMode(AltHoldFlightMode* altHoldFM)
 
 void PosHoldFlightMode::execute()
 {
+	this->baseFlightMode->execute();
+
+
 
 }
 
