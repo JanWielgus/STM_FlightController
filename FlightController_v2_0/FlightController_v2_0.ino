@@ -52,7 +52,7 @@ void setup()
 	
 
 	// on-board, blue and red diode
-	pinMode(LED_BUILTIN, OUTPUT);
+	pinMode(config::pin.LedBuiltIn, OUTPUT);
 	pinMode(config::pin.redDiode, OUTPUT);
 	pinMode(config::pin.blueDiode, OUTPUT);
 	

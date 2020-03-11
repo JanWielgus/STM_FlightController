@@ -101,6 +101,8 @@ namespace config
 		uint8_t aux = PB5;
 
 
+		uint8_t LedBuiltIn = LED_BUILTIN;
+
 	} const pin;
 }
 

@@ -22,7 +22,6 @@ void addTaskerFunctionsToTasker()
 
 
 	// Maximum tasker tasks amt is set in config::MaxAmtOfTaskerTasks
-	// Tasks are not added only here (also in the VirtualPilot class)!
 
 
 	// General
@@ -32,7 +31,10 @@ void addTaskerFunctionsToTasker()
 	// Steering
 	tasker.addTask(new ReadXY_angles, config::MainInterval, 639);	// 250Hz (tested duration)
 	tasker.addTask(new ReadCompass, 13340L, 492);					// 75Hz  (tested duration)
-	tasker.addTask(new Stabilize, 4000L, 31);						// 250Hz (duration tested only with leveling)
+	tasker.addTask(&Storage::virtualPilot, config::MainInterval, 0);// 250Hz
+
+	// !! tasker.addTask(new Stabilize, 4000L, 31);						// 250Hz (duration tested only with leveling)
+
 
 	// Communication
 	tasker.addTask(new UpdateSending, 22000L, 1);					// ~45Hz
@@ -45,7 +47,7 @@ namespace TaskerFunction
 {
 	void UpdateControlDiode::execute()
 	{
-		digitalWrite(LED_BUILTIN, ledState);
+		digitalWrite(config::pin.LedBuiltIn, ledState);
 		ledState = !ledState;
 	}
 
@@ -79,61 +81,63 @@ namespace TaskerFunction
 	}
 
 
-	// !!!!!
-	// THIS PART HAVE TO BE REMOVED (ONLY VIRTUAL PILOT USE FLIGHT MODES)
-	void Stabilize::execute()
-	{
-		// Cut-off all motors if the angle is too high
-		using namespace config;
-		if (angle.x > CutOffAngle || angle.x < -CutOffAngle ||
-			angle.y > CutOffAngle || angle.y < -CutOffAngle)
-			motors.setMotorState(false);
+
+	//// !!!!!
+	//// THIS PART HAVE TO BE REMOVED (ONLY VIRTUAL PILOT USE FLIGHT MODES)
+	//void Stabilize::execute()
+	//{
+	//	// Cut-off all motors if the angle is too high
+	//	using namespace config;
+	//	if (angle.x > CutOffAngle || angle.x < -CutOffAngle ||
+	//		angle.y > CutOffAngle || angle.y < -CutOffAngle)
+	//		motors.setMotorState(false);
 
 
 
 
 
-		// Extrapolate sticks
-		// Extrapolate TB and LR stick values
-		if (flags.needToExtrapolateStickVlaues)
-		{
-			extrapolatedTBstick += (float(com.received.steer.TB - previousTBvalue) * 0.2);
-			extrapolatedLRstick += (float(com.received.steer.LR - previousLRvalue) * 0.2);
-		}
-		else
-		{
-			extrapolatedTBstick = (float)com.received.steer.TB;
-			extrapolatedLRstick = (float)com.received.steer.LR;
-		}
-		// next run should extrapolate sticks values unless communication will reset this flag
-		extrapolatedTBstick = tbFilter.updateFilter(extrapolatedTBstick);
-		extrapolatedLRstick = lrFilter.updateFilter(extrapolatedLRstick);
-		flags.needToExtrapolateStickVlaues = true;
-		//Serial.print(com.received.steer.LR);
-		//Serial.print(" ");
-		//Serial.println(extrapolatedLRstick);
+	//	// Extrapolate sticks
+	//	// Extrapolate TB and LR stick values
+	//	if (flags.needToExtrapolateStickVlaues)
+	//	{
+	//		extrapolatedTBstick += (float(com.received.steer.TB - previousTBvalue) * 0.2);
+	//		extrapolatedLRstick += (float(com.received.steer.LR - previousLRvalue) * 0.2);
+	//	}
+	//	else
+	//	{
+	//		extrapolatedTBstick = (float)com.received.steer.TB;
+	//		extrapolatedLRstick = (float)com.received.steer.LR;
+	//	}
+	//	// next run should extrapolate sticks values unless communication will reset this flag
+	//	extrapolatedTBstick = tbFilter.updateFilter(extrapolatedTBstick);
+	//	extrapolatedLRstick = lrFilter.updateFilter(extrapolatedLRstick);
+	//	flags.needToExtrapolateStickVlaues = true;
+	//	//Serial.print(com.received.steer.LR);
+	//	//Serial.print(" ");
+	//	//Serial.println(extrapolatedLRstick);
 
 
 
 
 
 
-		/* OVERRIDE THAT CODE WITH THE NEW FLIGHT MODES
+	//	/* OVERRIDE THAT CODE WITH THE NEW FLIGHT MODES
 
-		fModes::runVirtualPilot();
+	//	fModes::runVirtualPilot();
 
 
-		// when pilot is disarmed motors will not spin
-		// when disconnected form the pilot, motors will stop (not enabled)
+	//	// when pilot is disarmed motors will not spin
+	//	// when disconnected form the pilot, motors will stop (not enabled)
 
-		motors.setOnTL(fModes::vSticks.throttle + pidXval + pidYval - pidYawVal); // BR
-		motors.setOnTR(fModes::vSticks.throttle + pidXval - pidYval + pidYawVal); // BL
-		motors.setOnBR((int16_t)(fModes::vSticks.throttle * 1.5f) - pidXval - pidYval - pidYawVal); // TL (damaged)
-		motors.setOnBL(fModes::vSticks.throttle - pidXval + pidYval + pidYawVal); // TR
-		motors.forceMotorsExecution();
+	//	motors.setOnTL(fModes::vSticks.throttle + pidXval + pidYval - pidYawVal); // BR
+	//	motors.setOnTR(fModes::vSticks.throttle + pidXval - pidYval + pidYawVal); // BL
+	//	motors.setOnBR((int16_t)(fModes::vSticks.throttle * 1.5f) - pidXval - pidYval - pidYawVal); // TL (damaged)
+	//	motors.setOnBL(fModes::vSticks.throttle - pidXval + pidYval + pidYawVal); // TR
+	//	motors.forceMotorsExecution();
 
-		*/
-	}
+	//	*/
+	//}
+
 
 
 
