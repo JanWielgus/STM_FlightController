@@ -26,17 +26,17 @@ void addTaskerFunctionsToTasker()
 
 
 	// General
-	tasker.addTask(new UpdateControlDiode, 100000L, 2);		// 1Hz (tested duration)
-	tasker.addTask(new CheckCalibrations, 700000L, 7);		// 1.4Hz
+	tasker.addTask(new UpdateControlDiode, 100000L, 2);				// 1Hz (tested duration)
+	tasker.addTask(new CheckCalibrations, 700000L, 7);				// 1.4Hz
 
 	// Steering
-	tasker.addTask(new ReadXY_angles, 4000L, 639);			// 250Hz (tested duration)
-	tasker.addTask(new ReadCompass, 13340L, 492);			// 75Hz  (tested duration)
-	tasker.addTask(new Stabilize, 4000L, 31);				// 250Hz (duration tested only with leveling)
+	tasker.addTask(new ReadXY_angles, config::MainInterval, 639);	// 250Hz (tested duration)
+	tasker.addTask(new ReadCompass, 13340L, 492);					// 75Hz  (tested duration)
+	tasker.addTask(new Stabilize, 4000L, 31);						// 250Hz (duration tested only with leveling)
 
 	// Communication
-	tasker.addTask(new UpdateSending, 22000L, 1);			// ~45Hz
-	tasker.addTask(new UpdateReceiving, 7142L, 1);			// 140Hz (! UPDATE the body if frequency chanded !!!)
+	tasker.addTask(new UpdateSending, 22000L, 1);					// ~45Hz
+	tasker.addTask(new UpdateReceiving, 7142L, 1);					// 140Hz (! UPDATE the body if frequency chanded !!!)
 }
 
 
