@@ -12,8 +12,8 @@ class StabilizeFlightMode: public FlightMode
 {
 public:
 	StabilizeFlightMode();
-	void execute();
-	void reset();
+	void execute() override;
+	void reset() override;
 
 
 private:

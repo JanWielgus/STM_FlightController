@@ -17,12 +17,12 @@
 class VirtualPilot
 {
 public:
-	VirtualPilot(FC_ObjectTasker* taskerPointer);
+	VirtualPilot(FC_ObjectTasker* taskerPointer, FlightMode* defaultFlightMode);
 	~VirtualPilot();
 
 	// public methods
 	void runVirtualPilot();
-	void setFlightMode(FlightModeType flightModeToSet);
+	bool setFlightMode(FlightModeType flightModeToSet); // return true if setting new flight mode was successful
 	void addFlightMode(FlightMode* flightModeToAdd);
 	FlightModeType getCurrentFlightMode();
 	
@@ -31,14 +31,15 @@ public:
 private:
 	FlightMode* currentFlightMode; // pointer to the current flight mode (abstract type)
 
-	static const uint8_t amtOfFlightModes = (uint8_t)FlightModeType::LAST_FLIGHT_MODE + 1;
-	FlightMode* flightModesArray[amtOfFlightModes]; // array of all available flight modes pointers
+	static const uint8_t AmtOfFlightModes = (uint8_t)FlightModeType::LAST_FLIGHT_MODE + 1;
+	FlightMode* flightModesArray[AmtOfFlightModes]; // array of all available flight modes pointers
 
 	FC_ObjectTasker& tasker; // reference to the global tasker
 
 
 private:
 	FlightMode* getFlightModePtrByType(FlightModeType flightModeType);
+	bool isNotNullptr(FlightMode* flightMode);
 };
 
 

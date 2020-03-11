@@ -5,13 +5,15 @@
 
 #include "arduino.h"
 #include "SharedDataTypes.h"
+#include <FC_Task.h>
 
 
-class FlightMode
+class FlightMode : public FC_Task // something like implementing FC_Task interface
+								  // this will allow to add flight mode to the tasker
 {
 public:
 	FlightMode(FlightModeType typeToSet);
-	virtual void execute() = 0;
+	virtual void execute() override = 0;
 	virtual void reset() = 0;
 
 	bool checkIfFromThisBranch(FlightMode* toCheck);

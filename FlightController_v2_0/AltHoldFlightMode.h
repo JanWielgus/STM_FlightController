@@ -13,8 +13,8 @@ class AltHoldFlightMode: public FlightMode
 {
 public:
 	AltHoldFlightMode(StabilizeFlightMode* stabilizeFM);
-	void execute();
-	void reset(); // reset only the AltHold part
+	void execute() override;
+	void reset() override; // reset only the AltHold part
 
 };
 

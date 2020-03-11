@@ -15,8 +15,8 @@ class PosHoldFlightMode: public FlightMode
 {
 public:
 	PosHoldFlightMode(AltHoldFlightMode* altHoldFM);
-	void execute();
-	void reset();
+	void execute() override;
+	void reset() override; // reset only the PosHold part
 
 };
 
