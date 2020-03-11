@@ -50,11 +50,13 @@ void setup()
 	debug.printHeader("Program has just started!");
 	
 	
+
 	// on-board, blue and red diode
 	pinMode(LED_BUILTIN, OUTPUT);
 	pinMode(config::pin.redDiode, OUTPUT);
 	pinMode(config::pin.blueDiode, OUTPUT);
 	
+
 	
 	// TEMPORARY !!!  set 
 	pinMode(config::pin.m0pin, OUTPUT);
@@ -62,6 +64,7 @@ void setup()
 	pinMode(config::pin.aux, INPUT);
 	digitalWrite(config::pin.m0pin, HIGH);
 	digitalWrite(config::pin.m1pin, LOW);
+
 
 
 	// Set up a virtual pilot
@@ -77,6 +80,7 @@ void setup()
 	motors.setOnBR(0);
 	motors.setOnBL(0);
 	motors.setMotorState(false); // disable motors
+
 
 
 	// Add functions to the Tasker tasks
@@ -100,6 +104,7 @@ void setup()
 	mpu.setGyroFusionMultiplier(0.999); // CHANGED TO TEST
 	
 	
+
 	
 	///////////////
 	// TEMPORARY //
@@ -170,8 +175,11 @@ void setup()
 	compass.setCalibrationValues(config::calibVal.compassMin, config::calibVal.compassMax);
 	//compass.calibrateCompass(15);
 	
+
 	
 	mpu.setFastClock(); // 400 kHz
+
+
 	
 	// set initial Z axis value
 	mpu.read6AxisMotion();
@@ -187,7 +195,7 @@ void setup()
 
 void loop()
 {
-	tasker.runTasker();
+	tasker.run();
 	baro.runBarometer(); // this method uses planned tasks which need to be checked as fast as possible
 }
 
