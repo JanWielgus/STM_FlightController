@@ -29,7 +29,8 @@ private:
 
 
 private:
-	void updateHeadingToHold();
+	void updateLevelingStuff();
+	void updateHeadingStuff();
 };
 
 #endif
