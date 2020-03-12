@@ -75,12 +75,6 @@ namespace Storage
     // Global sensor readings
     extern readingsType reading;
 
-
-    // Flight modes
-    extern int16_t lastPID_LevelX_value;
-    extern int16_t lastPID_LevelY_value;
-    extern int16_t lastPID_Yaw_value;
-    extern int16_t lastPID_AltHold_value;
 }
 
 

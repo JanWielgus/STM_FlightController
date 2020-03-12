@@ -23,12 +23,16 @@ namespace config
 
 	const uint8_t MaxAmtOfTaskerTasks = 20; // tasks array size inside tasker
 
+	const uint8_t ZeroActionThrottle = 20;
+	const float CutOffAngle = 45; // Angle from which motors are immediately disabled
+
 
 // Boolean constants
 
 	struct
 	{
 		bool UseCompassInZAxisAngleCalculation = false; // Last time there was something wrong with the compass reading
+		bool DisableMotorsWhenConnectionIsLost = false; // When connection stability drops below 1 motors will be cut-off
 	} const booleans;
 
 
@@ -82,12 +86,6 @@ namespace config
 		const pidSet yaw = { 3.8f, 1.2f, 90, 0.8f };
 		const pidSet altHold = { 0, 0, 0, 0 };
 	}defPID;
-
-
-// other
-	const uint8_t ZeroActionThrottle = 20;
-	const float CutOffAngle = 46; // Angle from which motors are immediately disabled
-
 
 
 // pins

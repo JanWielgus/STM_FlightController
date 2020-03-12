@@ -15,6 +15,9 @@
 	Make it to work well at that speed
 	For example use extrapolations or interpolations
 
+	Flight modes only update virtual sticks (using PID controllers).
+	The rest is done inside the virtual pilot.
+
 	!!!!!
 */
 

@@ -37,12 +37,6 @@ namespace Storage
 	// Global sensor readings
 	readingsType reading;
 
-
-	// PID controllers results
-	int16_t lastPID_LevelX_value;
-	int16_t lastPID_LevelY_value;
-	int16_t lastPID_Yaw_value;
-	int16_t lastPID_AltHold_value;
 }
 
 

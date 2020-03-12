@@ -23,6 +23,14 @@ VirtualPilot::~VirtualPilot()
 void VirtualPilot::runVirtualPilot()
 {
 	currentFlightMode->execute();
+
+	// when drone is disarmed motors will not spin
+	// when disconnected from the pilot, motors will stop (check if config::DisableMotorsWhenConnectionIsLost is true)
+
+	motors.setOnTL(virtualStick.throttle + virtualStick.TB + virtualStick.LR - virtualStick.rotate); // BR
+	motors.setOnTL(virtualStick.throttle + virtualStick.TB - virtualStick.LR + virtualStick.rotate); // BL
+	motors.setOnTL(virtualStick.throttle - virtualStick.TB - virtualStick.LR - virtualStick.rotate); // TL
+	motors.setOnTL(virtualStick.throttle - virtualStick.TB + virtualStick.LR + virtualStick.rotate); // TR
 }
 
 

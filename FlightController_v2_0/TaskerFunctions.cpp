@@ -316,15 +316,19 @@ namespace TaskerFunction
 		}
 
 
-		/*
+		
 		// WHEN LOST THE SIGNAL, then disable motors
 
-		IMPLEMENT THIS INSIDE THE NEW FAILSAFE CLASS   !!!!!
+		// !!!
+		// IMPLEMENT THIS INSIDE THE NEW FAILSAFE CLASS   !!!!!
 
-		if (com.connectionStability() == 0)
+		if (config::booleans.DisableMotorsWhenConnectionIsLost &&
+			com.connectionStability() == 0)
 		{
 			motors.setMotorState(false);
-		}*/
+		}
+
+
 
 
 		// light up the red diode
