@@ -48,11 +48,9 @@ void StabilizeFlightMode::updateLevelingStuff()
 
 void StabilizeFlightMode::updateHeadingStuff()
 {
-	// Integrate yaw stick value only if connection is stable
-	if (Storage::com.connectionStability() > 1)
-		headingToHold += ((float)(Storage::com.received.steer.rotate / 2) * config::MainDeltaTimeInSeconds);
+	// Integrate yaw (rotate) stick value
+	integrateHeadingToHold();
 
-	
 	// Calculate the error
 	headingError = headingToHold - reading.heading;
 	
@@ -67,6 +65,15 @@ void StabilizeFlightMode::updateHeadingStuff()
 	// Maybe crate a new flag or maybe not and there is a better solution
 	// Problem is that when in altHold the actual throttle can be 0 and drone have to fly
 	// But stabilize dont have to access to the virtual stick after flight mode because it is run before alt hold
+}
+
+
+
+void StabilizeFlightMode::integrateHeadingToHold()
+{
+	// Integrate only if connection is stable
+	if (Storage::com.connectionStability() > 1)
+		headingToHold += ((float)(Storage::com.received.steer.rotate / 2) * config::MainDeltaTimeInSeconds);
 }
 
 
