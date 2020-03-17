@@ -31,6 +31,8 @@ private:
 private:
 	void updateLevelingStuff();
 	void updateHeadingStuff();
+
+	void correctHeadingError(); // Correct heading to be in range of -180 : 180
 };
 
 #endif

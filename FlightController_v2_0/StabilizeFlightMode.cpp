@@ -26,7 +26,11 @@ void StabilizeFlightMode::execute()
 
 void StabilizeFlightMode::reset()
 {
-
+	// Reset virtual sticks
+	// Reset leveling controllers
+	// Reset yaw controller
+	// Update headingToHold to the current heading
+	// 
 }
 
 
@@ -51,18 +55,25 @@ void StabilizeFlightMode::updateHeadingStuff()
 	
 	// Calculate the error
 	headingError = headingToHold - reading.heading;
-	// Correct error to be in range of [-180, 180]
-	if (headingError > 180)
-		headingError -= 360;
-	else if (headingError < -180)
-		headingError += 360;
+	
+	correctHeadingError(); // Correct error to be in range of [-180, 180]
+
 
 	// Calculate the pid value
-	virtualStick.rotate = yawPID.updateController(headingError);
+	virtualSticks.rotate = yawPID.updateController(headingError);
 
 	
 	// Think about when to reset the PID controller
 	// Maybe crate a new flag or maybe not and there is a better solution
 	// Problem is that when in altHold the actual throttle can be 0 and drone have to fly
 	// But stabilize dont have to access to the virtual stick after flight mode because it is run before alt hold
+}
+
+
+void StabilizeFlightMode::correctHeadingError()
+{
+	if (headingError > 180)
+		headingError -= 360;
+	else if (headingError < -180)
+		headingError += 360;
 }
