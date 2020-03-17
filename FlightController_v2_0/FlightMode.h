@@ -29,6 +29,7 @@ public:
 	FlightMode(FlightModeType typeToSet);
 	virtual void execute() = 0;
 	virtual void reset() = 0;
+	virtualSticksType* getVirtualSticks(); // return virtual sticks values as structure
 
 	bool checkIfFromThisBranch(FlightMode* toCheck);
 	FlightModeType getType();
@@ -38,12 +39,11 @@ public:
 protected:
 	FlightMode* baseFlightMode = nullptr;
 	const FlightModeType type;
+	virtualSticksType virtualSticks;	// Eack flight mode has own virtual stick values
+										// Each next fligh mode decide if want to override previous sticks value
+										// VirtualPilot just use values from the last flight mode
 
 	void executeBaseFlightMode();
-
-
-	// Pomysl czy kazdy tryb lotu nie powinien zawierac swojego typu
-	// (zmiennej typu enumerator typTrybuLotu)
 };
 
 

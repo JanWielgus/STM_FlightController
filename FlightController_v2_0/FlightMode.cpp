@@ -41,3 +41,9 @@ FlightModeType FlightMode::getType()
 	return this->type;
 }
 
+
+virtualSticksType* FlightMode::getVirtualSticks()
+{
+	return &this->virtualSticks;
+}
+

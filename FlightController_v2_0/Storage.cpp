@@ -31,7 +31,6 @@ namespace Storage
 
 	// VirtualPilot
 	VirtualPilot virtualPilot(&tasker);
-	virtualSticksType virtualStick;
 
 
 	// Global sensor readings

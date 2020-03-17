@@ -69,7 +69,6 @@ namespace Storage
 
     // VirtualPilot object
     extern VirtualPilot virtualPilot;
-    extern virtualSticksType virtualStick;
 
 
     // Global sensor readings
