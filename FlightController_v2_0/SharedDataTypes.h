@@ -32,10 +32,10 @@ enum BaudRates { BAUD_9600 = 9600, BAUD_19200 = 19200, BAUD_38400 = 38400, BAUD_
 
 struct virtualSticksType
 {
-    uint16_t throttle;
-    int16_t rotate;
-    int16_t TB;
-    int16_t LR;
+    uint16_t throttle; // 0 : 1000
+    int16_t rotate; // -500 : 500
+    int16_t TB; // -500 : 500
+    int16_t LR; // -500 : 500
 };
 
 

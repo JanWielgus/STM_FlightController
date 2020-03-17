@@ -23,14 +23,24 @@ VirtualPilot::~VirtualPilot()
 void VirtualPilot::runVirtualPilot()
 {
 	currentFlightMode->execute();
+	virtualSticksType* curStick = currentFlightMode->getVirtualSticks();
 
 	// when drone is disarmed motors will not spin
 	// when disconnected from the pilot, motors will stop (check if config::DisableMotorsWhenConnectionIsLost is true)
 
-	motors.setOnTL(virtualStick.throttle + virtualStick.TB + virtualStick.LR - virtualStick.rotate); // BR
-	motors.setOnTL(virtualStick.throttle + virtualStick.TB - virtualStick.LR + virtualStick.rotate); // BL
-	motors.setOnTL(virtualStick.throttle - virtualStick.TB - virtualStick.LR - virtualStick.rotate); // TL
-	motors.setOnTL(virtualStick.throttle - virtualStick.TB + virtualStick.LR + virtualStick.rotate); // TR
+
+
+	// !!!
+	// How to use
+	// 
+	// VirtualPilot use current flight mode virtualSticks as pid outputs
+	// If needed create in config the scale values to multiply by
+
+
+	motors.setOnTL(curStick->throttle + curStick->TB + curStick->LR - curStick->rotate); // BR
+	motors.setOnTL(curStick->throttle + curStick->TB - curStick->LR + curStick->rotate); // BL
+	motors.setOnTL(curStick->throttle - curStick->TB - curStick->LR - curStick->rotate); // TL
+	motors.setOnTL(curStick->throttle - curStick->TB + curStick->LR + curStick->rotate); // TR
 }
 
 
