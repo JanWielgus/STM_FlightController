@@ -15,6 +15,7 @@
 
 #include <FC_ObjectTasker.h>
 #include <FC_Task.h>
+#include <FC_TaskPlanner.h>
 #include <MyPID.h>
 #include <FC_Communication_Base.h>
 #include "FC_MainCommunication.h"
@@ -46,9 +47,11 @@ namespace Storage
 
     // Objects
     extern FC_ObjectTasker tasker;
+    extern FC_TaskPlanner taskPlanner;
     extern FC_MainCommunication com;
     extern FC_MPU6050Lib mpu;
     extern FC_HMC5883L_Lib compass;
+    extern FC_MS5611_Lib baro;
     extern FC_Motors motors;
     extern DebugSystem debug;
 
