@@ -240,3 +240,5 @@ build-FlightControllerControlPanel_v1-Desktop_Qt_5_10_0_MinGW_32bit-Release/ui_m
 *.sln
 *.db-shm
 *.db-wal
+
+.vs/
