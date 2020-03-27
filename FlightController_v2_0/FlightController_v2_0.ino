@@ -195,7 +195,9 @@ void setup()
 
 void loop()
 {
+	// This is the only two things inside the loop()
+	// Every other function/method/task have to use one of this objects
 	tasker.run();
-	baro.runBarometer(); // this method uses planned tasks which need to be checked as fast as possible
+	taskPlanner.runPlanner();
 }
 

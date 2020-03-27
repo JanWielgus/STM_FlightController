@@ -19,7 +19,8 @@ namespace config
 	const float MainDeltaTimeInSeconds = 1.0f / (float)MainFrequeny; //  = 1/250  (250Hz)
 	const uint16_t MainInterval = (uint16_t)(MainDeltaTimeInSeconds * 1000000.0); // [micro seconds] interval of main tasks
 
-	const uint8_t MaxAmtOfTaskerTasks = 20; // tasks array size inside tasker
+	const uint8_t MaxAmtOfTaskerTasks = 25; // tasks array size inside tasker
+	const uint8_t MaxAmtOfTaskPlannerTasks = 7; // max amount of tasks planned at once
 
 
 	// mpu6050

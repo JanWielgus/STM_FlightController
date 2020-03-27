@@ -8,10 +8,11 @@ namespace Storage
 {
 	// Objects
 	FC_ObjectTasker tasker(MaxAmtOfTaskerTasks);
+	FC_TaskPlanner taskPlanner(MaxAmtOfTaskPlannerTasks);
 	FC_MainCommunication com(&Serial1, 45);
 	FC_MPU6050Lib mpu;
 	FC_HMC5883L_Lib compass;
-	// Barometer object is created inside the library
+	FC_MS5611_Lib baro(&taskPlanner);
 	FC_Motors motors;
 	DebugSystem debug(&Serial);
 
