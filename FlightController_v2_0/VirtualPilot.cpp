@@ -23,6 +23,24 @@ VirtualPilot::~VirtualPilot()
 void VirtualPilot::runVirtualPilot()
 {
 	currentFlightMode->execute();
+	virtualSticksType* curStick = currentFlightMode->getVirtualSticks();
+
+	// when drone is disarmed motors will not spin
+	// when disconnected from the pilot, motors will stop (check if config::DisableMotorsWhenConnectionIsLost is true)
+
+
+
+	// !!!
+	// How to use
+	// 
+	// VirtualPilot use current flight mode virtualSticks as pid outputs
+	// If needed create in config the scale values to multiply by
+
+
+	motors.setOnTL(curStick->throttle + curStick->TB + curStick->LR - curStick->rotate); // BR
+	motors.setOnTL(curStick->throttle + curStick->TB - curStick->LR + curStick->rotate); // BL
+	motors.setOnTL(curStick->throttle - curStick->TB - curStick->LR - curStick->rotate); // TL
+	motors.setOnTL(curStick->throttle - curStick->TB + curStick->LR + curStick->rotate); // TR
 }
 
 
@@ -43,7 +61,7 @@ bool VirtualPilot::setFlightMode(FlightModeType flightModeToSet)
 		for (int i = 0; i < AmtOfFlightModes; i++)
 			// If pointer is not null AND checked flight mode is not from current flight mode branch
 			if (isNotNullptr(flightModesArray[i]) &&
-				!currentFlightMode->checkIfFromThisBranch(flightModesArray[i]))
+				!currentFlightMode->checkIfRelated(flightModesArray[i]))
 				flightModesArray[i]->reset();
 
 		return true;

@@ -29,7 +29,12 @@ private:
 
 
 private:
-	void updateHeadingToHold();
+	void updateLevelingStuff();
+	void updateHeadingStuff();
+
+	// Help methods
+	void integrateHeadingToHold(); // use roatate stick to calculate headingToHold
+	void correctHeadingError(); // Correct heading to be in range of -180 : 180
 };
 
 #endif

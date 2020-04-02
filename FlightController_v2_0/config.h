@@ -15,6 +15,8 @@
 
 namespace config
 {
+// Numerical constants
+
 	const uint8_t MainFrequeny = 250; // [Hz]
 	const float MainDeltaTimeInSeconds = 1.0f / (float)MainFrequeny; //  = 1/250  (250Hz)
 	const uint16_t MainInterval = (uint16_t)(MainDeltaTimeInSeconds * 1000000.0); // [micro seconds] interval of main tasks
@@ -22,8 +24,22 @@ namespace config
 	const uint8_t MaxAmtOfTaskerTasks = 25; // tasks array size inside tasker
 	const uint8_t MaxAmtOfTaskPlannerTasks = 7; // max amount of tasks planned at once
 
+	const uint8_t ZeroActionThrottle = 20;
+	const float CutOffAngle = 45; // Angle from which motors are immediately disabled
 
-	// mpu6050
+
+// Boolean constants
+
+	struct
+	{
+		bool UseCompassInZAxisAngleCalculation = false; // Last time there was something wrong with the compass reading
+		bool DisableMotorsWhenConnectionIsLost = false; // When connection stability drops below 1 motors will be cut-off
+	} const booleans;
+
+
+
+
+// mpu6050
 	struct 
 	{
 		// mpu6050
@@ -44,7 +60,7 @@ namespace config
 	} calibVal;
 
 
-	// flight modes config values
+// flight modes config values
 	struct
 	{
 		//const uint16_t ZeroG_throttle = 500; // throttle value when motors power compensate the gravity force
@@ -56,7 +72,7 @@ namespace config
 	} const flModeConfig; // flight mode config
 
 
-	// PID default values
+// PID default values
 	struct pidSet
 	{
 		float p;
@@ -73,13 +89,7 @@ namespace config
 	}defPID;
 
 
-	// other
-	const uint8_t ZeroActionThrottle = 20;
-	const float CutOffAngle = 46; // Angle from which motors are immediately disabled
-
-
-
-	// pins
+// pins
 	struct
 	{
 		/* not used in the code

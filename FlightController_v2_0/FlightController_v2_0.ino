@@ -7,7 +7,10 @@
 */
 
 
-#include <FC_Tasker.h>
+#include <FC_Task.h>
+#include <FC_ObjectTasker.h>
+#include <FC_Extrapolation.h>
+#include <FC_LinearExtrapolation.h>
 #include <MyPID.h>
 #include <FC_Communication_Base.h>
 #include <FC_MPU6050Lib.h>
@@ -183,8 +186,8 @@ void setup()
 	
 	// set initial Z axis value
 	mpu.read6AxisMotion();
-	angle = mpu.getFusedXYAngles();
-	compass.readCompassData(angle.x, angle.y);
+	reading.angle = mpu.getFusedXYAngles();
+	compass.readCompassData(reading.angle.x, reading.angle.y);
 	mpu.setInitialZAxisValue(compass.getHeading());
 	
 	Serial.println("setup done");

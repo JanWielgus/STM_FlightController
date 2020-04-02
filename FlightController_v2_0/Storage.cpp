@@ -30,20 +30,13 @@ namespace Storage
 	PosHoldFlightMode posHoldFlightMode(&altHoldFlightMode);
 
 
-	// VirtualPilot object
+	// VirtualPilot
 	VirtualPilot virtualPilot(&tasker);
 
 
 	// Global sensor readings
-	FC_MPU6050Lib::vector3Float angle = { 0, 0, 0 }; // X and Y angles
-	float heading = 0;
+	readingsType reading;
 
-
-	// PID controllers results
-	int16_t lastPID_LevelX_value;
-	int16_t lastPID_LevelY_value;
-	int16_t lastPID_Yaw_value;
-	int16_t lastPID_AltHold_value;
 }
 
 

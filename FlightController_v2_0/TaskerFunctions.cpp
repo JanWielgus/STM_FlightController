@@ -1,6 +1,8 @@
 #include "TaskerFunctions.h"
 #include "Storage.h"
 #include "config.h"
+#include <FC_Extrapolation.h>
+#include <FC_LinearExtrapolation.h>
 
 /*
 using Storage::levelXpid;
@@ -25,26 +27,30 @@ void addTaskerFunctionsToTasker()
 
 
 	// General
-	tasker.addTask(new UpdateControlDiode, 100000L, 2);				// 1Hz (tested duration)
-	tasker.addTask(new CheckCalibrations, 700000L, 7);				// 1.4Hz
+	tasker.addTask(new UpdateControlDiode, 100000L, 2);					// 1Hz (tested duration)
+	tasker.addTask(new CheckCalibrations, 700000L, 7);					// 1.4Hz
 
 	// Steering
-	tasker.addTask(new ReadXY_angles, config::MainInterval, 639);	// 250Hz (tested duration)
-	tasker.addTask(new ReadCompass, 13340L, 492);					// 75Hz  (tested duration)
-	tasker.addTask(&Storage::virtualPilot, config::MainInterval, 0);// 250Hz
-
-	// !! tasker.addTask(new Stabilize, 4000L, 31);						// 250Hz (duration tested only with leveling)
+	tasker.addTask(new ReadXY_angles, config::MainInterval, 639);		// 250Hz (tested duration)
+	tasker.addTask(new ReadCompass, 13340L, 492);						// 75Hz  (tested duration)
+	baro.registerNewBaroReadingFunction(newBaroReadingEvent);
+	tasker.addTask(new ProcessSlowerReadings, config::MainInterval, 0);	// 250Hz
+	tasker.addTask(&Storage::virtualPilot, config::MainInterval, 0);	// 250Hz
 
 
 	// Communication
-	tasker.addTask(new UpdateSending, 22000L, 1);					// ~45Hz
-	tasker.addTask(new UpdateReceiving, 7142L, 1);					// 140Hz (! UPDATE the body if frequency chanded !!!)
+	tasker.addTask(new UpdateSending, 22000L, 1);						// ~45Hz
+	tasker.addTask(new UpdateReceiving, 7142L, 1);						// 140Hz (! UPDATE the body if frequency chanded !!!)
 }
 
 
 
 namespace TaskerFunction
 {
+	FC_Extrapolation* compassExtrapolator = new FC_LinearExtrapolation();
+	FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
+
+
 	void UpdateControlDiode::execute()
 	{
 		digitalWrite(config::pin.LedBuiltIn, ledState);
@@ -69,15 +75,39 @@ namespace TaskerFunction
 	void ReadXY_angles::execute()
 	{
 		mpu.read6AxisMotion();
-		angle = mpu.getFusedXYAngles();
-		//heading = mpu.getZAngle(compass.getHeading()); // Temporary (something bad is happening with the compass)
-		heading = mpu.getZAngle();
+		reading.angle = mpu.getFusedXYAngles();
+		
+		if (config::booleans.UseCompassInZAxisAngleCalculation)
+			// Return compass heading extrapolation for the current time
+			reading.heading = mpu.getZAngle(compassExtrapolator->getEstimation(tasker.getCurrentTime()));
+		else
+			reading.heading = mpu.getZAngle();
 	}
 
 
 	void ReadCompass::execute()
 	{
-		compass.readCompassData(angle.x, angle.y);
+		compass.readCompassData(reading.angle.x, reading.angle.y);
+
+		// Add new compass heading measurement for the current time
+		compassExtrapolator->addNewMeasuredValue(compass.getHeading(), tasker.getCurrentTime());
+	}
+
+
+	void newBaroReadingEvent()
+	{
+		// normal pressure is just assigned to the globar reading variable
+		reading.pressure = baro.getPressure();
+
+		// smooth pressure is extrapolated
+		baroExtrapolator->addNewMeasuredValue(baro.getSmoothPressure(), tasker.getCurrentTime());
+	}
+
+
+	void ProcessSlowerReadings::execute()
+	{
+		// extrapolate baro reading to meet the program main frequency (250Hz)
+		reading.smoothPressure = baroExtrapolator->getEstimation(tasker.getCurrentTime());
 	}
 
 
@@ -91,31 +121,6 @@ namespace TaskerFunction
 	//	if (angle.x > CutOffAngle || angle.x < -CutOffAngle ||
 	//		angle.y > CutOffAngle || angle.y < -CutOffAngle)
 	//		motors.setMotorState(false);
-
-
-
-
-
-	//	// Extrapolate sticks
-	//	// Extrapolate TB and LR stick values
-	//	if (flags.needToExtrapolateStickVlaues)
-	//	{
-	//		extrapolatedTBstick += (float(com.received.steer.TB - previousTBvalue) * 0.2);
-	//		extrapolatedLRstick += (float(com.received.steer.LR - previousLRvalue) * 0.2);
-	//	}
-	//	else
-	//	{
-	//		extrapolatedTBstick = (float)com.received.steer.TB;
-	//		extrapolatedLRstick = (float)com.received.steer.LR;
-	//	}
-	//	// next run should extrapolate sticks values unless communication will reset this flag
-	//	extrapolatedTBstick = tbFilter.updateFilter(extrapolatedTBstick);
-	//	extrapolatedLRstick = lrFilter.updateFilter(extrapolatedLRstick);
-	//	flags.needToExtrapolateStickVlaues = true;
-	//	//Serial.print(com.received.steer.LR);
-	//	//Serial.print(" ");
-	//	//Serial.println(extrapolatedLRstick);
-
 
 
 
@@ -197,8 +202,8 @@ namespace TaskerFunction
 	void UpdateSending::execute()
 	{
 		// Pack all data to the toSend variables
-		com.toSend.tilt_TB = (int8_t)angle.x;
-		com.toSend.tilt_LR = (int8_t)angle.y;
+		com.toSend.tilt_TB = (int8_t)reading.angle.x;
+		com.toSend.tilt_LR = (int8_t)reading.angle.y;
 		com.toSend.altitude = (int16_t)(baro.getSmoothPressure() - 90000);
 
 
@@ -311,15 +316,19 @@ namespace TaskerFunction
 		}
 
 
-		/*
+		
 		// WHEN LOST THE SIGNAL, then disable motors
 
-		IMPLEMENT THIS INSIDE THE NEW FAILSAFE CLASS   !!!!!
+		// !!!
+		// IMPLEMENT THIS INSIDE THE NEW FAILSAFE CLASS   !!!!!
 
-		if (com.connectionStability() == 0)
+		if (config::booleans.DisableMotorsWhenConnectionIsLost &&
+			com.connectionStability() == 0)
 		{
 			motors.setMotorState(false);
-		}*/
+		}
+
+
 
 
 		// light up the red diode

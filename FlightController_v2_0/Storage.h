@@ -30,6 +30,7 @@
 #include "AltHoldFlightMode.h"
 #include "PosHoldFlightMode.h"
 #include "VirtualPilot.h"
+#include "SharedDataTypes.h"
 
 
 
@@ -74,15 +75,8 @@ namespace Storage
 
 
     // Global sensor readings
-    extern FC_MPU6050Lib::vector3Float angle;
-    extern float heading;
+    extern readingsType reading;
 
-
-    // Flight modes
-    extern int16_t lastPID_LevelX_value;
-    extern int16_t lastPID_LevelY_value;
-    extern int16_t lastPID_Yaw_value;
-    extern int16_t lastPID_AltHold_value;
 }
 
 

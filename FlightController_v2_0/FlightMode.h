@@ -15,6 +15,9 @@
 	Make it to work well at that speed
 	For example use extrapolations or interpolations
 
+	Flight modes only update virtual sticks (using PID controllers).
+	The rest is done inside the virtual pilot.
+
 	!!!!!
 */
 
@@ -26,8 +29,9 @@ public:
 	FlightMode(FlightModeType typeToSet);
 	virtual void execute() = 0;
 	virtual void reset() = 0;
+	virtualSticksType* getVirtualSticks(); // return virtual sticks values as structure
 
-	bool checkIfFromThisBranch(FlightMode* toCheck);
+	bool checkIfRelated(FlightMode* toCheck);
 	FlightModeType getType();
 
 
@@ -35,12 +39,11 @@ public:
 protected:
 	FlightMode* baseFlightMode = nullptr;
 	const FlightModeType type;
+	virtualSticksType virtualSticks;	// Eack flight mode has own virtual stick values
+										// Each next fligh mode decide if want to override previous sticks value
+										// VirtualPilot just use values from the last flight mode
 
 	void executeBaseFlightMode();
-
-
-	// Pomysl czy kazdy tryb lotu nie powinien zawierac swojego typu
-	// (zmiennej typu enumerator typTrybuLotu)
 };
 
 

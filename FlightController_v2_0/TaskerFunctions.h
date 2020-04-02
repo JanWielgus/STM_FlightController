@@ -40,17 +40,12 @@ namespace TaskerFunction
 		void execute() override;
 	};
 
+	void newBaroReadingEvent(); // Function called by the baro instance
 
-	/*
-	// !!!!!
-	// THIS PART HAVE TO BE REMOVED (ONLY VIRTUAL PILOT USE FLIGHT MODES)
-	class Stabilize : public FC_Task
+	class ProcessSlowerReadings : public FC_Task
 	{
 		void execute() override;
-	};*/
-
-
-	//void updatePressureAndAltHold(); // update altHold PID if needed and do other baro stuff
+	};
 
 
 
