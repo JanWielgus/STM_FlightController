@@ -52,11 +52,11 @@ void StabilizeFlightMode::updateHeadingStuff()
 	integrateHeadingToHold();
 
 	// Calculate the error
-	headingError = headingToHold - reading.heading;
+	headingError = headingToHold - Storage::reading.heading;
 	correctHeadingError(); // Correct error to be in range of [-180, 180]
 
 	// Calculate the pid value
-	virtualSticks.rotate = yawPID.updateController(headingError);
+	virtualSticks.rotate = Storage::yawPID.updateController(headingError);
 
 	
 

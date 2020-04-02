@@ -3,6 +3,7 @@
 // 
 
 #include "VirtualPilot.h"
+#include "Storage.h"
 
 
 VirtualPilot::VirtualPilot(FC_ObjectTasker* taskerPointer)
@@ -37,10 +38,10 @@ void VirtualPilot::runVirtualPilot()
 	// If needed create in config the scale values to multiply by
 
 
-	motors.setOnTL(curStick->throttle + curStick->TB + curStick->LR - curStick->rotate); // BR
-	motors.setOnTL(curStick->throttle + curStick->TB - curStick->LR + curStick->rotate); // BL
-	motors.setOnTL(curStick->throttle - curStick->TB - curStick->LR - curStick->rotate); // TL
-	motors.setOnTL(curStick->throttle - curStick->TB + curStick->LR + curStick->rotate); // TR
+	Storage::motors.setOnTL(curStick->throttle + curStick->TB + curStick->LR - curStick->rotate); // BR
+	Storage::motors.setOnTL(curStick->throttle + curStick->TB - curStick->LR + curStick->rotate); // BL
+	Storage::motors.setOnTL(curStick->throttle - curStick->TB - curStick->LR - curStick->rotate); // TL
+	Storage::motors.setOnTL(curStick->throttle - curStick->TB + curStick->LR + curStick->rotate); // TR
 }
 
 
