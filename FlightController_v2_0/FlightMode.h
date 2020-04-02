@@ -4,6 +4,7 @@
 #define _FLIGHTMODE_h
 
 #include "arduino.h"
+#include "Interfaces.h"
 #include "SharedDataTypes.h"
 #include <FC_Task.h>
 
@@ -23,21 +24,20 @@
 
 
 
-class FlightMode
+class FlightMode: public IFlightMode
 {
 public:
-	FlightMode(FlightModeType typeToSet);
-	virtual void execute() = 0;
-	virtual void reset() = 0;
-	virtualSticksType* getVirtualSticks(); // return virtual sticks values as structure
+	FlightMode(FlightModeType typeToSet, IFlightMode* baseFlM, IVirtualPiltot* virtualPilot);
+	virtual void reset() override = 0;
+	virtualSticksType* getVirtualSticks() override; // return virtual sticks values as structure
 
-	bool checkIfRelated(FlightMode* toCheck);
-	FlightModeType getType();
+	bool checkIfRelated(const IFlightMode* toCheck) override;
+	FlightModeType getType() override;
 
 
 	// protected components
 protected:
-	FlightMode* baseFlightMode = nullptr;
+	IFlightMode* const baseFlightMode; // ! To initialize inside derivative class
 	const FlightModeType type;
 	virtualSticksType virtualSticks;	// Eack flight mode has own virtual stick values
 										// Each next fligh mode decide if want to override previous sticks value

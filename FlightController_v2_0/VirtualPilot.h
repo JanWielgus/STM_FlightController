@@ -10,7 +10,7 @@
 #include <FC_Task.h>
 
 
-class VirtualPilot : public IVirtualPiltot, public FC_Task
+class VirtualPilot : public IVirtualPilot, public FC_Task
 {
 public:
 	VirtualPilot(FC_ObjectTasker* taskerPointer);

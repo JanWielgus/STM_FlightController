@@ -5,13 +5,15 @@
 #include "FlightMode.h"
 
 
-FlightMode::FlightMode(FlightModeType typeToSet)
-	: type(typeToSet)
+FlightMode::FlightMode(FlightModeType typeToSet, IFlightMode* baseFlM, IVirtualPiltot* virtualPilot)
+	: type(typeToSet), baseFlightMode(baseFlM)
 {
+	// Add this object to the virtual pilot
+	virtualPilot->addFlightMode(this);
 }
 
 
-bool FlightMode::checkIfRelated(FlightMode* toCheck)
+bool FlightMode::checkIfRelated(const IFlightMode* toCheck)
 {
 	// Sprawdz czy ten tryb lotu to jest ten albo wywolaj dla bazowego trybu lotu sprawdzenie
 	// Sprawdz czy tryb bazowy nie jest nullptr (moze to byc pierwszy tryb w hierarchii)
@@ -20,19 +22,10 @@ bool FlightMode::checkIfRelated(FlightMode* toCheck)
 
 	if (toCheck == this) // this is the searched class
 		return true;
-
 	else if (baseFlightMode != nullptr)
 		return baseFlightMode->checkIfRelated(toCheck);
-
 	else
 		return false;
-}
-
-
-void FlightMode::executeBaseFlightMode()
-{
-	if (baseFlightMode != nullptr)
-		baseFlightMode->execute();
 }
 
 
@@ -45,5 +38,12 @@ FlightModeType FlightMode::getType()
 virtualSticksType* FlightMode::getVirtualSticks()
 {
 	return &this->virtualSticks;
+}
+
+
+void FlightMode::executeBaseFlightMode()
+{
+	if (baseFlightMode != nullptr)
+		baseFlightMode->run();
 }
 

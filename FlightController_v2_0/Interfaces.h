@@ -11,10 +11,10 @@ class IFlightMode;
 
 
 
-class IVirtualPiltot
+class IVirtualPilot
 {
 public:
-	virtual ~IVirtualPiltot() {}
+	virtual ~IVirtualPilot() {}
 	virtual void runVirtualPilot() = 0;
 	virtual bool addFlightMode(IFlightMode* flightModeToAdd) = 0;
 	virtual bool setFlightMode(FlightModeType flightModeToSet) = 0;
@@ -29,7 +29,7 @@ public:
 	virtual void run() = 0;
 	virtual void reset() = 0;
 	virtual virtualSticksType* getVirtualSticks() = 0;
-	virtual bool checkifRelated(IFlightMode* toCheck) = 0;
+	virtual bool checkIfRelated(const IFlightMode* toCheck) = 0;
 	virtual FlightModeType getType() = 0;
 };
 
