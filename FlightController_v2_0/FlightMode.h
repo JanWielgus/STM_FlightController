@@ -31,7 +31,7 @@ public:
 	virtual void reset() = 0;
 	virtualSticksType* getVirtualSticks(); // return virtual sticks values as structure
 
-	bool checkIfFromThisBranch(FlightMode* toCheck);
+	bool checkIfRelated(FlightMode* toCheck);
 	FlightModeType getType();
 
 

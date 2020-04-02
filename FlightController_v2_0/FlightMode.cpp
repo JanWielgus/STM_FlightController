@@ -11,7 +11,7 @@ FlightMode::FlightMode(FlightModeType typeToSet)
 }
 
 
-bool FlightMode::checkIfFromThisBranch(FlightMode* toCheck)
+bool FlightMode::checkIfRelated(FlightMode* toCheck)
 {
 	// Sprawdz czy ten tryb lotu to jest ten albo wywolaj dla bazowego trybu lotu sprawdzenie
 	// Sprawdz czy tryb bazowy nie jest nullptr (moze to byc pierwszy tryb w hierarchii)
@@ -22,7 +22,7 @@ bool FlightMode::checkIfFromThisBranch(FlightMode* toCheck)
 		return true;
 
 	else if (baseFlightMode != nullptr)
-		return baseFlightMode->checkIfFromThisBranch(toCheck);
+		return baseFlightMode->checkIfRelated(toCheck);
 
 	else
 		return false;

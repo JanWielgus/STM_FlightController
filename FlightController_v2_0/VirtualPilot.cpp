@@ -61,7 +61,7 @@ bool VirtualPilot::setFlightMode(FlightModeType flightModeToSet)
 		for (int i = 0; i < AmtOfFlightModes; i++)
 			// If pointer is not null AND checked flight mode is not from current flight mode branch
 			if (isNotNullptr(flightModesArray[i]) &&
-				!currentFlightMode->checkIfFromThisBranch(flightModesArray[i]))
+				!currentFlightMode->checkIfRelated(flightModesArray[i]))
 				flightModesArray[i]->reset();
 
 		return true;
