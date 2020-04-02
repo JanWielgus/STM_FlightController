@@ -9,21 +9,21 @@
 VirtualPilot::VirtualPilot(FC_ObjectTasker* taskerPointer)
 	: tasker(*taskerPointer)
 {
-	// Set each pointer to nullptr
-	for (int i = 0; i < AmtOfFlightModes; i++)
-		flightModesArray[i] = nullptr;
+	flightModesArraySize = 5;
+	flightModesArray = new IFlightMode* [flightModesArraySize];
 }
 
 
 VirtualPilot::~VirtualPilot()
 {
+	delete[] flightModesArray;
 }
 
 
 
 void VirtualPilot::runVirtualPilot()
 {
-	currentFlightMode->execute();
+	currentFlightMode->run();
 	virtualSticksType* curStick = currentFlightMode->getVirtualSticks();
 
 	// when drone is disarmed motors will not spin
@@ -53,69 +53,66 @@ void VirtualPilot::execute()
 
 bool VirtualPilot::setFlightMode(FlightModeType flightModeToSet)
 {
-	FlightMode* toSet = getFlightModePtrByType(flightModeToSet);
-	if (isNotNullptr(toSet))
+	bool result = false;
+
+	// Find flight mode pointer in the array
+	for (int i = 0; i < amtOfFlightModes; i++)
 	{
-		currentFlightMode = toSet;
-
-		// Reset other flight modes (not involved in the current flight mode)
-		for (int i = 0; i < AmtOfFlightModes; i++)
-			// If pointer is not null AND checked flight mode is not from current flight mode branch
-			if (isNotNullptr(flightModesArray[i]) &&
-				!currentFlightMode->checkIfRelated(flightModesArray[i]))
-				flightModesArray[i]->reset();
-
-		return true;
+		if (flightModesArray[i]->getType() == flightModeToSet)
+		{
+			currentFlightMode = flightModesArray[i];
+			result = true;
+		}
 	}
 
-	return false;
+	// Return false if not found flight mode with that type
+	if (result == false)
+		return false;
+
+	// reset state of not related flight modes
+	for (int i = 0; i < amtOfFlightModes; i++)
+		if (!currentFlightMode->checkifRelated(flightModesArray[i]))
+			flightModesArray[i]->reset();
+
+	return true;
 }
 
 
-// This method adds flight mode to it's fixed position in array
-bool VirtualPilot::addFlightMode(FlightMode* flightModeToAdd, bool isDefault)
+bool VirtualPilot::addFlightMode(IFlightMode* flightModeToAdd)
 {
-	// 'type' is the index in the array
-	uint8_t type = (uint8_t)flightModeToAdd->getType();
+	// Check if this flight mode type is not already in the array
+	FlightModeType toAddType = flightModeToAdd->getType();
+	for (int i = 0; i < amtOfFlightModes; i++)
+		if (flightModesArray[i]->getType() == toAddType)
+			return false;
 
-	// if this flight mode is null (was not added before)
-	if (flightModesArray[type] == nullptr)
+	// Make sure array is big enough
+	if (flightModesArraySize < amtOfFlightModes + 1)
 	{
-		flightModesArray[type] = flightModeToAdd;
+		// Create bigger array (for two new flight modes)
+		flightModesArraySize = amtOfFlightModes + 2;
+		IFlightMode** newArray = new IFlightMode* [flightModesArraySize];
 
-		// check if this flight mode is default one
-		if (isDefault)
-			setFlightMode(flightModeToAdd->getType());
+		// Copy previous flight modes to the new array
+		for (int i = 0; i < amtOfFlightModes; i++)
+			newArray[i] = flightModesArray[i];
 
-		return true;
+		// Now safely delete smaller array
+		delete[] flightModesArray;
+		flightModesArray = newArray; // change pointer
 	}
 
-	return false;
+	// Add new flight mode on the end
+	flightModesArray[amtOfFlightModes] = flightModeToAdd;
+	amtOfFlightModes++;
+
+	return true;
 }
 
 
-FlightModeType VirtualPilot::getCurrentFlightMode()
+FlightModeType VirtualPilot::getCurrentFlightModeType()
 {
 	return currentFlightMode->getType();
-}
-
-
-FlightMode* VirtualPilot::getFlightModePtrByType(FlightModeType flightModeType)
-{
-	for (int i = 0; i < AmtOfFlightModes; i++)
-	{
-		if (isNotNullptr(this->flightModesArray[i]) &&
-			this->flightModesArray[i]->getType() == flightModeType)
-			return this->flightModesArray[i];
-	}
-
-	return nullptr;
-}
-
-
-bool VirtualPilot::isNotNullptr(FlightMode* flightMode)
-{
-	return flightMode != nullptr;
 }
 
 
