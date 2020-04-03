@@ -3,11 +3,8 @@
 #ifndef _FC_MAINCOMMUNICATION_h
 #define _FC_MAINCOMMUNICATION_h
 
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "arduino.h"
+
 
 #include <FC_Communication_Base.h>
 #include <FC_CustomDataTypes.h>
