@@ -6,13 +6,14 @@
 #include "arduino.h"
 #include <MyPID.h>
 #include "FlightMode.h"
+#include "Interfaces.h"
 
 
 class StabilizeFlightMode: public FlightMode
 {
 public:
-	StabilizeFlightMode();
-	void execute() override;
+	StabilizeFlightMode(IVirtualPilot* virtualPilot);
+	void run() override;
 	void reset() override;
 
 public:

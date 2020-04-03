@@ -5,16 +5,17 @@
 #include "StabilizeFlightMode.h"
 #include "Storage.h"
 #include "SharedDataTypes.h"
+#include "config.h"
 
 
-StabilizeFlightMode::StabilizeFlightMode()
-	: FlightMode(FlightModeType::STABILIZE)
+StabilizeFlightMode::StabilizeFlightMode(IVirtualPilot* virtualPilot)
+	: FlightMode(FlightModeType::STABILIZE, nullptr, virtualPilot)
 {
 
 }
 
 
-void StabilizeFlightMode::execute()
+void StabilizeFlightMode::run()
 {
 	updateLevelingStuff();
 	updateHeadingStuff();

@@ -25,12 +25,8 @@
 #include <FC_EVA_Filter.h>
 #include "FC_Motors.h"
 #include "DebugSystem.h"
-#include "FlightMode.h"
-#include "StabilizeFlightMode.h"
-#include "AltHoldFlightMode.h"
-#include "PosHoldFlightMode.h"
-#include "VirtualPilot.h"
 #include "SharedDataTypes.h"
+#include "Interfaces.h"
 
 
 
@@ -64,14 +60,14 @@ namespace Storage
     extern MyPID altHoldPID;
 
 
-    // Used flight modes
-    extern StabilizeFlightMode stabilizeFlightMode;
-    extern AltHoldFlightMode altHoldFlightMode;
-    extern PosHoldFlightMode posHoldFlightMode;
-
-
     // VirtualPilot object
-    extern VirtualPilot virtualPilot;
+    extern IVirtualPilot& virtualPilot;
+
+
+    // Used flight modes
+    extern IFlightMode& stabilizeFlightMode;
+    extern IFlightMode& altHoldFlightMode;
+    extern IFlightMode& posHoldFlightMode;
 
 
     // Global sensor readings

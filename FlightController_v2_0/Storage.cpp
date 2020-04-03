@@ -1,6 +1,12 @@
 #include "Storage.h"
 #include "config.h"
 
+#include "VirtualPilot.h"
+#include "FlightMode.h"
+#include "StabilizeFlightMode.h"
+#include "AltHoldFlightMode.h"
+#include "PosHoldFlightMode.h"
+
 using namespace config;
 
 
@@ -24,14 +30,14 @@ namespace Storage
 	MyPID altHoldPID(MainDeltaTimeInSeconds, defPID.altHold.p, defPID.altHold.i, defPID.altHold.d, defPID.altHold.imax);
 
 
-	// Used flight modes
-	StabilizeFlightMode stabilizeFlightMode;
-	AltHoldFlightMode altHoldFlightMode(&stabilizeFlightMode);
-	PosHoldFlightMode posHoldFlightMode(&altHoldFlightMode);
-
-
 	// VirtualPilot
-	VirtualPilot virtualPilot(&tasker);
+	IVirtualPilot& virtualPilot = *(new VirtualPilot(&tasker));
+
+
+	// Used flight modes
+	IFlightMode& stabilizeFlightMode = *(new StabilizeFlightMode(&virtualPilot));
+	IFlightMode& altHoldFlightMode = *(new AltHoldFlightMode(&stabilizeFlightMode, &virtualPilot));
+	IFlightMode& posHoldFlightMode = *(new PosHoldFlightMode(&altHoldFlightMode, &virtualPilot));
 
 
 	// Global sensor readings
