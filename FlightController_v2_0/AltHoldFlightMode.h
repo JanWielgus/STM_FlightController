@@ -7,13 +7,14 @@
 #include <MyPID.h>
 #include "FlightMode.h"
 #include "StabilizeFlightMode.h"
+#include "Interfaces.h"
 
 
 class AltHoldFlightMode: public FlightMode
 {
 public:
-	AltHoldFlightMode(StabilizeFlightMode* stabilizeFM);
-	void execute() override;
+	AltHoldFlightMode(IFlightMode* stabilizeFM, IVirtualPilot* virtualPilot);
+	void run() override;
 	void reset() override; // reset only the AltHold part
 
 public:

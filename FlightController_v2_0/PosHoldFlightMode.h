@@ -9,15 +9,15 @@
 #include "StabilizeFlightMode.h"
 #include "StabilizeFlightMode.h"
 #include "AltHoldFlightMode.h"
+#include "Interfaces.h"
 
 
 class PosHoldFlightMode: public FlightMode
 {
 public:
-	PosHoldFlightMode(AltHoldFlightMode* altHoldFM);
-	void execute() override;
+	PosHoldFlightMode(IFlightMode* altHoldFM, IVirtualPilot* virtualPilot);
+	void run() override;
 	void reset() override; // reset only the PosHold part
-
 };
 
 #endif

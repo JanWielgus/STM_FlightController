@@ -71,7 +71,7 @@ bool VirtualPilot::setFlightMode(FlightModeType flightModeToSet)
 
 	// reset state of not related flight modes
 	for (int i = 0; i < amtOfFlightModes; i++)
-		if (!currentFlightMode->checkifRelated(flightModesArray[i]))
+		if (!currentFlightMode->checkIfRelated(flightModesArray[i]))
 			flightModesArray[i]->reset();
 
 	return true;

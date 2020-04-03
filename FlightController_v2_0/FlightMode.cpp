@@ -5,7 +5,7 @@
 #include "FlightMode.h"
 
 
-FlightMode::FlightMode(FlightModeType typeToSet, IFlightMode* baseFlM, IVirtualPiltot* virtualPilot)
+FlightMode::FlightMode(FlightModeType typeToSet, IFlightMode* baseFlM, IVirtualPilot* virtualPilot)
 	: type(typeToSet), baseFlightMode(baseFlM)
 {
 	// Add this object to the virtual pilot

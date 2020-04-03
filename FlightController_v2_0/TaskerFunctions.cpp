@@ -35,7 +35,7 @@ void addTaskerFunctionsToTasker()
 	tasker.addTask(new ReadCompass, 13340L, 492);						// 75Hz  (tested duration)
 	baro.registerNewBaroReadingFunction(newBaroReadingEvent);
 	tasker.addTask(new ProcessSlowerReadings, config::MainInterval, 0);	// 250Hz
-	tasker.addTask(&Storage::virtualPilot, config::MainInterval, 0);	// 250Hz
+	tasker.addTask((FC_Task*)&Storage::virtualPilot, config::MainInterval, 0);	// 250Hz
 
 
 	// Communication

@@ -27,7 +27,8 @@
 class FlightMode: public IFlightMode
 {
 public:
-	FlightMode(FlightModeType typeToSet, IFlightMode* baseFlM, IVirtualPiltot* virtualPilot);
+	FlightMode(FlightModeType typeToSet, IFlightMode* baseFlM, IVirtualPilot* virtualPilot);
+	virtual void run() override = 0;
 	virtual void reset() override = 0;
 	virtualSticksType* getVirtualSticks() override; // return virtual sticks values as structure
 
@@ -37,7 +38,7 @@ public:
 
 	// protected components
 protected:
-	IFlightMode* const baseFlightMode; // ! To initialize inside derivative class
+	IFlightMode* const baseFlightMode;  // ! To initialize inside derivative class
 	const FlightModeType type;
 	virtualSticksType virtualSticks;	// Eack flight mode has own virtual stick values
 										// Each next fligh mode decide if want to override previous sticks value

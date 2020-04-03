@@ -7,18 +7,16 @@
 #include "SharedDataTypes.h"
 
 
-PosHoldFlightMode::PosHoldFlightMode(AltHoldFlightMode* altHoldFM)
-	: FlightMode(FlightModeType::POS_HOLD)
+PosHoldFlightMode::PosHoldFlightMode(IFlightMode* altHoldFM, IVirtualPilot* virtualPilot)
+	: FlightMode(FlightModeType::POS_HOLD, altHoldFM, virtualPilot)
 {
-	this->baseFlightMode = altHoldFM;
 
-	//...
 }
 
 
-void PosHoldFlightMode::execute()
+void PosHoldFlightMode::run()
 {
-	this->baseFlightMode->execute();
+	this->baseFlightMode->run();
 
 
 
