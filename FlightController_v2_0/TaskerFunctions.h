@@ -57,7 +57,25 @@ namespace TaskerFunction
 		void execute() override;
 	};
 
-	class UpdateReceiving : public FC_Task
+	// received packet events
+
+	class SteeringReceivedUpdate : public FC_Task
+	{
+		void execute() override;
+	};
+
+	class BasicBackgroundReceivedUpdate : public FC_Task
+	{
+	protected:
+		void execute() override;
+	};
+
+	class FullBackgroundReceivedUpdate : public BasicBackgroundReceivedUpdate
+	{
+		void execute() override;
+	};
+
+	class PID_paramsReceivedUpdate : public FC_Task
 	{
 		void execute() override;
 	};

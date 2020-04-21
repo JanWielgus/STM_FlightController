@@ -27,21 +27,26 @@ void addTaskerFunctionsToTasker()
 
 
 	// General
-	tasker.addTask(new UpdateControlDiode, 100000L, 2);					// 1Hz (tested duration)
-	tasker.addTask(new CheckCalibrations, 700000L, 7);					// 1.4Hz
+	tasker.addTask(new UpdateControlDiode, 100000L, 2);							// 1Hz
+	tasker.addTask(new CheckCalibrations, 700000L, 7);							// 1.4Hz
 
 	// Steering
-	tasker.addTask(new ReadXY_angles, config::MainInterval, 639);		// 250Hz (tested duration)
-	tasker.addTask(new ReadCompass, 13340L, 492);						// 75Hz  (tested duration)
+	tasker.addTask(new ReadXY_angles, config::MainInterval, 639);				// 250Hz
+	tasker.addTask(new ReadCompass, 13340L, 492);								// 75Hz
 	baro.registerNewBaroReadingFunction(newBaroReadingEvent);
-	tasker.addTask(new ProcessSlowerReadings, config::MainInterval, 0);	// 250Hz
+	tasker.addTask(new ProcessSlowerReadings, config::MainInterval, 0);			// 250Hz
 	tasker.addTask((FC_Task*)&Storage::virtualPilot, config::MainInterval, 0);	// 250Hz
 
 
 	// Communication
 	tasker.addTask(&comm, config::MainInterval, 0);
-	tasker.addTask(new UpdateSending, 22000L, 1);						// ~45Hz
-	tasker.addTask(new UpdateReceiving, 7142L, 1);						// 140Hz (! UPDATE the body if frequency chanded !!!)
+	tasker.addTask(new UpdateSending, 22000L, 1);								// ~45Hz
+
+	// received packet events
+	ReceiveData::DP_steering.setPacketEvent(new SteeringReceivedUpdate);
+	ReceiveData::DP_basicBackground.setPacketEvent(new BasicBackgroundReceivedUpdate);
+	ReceiveData::DP_fullBackground.setPacketEvent(new FullBackgroundReceivedUpdate);
+	ReceiveData::DP_PID_params.setPacketEvent(new PID_paramsReceivedUpdate);
 }
 
 
@@ -54,8 +59,12 @@ namespace TaskerFunction
 
 	void UpdateControlDiode::execute()
 	{
+		// Blink built-in diode
 		digitalWrite(config::pin.LedBuiltIn, ledState);
 		ledState = !ledState;
+
+		// Update communication indication diode
+		digitalWrite(config::pin.redDiode, (comm.getConnectionStability() >= 75) ? HIGH : LOW);
 	}
 
 
@@ -203,133 +212,108 @@ namespace TaskerFunction
 	void UpdateSending::execute()
 	{
 		// Pack all data to the toSend variables
-		com.toSend.tilt_TB = (int8_t)reading.angle.x;
-		com.toSend.tilt_LR = (int8_t)reading.angle.y;
-		com.toSend.altitude = (int16_t)(baro.getSmoothPressure() - 90000);
+		SendData::tilt_TB = (int8_t)reading.angle.x;
+		SendData::tilt_LR = (int8_t)reading.angle.y;
+		SendData::heading = (int16_t)reading.heading;
+		SendData::altitude = (int16_t)(baro.getSmoothPressure() - 90000); // TEMP ! (change for altitude)
+		SendData::receivingConnectionStability = comm.getConnectionStability();
 
 
-		// Send proper data packet: TYPE1-full, TYPE2-basic
-		//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE); // basic
-		com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE); // full
-
-
-
-
-		/* /////////////////////////
-		Serial.print("H: ");
-		Serial.print(heading);
-		Serial.println();
-		*/
-
-		/*
-		//Serial.println((uint16_t)com.received.steer.throttle);
-		Serial.print(com.connectionStability());
-		Serial.print("\t");
-		Serial.print(angle.x);
-		Serial.print("\t");
-		Serial.print(angle.y);
-		Serial.println();
-		*/
-
-		//Serial.println(com.toSend.tilt_TB);
-
-		//Serial.println(MesasureTime::duration());
-		//Serial.println(heading);
+		//comm.sendDataPacket(&SendData::DP_basic);
+		comm.sendDataPacket(&SendData::DP_full);
 	}
 
 
-	void UpdateReceiving::execute()
+	void SteeringReceivedUpdate::execute()
 	{
-		// If at least one data packet was received
-		if (com.receiveAndUnpackData())
-		{
-			static bool lastArmingState = 0;
+		// do stuff after receiving steering values
+		// ...
 
-			// check if pilot changed armed state from 0 to 1
-			if (lastArmingState == 0 && com.received.arming == 1)
-			{
-				lastArmingState = 1;
-				levelXpid.resetController();
-				levelYpid.resetController();
-				yawPID.resetController();
-
-				//    RESET ALL PID CONTROLLERS  !!!
-				// and do all code when arming
-
-				motors.setMotorState(true);
-			}
-
-
-			if (com.received.arming == 0)
-			{
-				lastArmingState = 0;
-				motors.setMotorState(false);
-			}
-
-
-			// if any PID params was received
-			if (com.wasReceived(com.receivedPacketTypes.TYPE3_ID))
-			{
-				switch (com.received.PIDcontrollerID)
-				{
-				case 0: // leveling
-					// x
-					levelXpid.set_kP(com.received.PIDvalues.P);
-					levelXpid.set_kI(com.received.PIDvalues.I);
-					levelXpid.set_Imax(com.received.PIDvalues.I_max);
-					levelXpid.set_kD(com.received.PIDvalues.D);
-					// y
-					levelYpid.set_kP(com.received.PIDvalues.P);
-					levelYpid.set_kI(com.received.PIDvalues.I);
-					levelYpid.set_Imax(com.received.PIDvalues.I_max);
-					levelYpid.set_kD(com.received.PIDvalues.D);
-					break;
-
-
-				case 1: // yaw
-					yawPID.set_kP(com.received.PIDvalues.P);
-					yawPID.set_kI(com.received.PIDvalues.I);
-					yawPID.set_Imax(com.received.PIDvalues.I_max);
-					yawPID.set_kD(com.received.PIDvalues.D);
-					break;
-
-
-				case 2: // altHold
-					altHoldPID.set_kP(com.received.PIDvalues.P);
-					altHoldPID.set_kI(com.received.PIDvalues.I);
-					altHoldPID.set_Imax(com.received.PIDvalues.I_max);
-					altHoldPID.set_kD(com.received.PIDvalues.D);
-
-
-
-					// other cases.....
-					// ...
-					// ...
-				}
-			}
-		}
-
-
-		
-		// WHEN LOST THE SIGNAL, then disable motors
-
-		// !!!
-		// IMPLEMENT THIS INSIDE THE NEW FAILSAFE CLASS   !!!!!
-
-		if (config::booleans.DisableMotorsWhenConnectionIsLost &&
-			com.connectionStability() == 0)
-		{
-			motors.setMotorState(false);
-		}
-
-
-
-
-		// light up the red diode
-		digitalWrite(config::pin.redDiode, (com.connectionStability() >= 1) ? HIGH : LOW);
 	}
 
 
+	void BasicBackgroundReceivedUpdate::execute()
+	{
+		// Check if need to arm
+		static uint8_t lastArmingState = false;
+		if (ReceiveData::arming == 1 && lastArmingState == 0)
+		{
+			motors.setMotorState(true); // arm motors
+
+			// other code after arming
+			// ...
+		}
+		if (ReceiveData::arming == 0)
+		{
+			// For safety motors are disarmed every time when received this packet and arming == 0
+			motors.setMotorState(false); // disarm motors
+
+			// This code will be executed only one time per disarming
+			if (lastArmingState == 1)
+			{
+				// other code after disarming
+				// ...
+			}
+		}
+		// update last arming state
+		lastArmingState = ReceiveData::arming;
+
+
+
+	}
+
+
+	void FullBackgroundReceivedUpdate::execute()
+	{
+		// call basic update
+		BasicBackgroundReceivedUpdate::execute();
+
+		// and addidional
+		// ...
+
+	}
+
+
+	void PID_paramsReceivedUpdate::execute()
+	{
+		// !!!
+		// 
+		// I think, that should be made in a different way
+		// For example there only calibration values are updated inside config
+		// They are stored in EEPROM and other funciton sets proper values
+
+
+		switch (ReceiveData::tunedControllerID)
+		{
+		case 0: // leveling
+			// x
+			levelXpid.set_kP(ReceiveData::tunedPID_values.P);
+			levelXpid.set_kI(ReceiveData::tunedPID_values.I);
+			levelXpid.set_Imax(ReceiveData::tunedPID_values.I_max);
+			levelXpid.set_kD(ReceiveData::tunedPID_values.D);
+			// y
+			levelYpid.set_kP(ReceiveData::tunedPID_values.P);
+			levelYpid.set_kI(ReceiveData::tunedPID_values.I);
+			levelYpid.set_Imax(ReceiveData::tunedPID_values.I_max);
+			levelYpid.set_kD(ReceiveData::tunedPID_values.D);
+			break;
+
+
+		case 1: // yaw
+			yawPID.set_kP(ReceiveData::tunedPID_values.P);
+			yawPID.set_kI(ReceiveData::tunedPID_values.I);
+			yawPID.set_Imax(ReceiveData::tunedPID_values.I_max);
+			yawPID.set_kD(ReceiveData::tunedPID_values.D);
+			break;
+
+
+		case 2: // altHold
+			altHoldPID.set_kP(ReceiveData::tunedPID_values.P);
+			altHoldPID.set_kI(ReceiveData::tunedPID_values.I);
+			altHoldPID.set_Imax(ReceiveData::tunedPID_values.I_max);
+			altHoldPID.set_kD(ReceiveData::tunedPID_values.D);
+		}
+	}
 
 }
 
