@@ -21,7 +21,7 @@ namespace ReceiveData
 	uint8_t signalLostScenario;
 
 	uint8_t PIDcontrollerID; // which controller is tuned
-	pidPack PIDvalues; // PID values of that controller
+	pidCommPack PIDvalues; // PID values of that controller
 }
 
 

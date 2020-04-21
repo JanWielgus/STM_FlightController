@@ -47,6 +47,15 @@ struct readingsType
 };
 
 
+struct pidCommPack
+{
+    floatByte P;
+    floatByte I;
+    floatByte D;
+    uint16Byte I_max;
+};
+
+
 
 
 // Only for STM32 (maybe not necessary)

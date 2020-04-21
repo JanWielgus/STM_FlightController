@@ -28,7 +28,7 @@ namespace ReceiveData
 	extern uint8_t signalLostScenario;
 
 	extern uint8_t tunedControllerID; // which controller is tuned
-	extern pidPack tunedPID_values; // PID values of that controller
+	extern pidCommPack tunedPID_values; // PID values of that controller
 
 
 	
@@ -95,7 +95,7 @@ namespace ReceiveData
 				add_uint8_t(tunedControllerID);
 				addByteType(tunedPID_values.P);
 				addByteType(tunedPID_values.I);
-				add_uint8_t(tunedPID_values.I_max);
+				addByteType(tunedPID_values.I_max);
 				addByteType(tunedPID_values.D);
 			}
 		};
