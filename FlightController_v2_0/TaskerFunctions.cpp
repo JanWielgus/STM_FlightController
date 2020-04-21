@@ -39,6 +39,7 @@ void addTaskerFunctionsToTasker()
 
 
 	// Communication
+	tasker.addTask(&comm, config::MainInterval, 0);
 	tasker.addTask(new UpdateSending, 22000L, 1);						// ~45Hz
 	tasker.addTask(new UpdateReceiving, 7142L, 1);						// 140Hz (! UPDATE the body if frequency chanded !!!)
 }
@@ -239,13 +240,6 @@ namespace TaskerFunction
 
 	void UpdateReceiving::execute()
 	{
-		// update temporary previous stick values for extrapolation
-		// those values will be stored if new one will come
-		int16_t tempPreviousTBvalue = com.received.steer.TB;
-		int16_t tempprevioudLRvalue = com.received.steer.LR;
-
-
-
 		// If at least one data packet was received
 		if (com.receiveAndUnpackData())
 		{

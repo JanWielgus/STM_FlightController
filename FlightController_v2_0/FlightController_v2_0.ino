@@ -93,6 +93,10 @@ void setup()
 	// Add functions to the Tasker tasks
 	addTaskerFunctionsToTasker();
 
+	// Makes that time has not influence connection stability value
+	// Use after adding tasks to tasker
+	comm.adaptConStabFilterToInterval();
+
 
 	
 	delay(300);
