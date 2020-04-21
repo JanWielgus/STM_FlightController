@@ -7,13 +7,15 @@
 */
 
 
+#include <FC_Communication_Base.h>
+#include "CommSendDataPackets.h"
+#include "CommRecDataPackets.h"
 #include "Interfaces.h"
 #include <FC_Task.h>
 #include <FC_ObjectTasker.h>
 #include <FC_Extrapolation.h>
 #include <FC_LinearExtrapolation.h>
 #include <MyPID.h>
-#include <FC_Communication_Base.h>
 #include <FC_MPU6050Lib.h>
 #include <FC_HMC5883L_Lib.h>
 #include <FC_MS5611_Lib.h>
