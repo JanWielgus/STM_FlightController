@@ -32,7 +32,7 @@ namespace ReceiveData
 
 
 	
-	namespace Packets
+	namespace PacketClasses
 	{
 		class Steering : public DataPacketBase
 		{
@@ -100,6 +100,13 @@ namespace ReceiveData
 			}
 		};
 	}
+
+
+	// Packet only instances
+	extern PacketClasses::Steering DP_steering;
+	extern PacketClasses::BasicBackground DP_basicBackground;
+	extern PacketClasses::FullBackground DP_fullBackground;
+	extern PacketClasses::PID_params DP_PID_params;
 }
 
 

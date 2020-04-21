@@ -16,6 +16,11 @@ namespace SendData
 	bitByte errorBits1;
 	bitByte errorBits2;
 	bitByte bitArray1;
+
+
+	// Packet only instances
+	PacketClasses::Basic DP_basic;
+	PacketClasses::Full DP_full;
 }
 
 

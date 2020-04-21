@@ -22,6 +22,13 @@ namespace ReceiveData
 
 	uint8_t PIDcontrollerID; // which controller is tuned
 	pidCommPack PIDvalues; // PID values of that controller
+
+
+	// Packet only instances
+	PacketClasses::Steering DP_steering;
+	PacketClasses::BasicBackground DP_basicBackground;
+	PacketClasses::FullBackground DP_fullBackground;
+	PacketClasses::PID_params DP_PID_params;
 }
 
 

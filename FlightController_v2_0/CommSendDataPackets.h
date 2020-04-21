@@ -24,7 +24,7 @@ namespace SendData
 
 
 
-	namespace Packets
+	namespace PacketClasses
 	{
 		class Full : public DataPacketBase
 		{
@@ -63,6 +63,11 @@ namespace SendData
 			}
 		};
 	}
+
+
+	// Packet only instances
+	extern PacketClasses::Basic DP_basic;
+	extern PacketClasses::Full DP_full;
 }
 
 
