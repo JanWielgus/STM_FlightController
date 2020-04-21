@@ -34,6 +34,7 @@ namespace config
 
 	struct
 	{
+		// !!! Currently NOT IMPLEMENTED !!  (implement inside Failsafe class)
 		bool UseCompassInZAxisAngleCalculation = false; // Last time there was something wrong with the compass reading
 		bool DisableMotorsWhenConnectionIsLost = false; // When connection stability drops below 1 motors will be cut-off
 	} const booleans;
