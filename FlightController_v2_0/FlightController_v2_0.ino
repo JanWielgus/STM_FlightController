@@ -25,6 +25,8 @@
 #include <FC_CustomDataTypes.h>
 #include <FC_TaskPlanner.h>
 #include <FC_AverageFilter.h>
+#include <FC_SinkingQueue.h>
+#include <FC_GrowingArray.h>
 #include "Storage.h"
 //#include "FlightModes.h" // THIS FILE IS NO LONGER USED !!!
 #include "FC_Motors.h"
@@ -38,6 +40,7 @@
 #include "AltHoldFlightMode.h"
 #include "PosHoldFlightMode.h"
 #include "SharedDataTypes.h"
+
 
 using namespace Storage;
 

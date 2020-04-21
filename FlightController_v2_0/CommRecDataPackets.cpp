@@ -20,8 +20,8 @@ namespace ReceiveData
 	bitByte bitArray2;
 	uint8_t signalLostScenario;
 
-	uint8_t PIDcontrollerID; // which controller is tuned
-	pidCommPack PIDvalues; // PID values of that controller
+	uint8_t tunedControllerID; // which controller is tuned
+	pidCommPack tunedPID_values; // PID values of that controller
 
 
 	// Packet only instances

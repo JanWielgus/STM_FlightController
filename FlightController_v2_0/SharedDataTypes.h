@@ -13,6 +13,7 @@
 #define CUSTOMDATATYPES_H_
 
 #include <FC_MPU6050Lib.h>
+#include <FC_CustomDataTypes.h>
 
 
 
