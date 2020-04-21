@@ -21,16 +21,32 @@ namespace SendData
 	extern bitByte errorBits1;
 	extern bitByte errorBits2;
 	extern bitByte bitArray1;
+	extern uint8_t receivingConnectionStability;
 
 
 
 	namespace PacketClasses
 	{
+		class Basic : public DataPacketBase
+		{
+		public:
+			Basic()
+				: DataPacketBase(0)
+			{
+				// byte types
+				addByteType(errorBits1);
+				addByteType(errorBits2);
+				addByteType(bitArray1);
+				add_uint8_t(receivingConnectionStability);
+			}
+		};
+
+
 		class Full : public DataPacketBase
 		{
 		public:
 			Full()
-				: DataPacketBase(0)
+				: DataPacketBase(1)
 			{
 				// add voltage
 
@@ -44,24 +60,14 @@ namespace SendData
 				addByteType(bitArray1);
 
 				// other types
+				add_uint8_t(receivingConnectionStability);
 				add_int8_t(tilt_TB);
 				add_int8_t(tilt_LR);
 			}
 		};
 
 
-		class Basic : public DataPacketBase
-		{
-		public:
-			Basic()
-				: DataPacketBase(1)
-			{
-				// byte types
-				addByteType(errorBits1);
-				addByteType(errorBits2);
-				addByteType(bitArray1);
-			}
-		};
+		
 	}
 
 

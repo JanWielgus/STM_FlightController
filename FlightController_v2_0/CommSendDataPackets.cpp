@@ -16,6 +16,7 @@ namespace SendData
 	bitByte errorBits1;
 	bitByte errorBits2;
 	bitByte bitArray1;
+	uint8_t receivingConnectionStability;
 
 
 	// Packet only instances
