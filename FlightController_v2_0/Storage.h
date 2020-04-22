@@ -18,7 +18,6 @@
 #include <FC_TaskPlanner.h>
 #include <MyPID.h>
 #include <FC_Communication_Base.h>
-#include "FC_MainCommunication.h"
 #include <FC_MPU6050Lib.h>
 #include <FC_HMC5883L_Lib.h>
 #include <FC_MS5611_Lib.h>
@@ -27,6 +26,9 @@
 #include "DebugSystem.h"
 #include "SharedDataTypes.h"
 #include "Interfaces.h"
+#include <FC_CommunicationHandler.h>
+#include "CommRecDataPackets.h"
+#include "CommSendDataPackets.h"
 
 
 
@@ -45,7 +47,7 @@ namespace Storage
     // Objects
     extern FC_ObjectTasker tasker;
     extern FC_TaskPlanner taskPlanner;
-    extern FC_MainCommunication com;
+    extern FC_CommunicationHandler comm;
     extern FC_MPU6050Lib mpu;
     extern FC_HMC5883L_Lib compass;
     extern FC_MS5611_Lib baro;

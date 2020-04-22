@@ -72,8 +72,8 @@ void StabilizeFlightMode::updateHeadingStuff()
 void StabilizeFlightMode::integrateHeadingToHold()
 {
 	// Integrate only if connection is stable
-	if (Storage::com.connectionStability() > 1)
-		headingToHold += ((float)(Storage::com.received.steer.rotate / 2) * config::MainDeltaTimeInSeconds);
+	if (Storage::comm.getConnectionStability() > 20)
+		headingToHold += ((float)(ReceiveData::rot_stick / 2) * config::MainDeltaTimeInSeconds);
 }
 
 

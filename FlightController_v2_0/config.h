@@ -24,14 +24,17 @@ namespace config
 	const uint8_t MaxAmtOfTaskerTasks = 25; // tasks array size inside tasker
 	const uint8_t MaxAmtOfTaskPlannerTasks = 7; // max amount of tasks planned at once
 
+	const uint8_t MaxCommPacketBytes = 100; // communication buffer size
+
 	const uint8_t ZeroActionThrottle = 20;
-	const float CutOffAngle = 45; // Angle from which motors are immediately disabled
+	const float CutOffAngle = 55; // Angle from which motors are immediately disabled
 
 
 // Boolean constants
 
 	struct
 	{
+		// !!! Currently NOT IMPLEMENTED !!  (implement inside Failsafe class)
 		bool UseCompassInZAxisAngleCalculation = false; // Last time there was something wrong with the compass reading
 		bool DisableMotorsWhenConnectionIsLost = false; // When connection stability drops below 1 motors will be cut-off
 	} const booleans;

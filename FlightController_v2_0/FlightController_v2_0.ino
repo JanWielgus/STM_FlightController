@@ -7,13 +7,16 @@
 */
 
 
+#include <FC_Communication_Base.h>
+#include <FC_CommunicationHandler.h>
+#include "CommSendDataPackets.h"
+#include "CommRecDataPackets.h"
 #include "Interfaces.h"
 #include <FC_Task.h>
 #include <FC_ObjectTasker.h>
 #include <FC_Extrapolation.h>
 #include <FC_LinearExtrapolation.h>
 #include <MyPID.h>
-#include <FC_Communication_Base.h>
 #include <FC_MPU6050Lib.h>
 #include <FC_HMC5883L_Lib.h>
 #include <FC_MS5611_Lib.h>
@@ -22,6 +25,8 @@
 #include <FC_CustomDataTypes.h>
 #include <FC_TaskPlanner.h>
 #include <FC_AverageFilter.h>
+#include <FC_SinkingQueue.h>
+#include <FC_GrowingArray.h>
 #include "Storage.h"
 //#include "FlightModes.h" // THIS FILE IS NO LONGER USED !!!
 #include "FC_Motors.h"
@@ -35,6 +40,7 @@
 #include "AltHoldFlightMode.h"
 #include "PosHoldFlightMode.h"
 #include "SharedDataTypes.h"
+
 
 using namespace Storage;
 
@@ -89,6 +95,10 @@ void setup()
 
 	// Add functions to the Tasker tasks
 	addTaskerFunctionsToTasker();
+
+	// Makes that time has not influence connection stability value
+	// Use after adding tasks to tasker
+	comm.adaptConStabFilterToInterval();
 
 
 	
@@ -147,7 +157,7 @@ void setup()
 	Serial.println("mpu initialized");
 	
 	// HMC5003L
-	compass.enableHMC_on_MPU(false); // delete this parameter. There is no need because wire have to be initialized before mpu starts
+	compass.enableHMC_on_MPU(false); // enable HMC on MPU without Wire.begin() inside
 	while (!compass.initialize(false))
 	{
 		// If gets stuck here, there is an error
@@ -161,7 +171,7 @@ void setup()
 
 
 	// MS5611
-	while (!baro.initialize())
+	while (!baro.initialize(false)) // initialize baro without Wire.begin()
 	{
 		// If gets stuck here, there is an error
 		Serial.println("cannot initialize baro");

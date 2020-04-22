@@ -13,6 +13,7 @@
 #define CUSTOMDATATYPES_H_
 
 #include <FC_MPU6050Lib.h>
+#include <FC_CustomDataTypes.h>
 
 
 
@@ -44,6 +45,15 @@ struct readingsType
     float heading = 0;
     float pressure = 0; // not extrapolated value (about 110 Hz)
     float smoothPressure = 0;
+};
+
+
+struct pidCommPack
+{
+    floatByte P;
+    floatByte I;
+    floatByte D;
+    uint16Byte I_max;
 };
 
 
