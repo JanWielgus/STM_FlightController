@@ -27,7 +27,7 @@ void addTaskerFunctionsToTasker()
 
 
 	// General
-	tasker.addTask(new UpdateControlDiode, 100000L, 2);							// 1Hz
+	tasker.addTask(new UpdateControlDiode, 1000000L, 2);							// 1Hz
 	tasker.addTask(new CheckCalibrations, 700000L, 7);							// 1.4Hz
 
 	// Steering
@@ -41,6 +41,12 @@ void addTaskerFunctionsToTasker()
 	// Communication
 	tasker.addTask(&comm, config::MainInterval, 0);
 	tasker.addTask(new UpdateSending, 22000L, 1);								// ~45Hz
+
+	// add receive data packets
+	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_steering, 10); // pointer, queue size
+	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_basicBackground, 3);
+	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_fullBackground, 3);
+	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_PID_params, 2);
 
 	// received packet events
 	ReceiveData::DP_steering.setPacketEvent(new SteeringReceivedUpdate);

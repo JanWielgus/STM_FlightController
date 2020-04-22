@@ -15,7 +15,7 @@ namespace Storage
 	// Objects
 	FC_ObjectTasker tasker(MaxAmtOfTaskerTasks);
 	FC_TaskPlanner taskPlanner(MaxAmtOfTaskPlannerTasks);
-	FC_CommunicationHandler comm(&Serial1, MaxCommPacketBytes);
+	FC_CommunicationHandler comm(&Serial2, MaxCommPacketBytes);
 	FC_MPU6050Lib mpu;
 	FC_HMC5883L_Lib compass;
 	FC_MS5611_Lib baro(&taskPlanner);
