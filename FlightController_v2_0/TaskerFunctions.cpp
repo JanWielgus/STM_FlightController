@@ -28,7 +28,6 @@ void addTaskerFunctionsToTasker()
 
 	// General
 	tasker.addTask(new UpdateControlDiode, 1000000L, 2);							// 1Hz
-	tasker.addTask(new CheckCalibrations, 700000L, 7);							// 1.4Hz
 
 	// Steering
 	tasker.addTask(new ReadXY_angles, config::MainInterval, 639);				// 250Hz
@@ -39,14 +38,14 @@ void addTaskerFunctionsToTasker()
 
 
 	// Communication
-	tasker.addTask(&comm, config::MainInterval, 0);
-	tasker.addTask(new UpdateSending, 22000L, 1);								// ~45Hz
+	tasker.addTask(&comm, 4545L, 0); // 220Hz ( !!! To solve. During communication some data is lost)
+	tasker.addTask(new UpdateSending, 22000L, 0);								// ~45Hz
 
 	// add receive data packets
-	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_steering, 10); // pointer, queue size
-	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_basicBackground, 3);
-	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_fullBackground, 3);
-	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_PID_params, 2);
+	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_steering, 35); // pointer, queue size
+	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_basicBackground, 8);
+	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_fullBackground, 8);
+	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_PID_params, 3);
 
 	// received packet events
 	ReceiveData::DP_steering.setPacketEvent(new SteeringReceivedUpdate);
@@ -62,6 +61,12 @@ namespace TaskerFunction
 	FC_Extrapolation* compassExtrapolator = new FC_LinearExtrapolation();
 	FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
 
+	// Sticks extrapolation
+	FC_LinearExtrapolation throttleExtrapolator;
+	FC_LinearExtrapolation rot_stickExtraplator;
+	FC_LinearExtrapolation TB_stickExtrapolator;
+	FC_LinearExtrapolation LR_stickExtrapolator;
+
 
 	void UpdateControlDiode::execute()
 	{
@@ -73,7 +78,9 @@ namespace TaskerFunction
 		digitalWrite(config::pin.redDiode, (comm.getConnectionStability() >= 75) ? HIGH : LOW);
 	}
 
-
+	/* DO IT DIFFERENTLY
+		Make separate procedure where calibraiton will be performed
+		Calibration will be triggered in receive update task which is called after receiving specific packet type
 	void CheckCalibrations::execute()
 	{
 		//...
@@ -85,7 +92,7 @@ namespace TaskerFunction
 		// eg. set fused angle inside the MPU class after accelermeter calibration (may have to write a proper method)
 		// eg. set initial Z axis in the MPU after calibrating the compass
 		// ...
-	}
+	}*/
 
 
 	void ReadXY_angles::execute()
@@ -95,7 +102,7 @@ namespace TaskerFunction
 		
 		if (config::booleans.UseCompassInZAxisAngleCalculation)
 			// Return compass heading extrapolation for the current time
-			reading.heading = mpu.getZAngle(compassExtrapolator->getEstimation(tasker.getCurrentTime()));
+			reading.heading = mpu.getZAngle(reading.compassHeading);
 		else
 			reading.heading = mpu.getZAngle();
 	}
@@ -122,8 +129,27 @@ namespace TaskerFunction
 
 	void ProcessSlowerReadings::execute()
 	{
+		// Get current time from tasker (to speed up)
+		uint32_t curTime = tasker.getCurrentTime();
+
+
+		// extrapolate compass reading
+		reading.compassHeading = compassExtrapolator->getEstimation(curTime);
+
+
 		// extrapolate baro reading to meet the program main frequency (250Hz)
-		reading.smoothPressure = baroExtrapolator->getEstimation(tasker.getCurrentTime());
+		reading.smoothPressure = baroExtrapolator->getEstimation(curTime);
+
+
+		// extrapolate stick values
+		if (comm.getConnectionStability() > 20)
+		{
+			// extrapolate
+			ReceiveData::throttle = throttleExtrapolator.getEstimation(curTime);
+			ReceiveData::rot_stick = rot_stickExtraplator.getEstimation(curTime);
+			ReceiveData::TB_stick = TB_stickExtrapolator.getEstimation(curTime);
+			ReceiveData::LR_stick = LR_stickExtrapolator.getEstimation(curTime);
+		}
 	}
 
 
@@ -232,9 +258,15 @@ namespace TaskerFunction
 
 	void SteeringReceivedUpdate::execute()
 	{
-		// do stuff after receiving steering values
-		// ...
+		// add new received values for extrapolation
+		throttleExtrapolator.addNewMeasuredValue(ReceiveData::throttle, tasker.getCurrentTime());
+		rot_stickExtraplator.addNewMeasuredValue(ReceiveData::rot_stick, tasker.getCurrentTime());
+		TB_stickExtrapolator.addNewMeasuredValue(ReceiveData::TB_stick, tasker.getCurrentTime());
+		LR_stickExtrapolator.addNewMeasuredValue(ReceiveData::LR_stick, tasker.getCurrentTime());
 
+
+		// other stuff after receiving steering values
+		// ...
 	}
 
 

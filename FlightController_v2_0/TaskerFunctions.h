@@ -19,13 +19,6 @@ namespace TaskerFunction
 		void execute() override;
 	};
 
-	// Check if there is a need to calibrate one of the module and perform it if needed
-	class CheckCalibrations : public FC_Task
-	{
-		void execute() override;
-	};
-	
-
 
 
 // Steering
