@@ -50,7 +50,7 @@ using namespace Storage;
 void setup()
 {
 	// Communication serial
-	Serial2.begin(BAUD_57600);
+	Serial2.begin(BAUD_115200);
 	
 	// Debugging
 	debug.begin(BAUD_115200);
@@ -98,7 +98,8 @@ void setup()
 
 	// Makes that time has not influence connection stability value
 	// Use after adding tasks to tasker
-	comm.adaptConStabFilterToInterval();
+	//comm.adaptConStabFilterToInterval();
+	comm.setConStabFilterIntensity(0.95f); // set filter intensity manually
 
 
 	
