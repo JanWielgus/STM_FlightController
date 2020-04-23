@@ -41,10 +41,11 @@ struct virtualSticksType
 
 struct readingsType
 {
-    FC_MPU6050Lib::vector3Float angle = { 0, 0, 0 }; // X and Y angles
-    float heading = 0;
+    FC_MPU6050Lib::vector3Float angle = { 0, 0, 0 }; // X and Y angles, 250Hz
+    float compassHeading; // extrapolated (250Hz)
+    float heading = 0; // 250Hz (fused or only gyro)
     float pressure = 0; // not extrapolated value (about 110 Hz)
-    float smoothPressure = 0;
+    float smoothPressure = 0; // 250Hz
 };
 
 
