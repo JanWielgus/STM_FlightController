@@ -20,9 +20,10 @@
  // list of all flight modes
 enum FlightModeType
 {
-    STABILIZE,
-    ALT_HOLD,
-    POS_HOLD,
+    UNARMED, // used when drone have to be unarmed
+    STABILIZE, // keeps drone level
+    ALT_HOLD, // extend stabilize, take control of throttle and keep altitude
+    POS_HOLD, // extend altHold, take control of position
 };
 // Do not use separate flight modes type. ADD ALL FLIGHT MODES TO THE ENUM ABOVE !!!
 // {LANDING, RETURN_TO_LAUNCH, RETURN_OVER_PILOT};

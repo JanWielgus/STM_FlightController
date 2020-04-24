@@ -39,6 +39,7 @@
 #include "StabilizeFlightMode.h"
 #include "AltHoldFlightMode.h"
 #include "PosHoldFlightMode.h"
+#include "UnarmedFlightMode.h"
 #include "SharedDataTypes.h"
 
 

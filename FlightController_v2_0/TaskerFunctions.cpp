@@ -272,31 +272,18 @@ namespace TaskerFunction
 
 	void BasicBackgroundReceivedUpdate::execute()
 	{
-		// Check if need to arm
-		static uint8_t lastArmingState = false;
-		if (ReceiveData::arming == 1 && lastArmingState == 0)
+		if (ReceiveData::arming == 1)
 		{
-			motors.setMotorState(true); // arm motors
-
-			// other code after arming
+			// set proper flight mode
 			// ...
+			// !!!
 		}
 		if (ReceiveData::arming == 0)
 		{
-			// For safety motors are disarmed every time when received this packet and arming == 0
-			motors.setMotorState(false); // disarm motors
-
-			// This code will be executed only one time per disarming
-			if (lastArmingState == 1)
-			{
-				// other code after disarming
-				// ...
-			}
+			// set unarmed flight mode
+			// everything that have to be done when unarmed is done there
+			virtualPilot.setFlightMode(FlightModeType::UNARMED);
 		}
-		// update last arming state
-		lastArmingState = ReceiveData::arming;
-
-
 
 	}
 
