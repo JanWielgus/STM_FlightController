@@ -34,7 +34,7 @@ void addTaskerFunctionsToTasker()
 	tasker.addTask(new ReadCompass, 13340L, 492);								// 75Hz
 	baro.registerNewBaroReadingFunction(newBaroReadingEvent);
 	tasker.addTask(new ProcessSlowerReadings, config::MainInterval, 0);			// 250Hz
-	tasker.addTask((FC_Task*)&Storage::virtualPilot, config::MainInterval, 0);	// 250Hz
+	tasker.addTask(new RunVirtualPilot, config::MainInterval, 0);	// 250Hz
 
 
 	// Communication
@@ -150,6 +150,12 @@ namespace TaskerFunction
 			ReceiveData::TB_stick = TB_stickExtrapolator.getEstimation(curTime);
 			ReceiveData::LR_stick = LR_stickExtrapolator.getEstimation(curTime);
 		}
+	}
+
+
+	void RunVirtualPilot::execute()
+	{
+		Storage::virtualPilot.runVirtualPilot();
 	}
 
 
