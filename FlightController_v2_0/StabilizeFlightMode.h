@@ -15,6 +15,7 @@ public:
 	StabilizeFlightMode(IVirtualPilot* virtualPilot);
 	void run() override;
 	void reset() override;
+	void prepare() override;
 
 public:
 	float getHeadingToHold();

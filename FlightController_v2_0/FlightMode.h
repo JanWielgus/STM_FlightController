@@ -16,7 +16,7 @@
 	Make it to work well at that speed
 	For example use extrapolations or interpolations
 
-	Flight modes only update virtual sticks (using PID controllers).
+	Flight modes only update their virtual sticks (using PID controllers).
 	The rest is done inside the virtual pilot.
 
 	!!!!!
@@ -30,6 +30,7 @@ public:
 	FlightMode(FlightModeType typeToSet, IFlightMode* baseFlM, IVirtualPilot* virtualPilot);
 	virtual void run() override = 0;
 	virtual void reset() override = 0;
+	virtual void prepare() override = 0;
 	virtualSticksType* getVirtualSticks() override; // return virtual sticks values as structure
 
 	bool checkIfRelated(const IFlightMode* toCheck) override;

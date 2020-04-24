@@ -42,6 +42,7 @@ void VirtualPilot::runVirtualPilot()
 	Storage::motors.setOnTL(curStick->throttle + curStick->TB - curStick->LR + curStick->rotate); // BL
 	Storage::motors.setOnTL(curStick->throttle - curStick->TB - curStick->LR - curStick->rotate); // TL
 	Storage::motors.setOnTL(curStick->throttle - curStick->TB + curStick->LR + curStick->rotate); // TR
+	Storage::motors.forceMotorsExecution();
 }
 
 
@@ -70,9 +71,14 @@ bool VirtualPilot::setFlightMode(FlightModeType flightModeToSet)
 		return false;
 
 	// reset state of not related flight modes
+	// and prepate for change related ones
 	for (int i = 0; i < amtOfFlightModes; i++)
+	{
 		if (!currentFlightMode->checkIfRelated(flightModesArray[i]))
 			flightModesArray[i]->reset();
+		else
+			flightModesArray[i]->prepare();
+	}
 
 	return true;
 }
