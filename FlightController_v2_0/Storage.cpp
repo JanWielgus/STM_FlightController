@@ -3,6 +3,7 @@
 
 #include "VirtualPilot.h"
 #include "FlightMode.h"
+#include "UnarmedFlightMode.h"
 #include "StabilizeFlightMode.h"
 #include "AltHoldFlightMode.h"
 #include "PosHoldFlightMode.h"
@@ -35,6 +36,7 @@ namespace Storage
 
 
 	// Used flight modes
+	IFlightMode& unarmedFlightMode = *(new UnarmedFlightMode(&virtualPilot));
 	IFlightMode& stabilizeFlightMode = *(new StabilizeFlightMode(&virtualPilot));
 	IFlightMode& altHoldFlightMode = *(new AltHoldFlightMode(&stabilizeFlightMode, &virtualPilot));
 	IFlightMode& posHoldFlightMode = *(new PosHoldFlightMode(&altHoldFlightMode, &virtualPilot));
