@@ -3,6 +3,8 @@
 // 
 
 #include "UnarmedFlightMode.h"
+#include "Storage.h"
+#include "config.h"
 
 
 UnarmedFlightMode::UnarmedFlightMode(IVirtualPilot* virtualPilot)
@@ -19,10 +21,7 @@ UnarmedFlightMode::UnarmedFlightMode(IVirtualPilot* virtualPilot)
 void UnarmedFlightMode::run()
 {
 	// disarm motors
-	motors.setMotorState(false);
-
-	// turn off blue diode
-	digitalWrite(config::pin.blueDiode, LOW);
+	Storage::motors.setMotorState(false);
 }
 
 
@@ -30,8 +29,16 @@ void UnarmedFlightMode::run()
 void UnarmedFlightMode::reset()
 {
 	// arm motors
-	motors.setMotorState(true);
+	Storage::motors.setMotorState(true);
 
 	// turn on blue diode
 	digitalWrite(config::pin.blueDiode, HIGH);
+}
+
+
+// Executed when entering to unarmed flight mode
+void UnarmedFlightMode::prepare()
+{
+	// turn off blue diode
+	digitalWrite(config::pin.blueDiode, LOW);
 }
