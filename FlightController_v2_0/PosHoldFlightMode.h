@@ -18,6 +18,7 @@ public:
 	PosHoldFlightMode(IFlightMode* altHoldFM, IVirtualPilot* virtualPilot);
 	void run() override;
 	void reset() override; // reset only the PosHold part
+	void prepare() override; // prepate for action
 };
 
 #endif

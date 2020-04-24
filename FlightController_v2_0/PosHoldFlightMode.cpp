@@ -27,3 +27,8 @@ void PosHoldFlightMode::reset()
 {
 
 }
+
+
+void PosHoldFlightMode::prepare()
+{
+}

@@ -16,6 +16,7 @@ public:
 	AltHoldFlightMode(IFlightMode* stabilizeFM, IVirtualPilot* virtualPilot);
 	void run() override;
 	void reset() override; // reset only the AltHold part
+	void prepare() override; // prepate for action
 
 public:
 	float getPressureToHold();
