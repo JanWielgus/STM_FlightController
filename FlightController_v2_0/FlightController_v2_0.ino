@@ -78,10 +78,12 @@ void setup()
 
 
 
-	// Set up a virtual pilot
-	virtualPilot.addFlightMode(&stabilizeFlightMode);
-	virtualPilot.addFlightMode(&altHoldFlightMode);
-	virtualPilot.addFlightMode(&posHoldFlightMode);
+	// Set the startup flight mode
+	while (!virtualPilot.setFlightMode(FlightModeType::UNARMED))
+	{
+		debug.printHeader("Base flight mode NOT SET");
+		delay(500);
+	}
 
 	
 	

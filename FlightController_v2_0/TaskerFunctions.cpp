@@ -272,19 +272,32 @@ namespace TaskerFunction
 
 	void BasicBackgroundReceivedUpdate::execute()
 	{
-		if (ReceiveData::arming == 1)
+		// Update flight mode
+		static FlightModeType lastFlightMode = UNARMED;
+		// If flight mode has changed
+		if (lastFlightMode != ReceiveData::flightMode)
 		{
-			// set proper flight mode
-			// ...
-			// !!!
-		}
-		if (ReceiveData::arming == 0)
-		{
-			// set unarmed flight mode
-			// everything that have to be done when unarmed is done there
-			virtualPilot.setFlightMode(FlightModeType::UNARMED);
+			switch (ReceiveData::flightMode)
+			{
+			case FlightModeType::UNARMED:
+				virtualPilot.setFlightMode(FlightModeType::UNARMED);
+				break;
+
+			case FlightModeType::STABILIZE:
+				virtualPilot.setFlightMode(FlightModeType::STABILIZE);
+				break;
+
+			default:
+				virtualPilot.setFlightMode(FlightModeType::UNARMED);
+			}
+
+
+			lastFlightMode = virtualPilot.getCurrentFlightModeType();
 		}
 
+
+		// other stuff
+		// ...
 	}
 
 
