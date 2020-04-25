@@ -21,9 +21,11 @@ void StabilizeFlightMode::run()
 	virtualSticks.throttle = Storage::sticksFiltered.throttle;
 
 	// rot, TB and LR are set by PID controllers
-	updateLevelingStuff();
-	updateHeadingStuff();
-
+	if (virtualSticks.throttle > config::ZeroActionThrottle) // if throttle is high enough
+	{
+		updateLevelingStuff();
+		updateHeadingStuff();
+	}
 
 
 }

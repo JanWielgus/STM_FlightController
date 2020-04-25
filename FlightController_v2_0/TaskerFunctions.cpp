@@ -3,6 +3,7 @@
 #include "config.h"
 #include <FC_Extrapolation.h>
 #include <FC_LinearExtrapolation.h>
+#include "Failsafe.h"
 
 /*
 using Storage::levelXpid;
@@ -35,6 +36,7 @@ void addTaskerFunctionsToTasker()
 	baro.registerNewBaroReadingFunction(newBaroReadingEvent);
 	tasker.addTask(new ProcessSlowerReadings, config::MainInterval, 0);			// 250Hz
 	tasker.addTask(new RunVirtualPilot, config::MainInterval, 0);	// 250Hz
+	tasker.addTask(new Failsafe, 50000L, 0);									// 20Hz
 
 
 	// Communication
@@ -159,15 +161,6 @@ namespace TaskerFunction
 	//// THIS PART HAVE TO BE REMOVED (ONLY VIRTUAL PILOT USE FLIGHT MODES)
 	//void Stabilize::execute()
 	//{
-	//	// Cut-off all motors if the angle is too high
-	//	using namespace config;
-	//	if (angle.x > CutOffAngle || angle.x < -CutOffAngle ||
-	//		angle.y > CutOffAngle || angle.y < -CutOffAngle)
-	//		motors.setMotorState(false);
-
-
-
-
 
 	//	/* OVERRIDE THAT CODE WITH THE NEW FLIGHT MODES
 

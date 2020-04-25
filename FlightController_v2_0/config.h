@@ -27,7 +27,19 @@ namespace config
 	const uint8_t MaxCommPacketBytes = 100; // communication buffer size
 
 	const uint8_t ZeroActionThrottle = 20;
-	const float CutOffAngle = 55; // Angle from which motors are immediately disabled
+
+
+	// Failsafe
+	struct
+	{
+		bool CutOffMotorsIfAngleExceeded = true; // When connection stability drops below 1 motors will be cut-off
+		uint8_t CutOffAngle = 60; // Angle from which motors are immediately disabled
+
+		bool SuppressMotorsAndDisarmWhenLostSignal = true; // in 0.5 second gradually suppress motors and in the end disarm
+		uint8_t ConnectionStabilityBorder = 15; // below that value and if flag above is true suppress will take place
+		float suppressMultiplier = 0.7; // if failsafe in 20Hz and 0.5 suppress will take about 0.5 second to disarm
+
+	} const failsafeSettings;
 
 
 // Boolean constants
@@ -36,8 +48,6 @@ namespace config
 	{
 		bool UseCompassInZAxisAngleCalculation = false; // Last time there was something wrong with the compass reading
 
-		// !!! Currently NOT IMPLEMENTED !!  (implement inside Failsafe class)
-		bool DisableMotorsWhenConnectionIsLost = false; // When connection stability drops below 1 motors will be cut-off
 
 	} const booleans;
 
