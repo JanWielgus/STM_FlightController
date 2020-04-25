@@ -145,8 +145,6 @@ namespace TaskerFunction
 		Storage::sticksFiltered.rotate = rotateFilter.updateFilter(ReceiveData::rot_stick);
 		Storage::sticksFiltered.TB = TB_fiter.updateFilter(ReceiveData::TB_stick);
 		Storage::sticksFiltered.LR = LR_filter.updateFilter(ReceiveData::LR_stick);
-
-		//Serial.println(Storage::sticksFiltered.TB);
 	}
 
 
