@@ -323,12 +323,12 @@ float FC_MPU6050Lib::getZAngle(float heading)
 {
 	// Z axis
 	fusedAngle.z += (float)rawRotation.z * Multiplier1;
-	
+	/*
 	// 0-359.99 correction
 	if(fusedAngle.z < 0.0)
 		fusedAngle.z += 360.0;
 	else if (fusedAngle.z >= 360.0)
-		fusedAngle.z -= 360.0;
+		fusedAngle.z -= 360.0;*/
 	
 	
 	// USE COMPASS DATA IF PROVIDED (if not, compass is == -1)  !!!!   <<<-----
@@ -338,23 +338,24 @@ float FC_MPU6050Lib::getZAngle(float heading)
 		
 		// eg. if compass is 359 but gyro is 1 degree
 		// this solve this error
-		if (abs(fusedAngle.z - heading) > 100)
+		if (abs(fusedAngle.z - heading) > 180)
 		{
 			if (heading > 180)
-				heading -= 360.0;
+				heading -= 360.0f;
 			else
-				heading += 360.0;
+				heading += 360.0f;
 		}
 		
 		// complementary filter
-		fusedAngle.z = 0.98 * fusedAngle.z + 0.02 * heading;
-		
-		// 0-359.99 correction
-		if(fusedAngle.z < 0.0)
-			fusedAngle.z += 360.0;
-		else if (fusedAngle.z >= 360.0)
-			fusedAngle.z -= 360.0;
+		fusedAngle.z = 0.98f * fusedAngle.z + 0.02f * heading;
 	}
+
+
+	// 0-359.99 correction
+	if (fusedAngle.z < 0.0f)
+		fusedAngle.z += 360.0f;
+	else if (fusedAngle.z >= 360.0f)
+		fusedAngle.z -= 360.0f;
 	
 	
 	return fusedAngle.z;
