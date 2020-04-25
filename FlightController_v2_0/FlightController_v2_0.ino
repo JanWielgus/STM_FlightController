@@ -41,6 +41,7 @@
 #include "PosHoldFlightMode.h"
 #include "UnarmedFlightMode.h"
 #include "SharedDataTypes.h"
+#include "Failsafe.h"
 
 
 using namespace Storage;
