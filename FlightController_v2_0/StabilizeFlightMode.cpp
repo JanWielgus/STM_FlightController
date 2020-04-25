@@ -18,7 +18,7 @@ StabilizeFlightMode::StabilizeFlightMode(IVirtualPilot* virtualPilot)
 void StabilizeFlightMode::run()
 {
 	// Only throttle remain unchanged
-	virtualSticks.throttle = ReceiveData::throttle;
+	virtualSticks.throttle = Storage::sticksFiltered.throttle;
 
 	// rot, TB and LR are set by PID controllers
 	updateLevelingStuff();
@@ -64,8 +64,8 @@ float StabilizeFlightMode::getHeadingToHold()
 void StabilizeFlightMode::updateLevelingStuff()
 {
 	// Update virtual sticks values using PID controllers
-	virtualSticks.TB = Storage::levelXpid.updateController(Storage::reading.angle.x + (ReceiveData::TB_stick / 10.f)) + 0.5f;
-	virtualSticks.LR = Storage::levelYpid.updateController(Storage::reading.angle.y - (ReceiveData::LR_stick / 10.f)) + 0.5f;
+	virtualSticks.TB = Storage::levelXpid.updateController(Storage::reading.angle.x + (Storage::sticksFiltered.TB / 10.f)) + 0.5f;
+	virtualSticks.LR = Storage::levelYpid.updateController(Storage::reading.angle.y - (Storage::sticksFiltered.LR / 10.f)) + 0.5f;
 
 	// Keep values in borders
 	virtualSticks.TB = constrain(virtualSticks.TB, -500, 500);
@@ -95,7 +95,7 @@ void StabilizeFlightMode::integrateHeadingToHold()
 {
 	// Integrate only if connection is stable
 	if (Storage::comm.getConnectionStability() > 20)
-		headingToHold += ((float)(ReceiveData::rot_stick / 2.f) * config::MainDeltaTimeInSeconds);
+		headingToHold += ((float)(Storage::sticksFiltered.rotate / 2.f) * config::MainDeltaTimeInSeconds);
 }
 
 

@@ -44,6 +44,7 @@ namespace Storage
 
 	// Global sensor readings
 	readingsType reading;
+	virtualSticksType sticksFiltered; // filtered steering sticks values
 
 }
 

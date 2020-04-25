@@ -61,11 +61,10 @@ namespace TaskerFunction
 	FC_Extrapolation* compassExtrapolator = new FC_LinearExtrapolation();
 	FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
 
-	// Sticks extrapolation
-	FC_LinearExtrapolation throttleExtrapolator;
-	FC_LinearExtrapolation rot_stickExtraplator;
-	FC_LinearExtrapolation TB_stickExtrapolator;
-	FC_LinearExtrapolation LR_stickExtrapolator;
+	FC_EVA_Filter throttleFilter(0.5);
+	FC_EVA_Filter rotateFilter(0.5);
+	FC_EVA_Filter TB_fiter(0.58);
+	FC_EVA_Filter LR_filter(0.58);
 
 
 	void UpdateControlDiode::execute()
@@ -141,15 +140,13 @@ namespace TaskerFunction
 		reading.smoothPressure = baroExtrapolator->getEstimation(curTime);
 
 
-		// extrapolate stick values
-		if (comm.getConnectionStability() > 20)
-		{
-			// extrapolate
-			ReceiveData::throttle = throttleExtrapolator.getEstimation(curTime);
-			ReceiveData::rot_stick = rot_stickExtraplator.getEstimation(curTime);
-			ReceiveData::TB_stick = TB_stickExtrapolator.getEstimation(curTime);
-			ReceiveData::LR_stick = LR_stickExtrapolator.getEstimation(curTime);
-		}
+		// filter received sticks values
+		Storage::sticksFiltered.throttle = throttleFilter.updateFilter(ReceiveData::throttle);
+		Storage::sticksFiltered.rotate = rotateFilter.updateFilter(ReceiveData::rot_stick);
+		Storage::sticksFiltered.TB = TB_fiter.updateFilter(ReceiveData::TB_stick);
+		Storage::sticksFiltered.LR = LR_filter.updateFilter(ReceiveData::LR_stick);
+
+		//Serial.println(Storage::sticksFiltered.TB);
 	}
 
 
@@ -264,14 +261,7 @@ namespace TaskerFunction
 
 	void SteeringReceivedUpdate::execute()
 	{
-		// add new received values for extrapolation
-		throttleExtrapolator.addNewMeasuredValue(ReceiveData::throttle, tasker.getCurrentTime());
-		rot_stickExtraplator.addNewMeasuredValue(ReceiveData::rot_stick, tasker.getCurrentTime());
-		TB_stickExtrapolator.addNewMeasuredValue(ReceiveData::TB_stick, tasker.getCurrentTime());
-		LR_stickExtrapolator.addNewMeasuredValue(ReceiveData::LR_stick, tasker.getCurrentTime());
-
-
-		// other stuff after receiving steering values
+		// stuff after receiving steering values
 		// ...
 	}
 

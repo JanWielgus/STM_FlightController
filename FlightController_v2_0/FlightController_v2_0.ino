@@ -241,6 +241,14 @@ void setup()
 	reading.angle = mpu.getFusedXYAngles();
 	compass.readCompassData(reading.angle.x, reading.angle.y);
 	mpu.setInitialZAxisValue(compass.getHeading());
+
+
+	// set up PID derivative low-pass filters
+	Storage::levelXpid.setDerivativeLowPassFilterParams(6);
+	Storage::levelYpid.setDerivativeLowPassFilterParams(6);
+	Storage::yawPID.setDerivativeLowPassFilterParams(6);
+	Storage::altHoldPID.setDerivativeLowPassFilterParams(6);
+
 	
 	Serial.println("setup done");
 }
