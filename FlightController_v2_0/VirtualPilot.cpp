@@ -39,16 +39,10 @@ void VirtualPilot::runVirtualPilot()
 
 
 	Storage::motors.setOnTL(curStick->throttle + curStick->TB + curStick->LR - curStick->rotate); // BR
-	Storage::motors.setOnTL(curStick->throttle + curStick->TB - curStick->LR + curStick->rotate); // BL
-	Storage::motors.setOnTL(curStick->throttle - curStick->TB - curStick->LR - curStick->rotate); // TL
-	Storage::motors.setOnTL(curStick->throttle - curStick->TB + curStick->LR + curStick->rotate); // TR
+	Storage::motors.setOnTR(curStick->throttle + curStick->TB - curStick->LR + curStick->rotate); // BL
+	Storage::motors.setOnBR(curStick->throttle - curStick->TB - curStick->LR - curStick->rotate); // TL (damaged motor)
+	Storage::motors.setOnBL(curStick->throttle - curStick->TB + curStick->LR + curStick->rotate); // TR
 	Storage::motors.forceMotorsExecution();
-}
-
-
-void VirtualPilot::execute()
-{
-	runVirtualPilot();
 }
 
 
