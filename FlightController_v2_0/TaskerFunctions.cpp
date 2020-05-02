@@ -253,7 +253,7 @@ namespace TaskerFunction
 		SendData::tilt_TB = (int8_t)reading.angle.x;
 		SendData::tilt_LR = (int8_t)reading.angle.y;
 		SendData::heading = (int16_t)reading.heading;
-		SendData::altitude = (int16_t)(baro.getSmoothPressure() - 90000); // TEMP ! (change for altitude)
+		SendData::altitude = (int16_t)(reading.smoothPressure - 90000); // TEMP ! (change for altitude)
 		SendData::receivingConnectionStability = comm.getConnectionStability();
 
 
