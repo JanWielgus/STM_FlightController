@@ -4,6 +4,8 @@
 #define _UNARMEDFLIGHTMODE_h
 
 #include "arduino.h"
+#include "FlightMode.h"
+#include "Interfaces.h"
 
 /*
 	This flight mode is used when drone is unarmed.
@@ -20,6 +22,7 @@ public:
 	UnarmedFlightMode(IVirtualPilot* virtualPilot);
 	void run() override;
 	void reset() override;
+	void prepare() override;
 };
 
 

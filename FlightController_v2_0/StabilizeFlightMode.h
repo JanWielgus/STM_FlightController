@@ -15,6 +15,7 @@ public:
 	StabilizeFlightMode(IVirtualPilot* virtualPilot);
 	void run() override;
 	void reset() override;
+	void prepare() override;
 
 public:
 	float getHeadingToHold();
@@ -36,6 +37,7 @@ private:
 	// Help methods
 	void integrateHeadingToHold(); // use roatate stick to calculate headingToHold
 	void correctHeadingError(); // Correct heading to be in range of -180 : 180
+	void setHeadingToHoldToCurrentReading(); // sets headingToHold value to the current heading reading
 };
 
 #endif

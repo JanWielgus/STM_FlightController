@@ -10,7 +10,7 @@
 #include <FC_Task.h>
 
 
-class VirtualPilot : public IVirtualPilot, public FC_Task
+class VirtualPilot : public IVirtualPilot
 {
 public:
 	VirtualPilot(FC_ObjectTasker* taskerPointer);
@@ -31,10 +31,6 @@ private:
 	uint8_t flightModesArraySize = 0; // size of the array in memory
 
 	FC_ObjectTasker& tasker; // reference to the global tasker
-
-
-private:
-	void execute() override;
 };
 
 

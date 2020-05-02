@@ -3,6 +3,7 @@
 #include "config.h"
 #include <FC_Extrapolation.h>
 #include <FC_LinearExtrapolation.h>
+#include "Failsafe.h"
 
 /*
 using Storage::levelXpid;
@@ -34,7 +35,8 @@ void addTaskerFunctionsToTasker()
 	tasker.addTask(new ReadCompass, 13340L, 492);								// 75Hz
 	baro.registerNewBaroReadingFunction(newBaroReadingEvent);
 	tasker.addTask(new ProcessSlowerReadings, config::MainInterval, 0);			// 250Hz
-	tasker.addTask((FC_Task*)&Storage::virtualPilot, config::MainInterval, 0);	// 250Hz
+	tasker.addTask(new RunVirtualPilot, config::MainInterval, 0);	// 250Hz
+	tasker.addTask(new Failsafe, 50000L, 0);									// 20Hz
 
 
 	// Communication
@@ -61,11 +63,10 @@ namespace TaskerFunction
 	FC_Extrapolation* compassExtrapolator = new FC_LinearExtrapolation();
 	FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
 
-	// Sticks extrapolation
-	FC_LinearExtrapolation throttleExtrapolator;
-	FC_LinearExtrapolation rot_stickExtraplator;
-	FC_LinearExtrapolation TB_stickExtrapolator;
-	FC_LinearExtrapolation LR_stickExtrapolator;
+	FC_EVA_Filter throttleFilter(0.5);
+	FC_EVA_Filter rotateFilter(0.5);
+	FC_EVA_Filter TB_fiter(0.58);
+	FC_EVA_Filter LR_filter(0.58);
 
 
 	void UpdateControlDiode::execute()
@@ -141,15 +142,17 @@ namespace TaskerFunction
 		reading.smoothPressure = baroExtrapolator->getEstimation(curTime);
 
 
-		// extrapolate stick values
-		if (comm.getConnectionStability() > 20)
-		{
-			// extrapolate
-			ReceiveData::throttle = throttleExtrapolator.getEstimation(curTime);
-			ReceiveData::rot_stick = rot_stickExtraplator.getEstimation(curTime);
-			ReceiveData::TB_stick = TB_stickExtrapolator.getEstimation(curTime);
-			ReceiveData::LR_stick = LR_stickExtrapolator.getEstimation(curTime);
-		}
+		// filter received sticks values
+		Storage::sticksFiltered.throttle = throttleFilter.updateFilter(ReceiveData::throttle);
+		Storage::sticksFiltered.rotate = rotateFilter.updateFilter(ReceiveData::rot_stick);
+		Storage::sticksFiltered.TB = TB_fiter.updateFilter(ReceiveData::TB_stick);
+		Storage::sticksFiltered.LR = LR_filter.updateFilter(ReceiveData::LR_stick);
+	}
+
+
+	void RunVirtualPilot::execute()
+	{
+		Storage::virtualPilot.runVirtualPilot();
 	}
 
 
@@ -158,15 +161,6 @@ namespace TaskerFunction
 	//// THIS PART HAVE TO BE REMOVED (ONLY VIRTUAL PILOT USE FLIGHT MODES)
 	//void Stabilize::execute()
 	//{
-	//	// Cut-off all motors if the angle is too high
-	//	using namespace config;
-	//	if (angle.x > CutOffAngle || angle.x < -CutOffAngle ||
-	//		angle.y > CutOffAngle || angle.y < -CutOffAngle)
-	//		motors.setMotorState(false);
-
-
-
-
 
 	//	/* OVERRIDE THAT CODE WITH THE NEW FLIGHT MODES
 
@@ -258,33 +252,35 @@ namespace TaskerFunction
 
 	void SteeringReceivedUpdate::execute()
 	{
-		// add new received values for extrapolation
-		throttleExtrapolator.addNewMeasuredValue(ReceiveData::throttle, tasker.getCurrentTime());
-		rot_stickExtraplator.addNewMeasuredValue(ReceiveData::rot_stick, tasker.getCurrentTime());
-		TB_stickExtrapolator.addNewMeasuredValue(ReceiveData::TB_stick, tasker.getCurrentTime());
-		LR_stickExtrapolator.addNewMeasuredValue(ReceiveData::LR_stick, tasker.getCurrentTime());
-
-
-		// other stuff after receiving steering values
+		// stuff after receiving steering values
 		// ...
 	}
 
 
 	void BasicBackgroundReceivedUpdate::execute()
 	{
-		if (ReceiveData::arming == 1)
+		// Update flight mode
+		// If flight mode has changed
+		if (virtualPilot.getCurrentFlightModeType() != ReceiveData::flightMode)
 		{
-			// set proper flight mode
-			// ...
-			// !!!
-		}
-		if (ReceiveData::arming == 0)
-		{
-			// set unarmed flight mode
-			// everything that have to be done when unarmed is done there
-			virtualPilot.setFlightMode(FlightModeType::UNARMED);
+			switch (ReceiveData::flightMode)
+			{
+			case FlightModeType::UNARMED:
+				virtualPilot.setFlightMode(FlightModeType::UNARMED);
+				break;
+
+			case FlightModeType::STABILIZE:
+				virtualPilot.setFlightMode(FlightModeType::STABILIZE);
+				break;
+
+			default:
+				virtualPilot.setFlightMode(FlightModeType::UNARMED);
+			}
 		}
 
+
+		// other stuff
+		// ...
 	}
 
 

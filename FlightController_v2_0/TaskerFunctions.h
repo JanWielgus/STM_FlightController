@@ -40,6 +40,11 @@ namespace TaskerFunction
 		void execute() override;
 	};
 
+	class RunVirtualPilot : public FC_Task
+	{
+		void execute() override;
+	};
+
 
 
 

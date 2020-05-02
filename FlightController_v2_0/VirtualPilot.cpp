@@ -23,31 +23,30 @@ VirtualPilot::~VirtualPilot()
 
 void VirtualPilot::runVirtualPilot()
 {
+	// Run current flight mode code and get the result virtual sticks values
 	currentFlightMode->run();
 	virtualSticksType* curStick = currentFlightMode->getVirtualSticks();
 
-	// when drone is disarmed motors will not spin
+
+	// when drone is disarmed motors will not spin (unarmed flight mode)
 	// when disconnected from the pilot, motors will stop (check if config::DisableMotorsWhenConnectionIsLost is true)
 
+	// there is unarmed flight mode which is activated when drone is unarmed
+	// in this flight mode all sticks are always set to 0
+	// during flight mode changing it arm and disarm motors as needed
 
 
-	// !!!
+
 	// How to use
 	// 
 	// VirtualPilot use current flight mode virtualSticks as pid outputs
-	// If needed create in config the scale values to multiply by
 
 
 	Storage::motors.setOnTL(curStick->throttle + curStick->TB + curStick->LR - curStick->rotate); // BR
-	Storage::motors.setOnTL(curStick->throttle + curStick->TB - curStick->LR + curStick->rotate); // BL
-	Storage::motors.setOnTL(curStick->throttle - curStick->TB - curStick->LR - curStick->rotate); // TL
-	Storage::motors.setOnTL(curStick->throttle - curStick->TB + curStick->LR + curStick->rotate); // TR
-}
-
-
-void VirtualPilot::execute()
-{
-	runVirtualPilot();
+	Storage::motors.setOnTR(curStick->throttle + curStick->TB - curStick->LR + curStick->rotate); // BL
+	Storage::motors.setOnBR(curStick->throttle - curStick->TB - curStick->LR - curStick->rotate); // TL (damaged motor)
+	Storage::motors.setOnBL(curStick->throttle - curStick->TB + curStick->LR + curStick->rotate); // TR
+	Storage::motors.forceMotorsExecution();
 }
 
 
@@ -70,9 +69,14 @@ bool VirtualPilot::setFlightMode(FlightModeType flightModeToSet)
 		return false;
 
 	// reset state of not related flight modes
+	// and prepate for change related ones
 	for (int i = 0; i < amtOfFlightModes; i++)
+	{
 		if (!currentFlightMode->checkIfRelated(flightModesArray[i]))
 			flightModesArray[i]->reset();
+		else
+			flightModesArray[i]->prepare();
+	}
 
 	return true;
 }

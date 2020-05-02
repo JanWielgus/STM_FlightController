@@ -74,6 +74,7 @@ namespace Storage
 
     // Global sensor readings
     extern readingsType reading;
+    extern virtualSticksType sticksFiltered;
 
 }
 

@@ -41,6 +41,7 @@
 #include "PosHoldFlightMode.h"
 #include "UnarmedFlightMode.h"
 #include "SharedDataTypes.h"
+#include "Failsafe.h"
 
 
 using namespace Storage;
@@ -78,10 +79,12 @@ void setup()
 
 
 
-	// Set up a virtual pilot
-	virtualPilot.addFlightMode(&stabilizeFlightMode);
-	virtualPilot.addFlightMode(&altHoldFlightMode);
-	virtualPilot.addFlightMode(&posHoldFlightMode);
+	// Set the startup flight mode
+	while (!virtualPilot.setFlightMode(FlightModeType::UNARMED))
+	{
+		debug.printHeader("Base flight mode NOT SET");
+		delay(500);
+	}
 
 	
 	
@@ -125,30 +128,43 @@ void setup()
 	///////////////
 	// TEMPORARY //
 	///////////////
+	//delay(1500);
 	debug.print("Started calibrations... ");
 	
 	/*
-	mpu.calibrateAccelerometer(1000); // 
-	Serial.print("Acc done. X: ");
-	Serial.print(mpu.getAccelerometerCalibrationValues().x);
-	Serial.print(" Y: ");
-	Serial.print(mpu.getAccelerometerCalibrationValues().y);
-	Serial.print(" Z: ");
-	Serial.print(mpu.getAccelerometerCalibrationValues().z);
-	Serial.println();*/
-	mpu.setAccelerometerCalibrationValues(78, -3, -243);
+	digitalWrite(config::pin.blueDiode, HIGH);
+	mpu.calibrateAccelerometer(2000);
+	digitalWrite(config::pin.blueDiode, LOW);
+	while (true)
+	{
+		Serial.print("Acc done. X: ");
+		Serial.print(mpu.getAccelerometerCalibrationValues().x);
+		Serial.print(" Y: ");
+		Serial.print(mpu.getAccelerometerCalibrationValues().y);
+		Serial.print(" Z: ");
+		Serial.print(mpu.getAccelerometerCalibrationValues().z);
+		Serial.println();
+		delay(2000);
+	}*/
+	mpu.setAccelerometerCalibrationValues(-2, 52, -214);
 	
 	
 	/*
-	mpu.calibrateGyro(4000);
-	Serial.print("Gyro done. X: ");
-	Serial.print(mpu.getGyroCalibrationValues().x);
-	Serial.print(" Y: ");
-	Serial.print(mpu.getGyroCalibrationValues().y);
-	Serial.print(" Z: ");
-	Serial.print(mpu.getGyroCalibrationValues().z);
-	Serial.println();*/
-	mpu.setGyroCalibrationValues(-108, -156, 0);
+	digitalWrite(config::pin.blueDiode, HIGH);
+	mpu.calibrateGyro(6000);
+	digitalWrite(config::pin.blueDiode, LOW);
+	while (true)
+	{
+		Serial.print("Gyro done. X: ");
+		Serial.print(mpu.getGyroCalibrationValues().x);
+		Serial.print(" Y: ");
+		Serial.print(mpu.getGyroCalibrationValues().y);
+		Serial.print(" Z: ");
+		Serial.print(mpu.getGyroCalibrationValues().z);
+		Serial.println();
+		delay(2000);
+	}*/
+	mpu.setGyroCalibrationValues(-102, -163, 6);
 	
 	debug.println(" PASSED");
 	
@@ -188,8 +204,32 @@ void setup()
 	// and the whole process is repeated
 	//mpu.setAccelerometerCalibrationValues(....);
 	//setGyroCalibrationMethod here <----
+
+	/*
+	digitalWrite(config::pin.blueDiode, HIGH);
+	compass.calibrateCompass(40);
+	digitalWrite(config::pin.blueDiode, LOW);
+	while (true)
+	{
+		FC_HMC5883L_Lib::vector3Int mins;
+		FC_HMC5883L_Lib::vector3Int maxs;
+		compass.getCalibrationValues(&mins, &maxs);
+		Serial.print("Compass done. MIN: X: ");
+		Serial.print(mins.x);
+		Serial.print(" Y: ");
+		Serial.print(mins.y);
+		Serial.print(" Z: ");
+		Serial.print(mins.z);
+		Serial.print("  MAX: X: ");
+		Serial.print(maxs.x);
+		Serial.print(" Y: ");
+		Serial.print(maxs.y);
+		Serial.print(" Z: ");
+		Serial.print(maxs.z);
+		Serial.println();
+		delay(2000);
+	}*/
 	compass.setCalibrationValues(config::calibVal.compassMin, config::calibVal.compassMax);
-	//compass.calibrateCompass(15);
 	
 
 	
@@ -202,6 +242,14 @@ void setup()
 	reading.angle = mpu.getFusedXYAngles();
 	compass.readCompassData(reading.angle.x, reading.angle.y);
 	mpu.setInitialZAxisValue(compass.getHeading());
+
+
+	// set up PID derivative low-pass filters
+	Storage::levelXpid.setDerivativeLowPassFilterParams(6);
+	Storage::levelYpid.setDerivativeLowPassFilterParams(6);
+	Storage::yawPID.setDerivativeLowPassFilterParams(6);
+	Storage::altHoldPID.setDerivativeLowPassFilterParams(6);
+
 	
 	Serial.println("setup done");
 }

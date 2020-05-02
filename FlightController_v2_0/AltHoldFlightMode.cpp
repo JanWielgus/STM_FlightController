@@ -15,7 +15,7 @@ AltHoldFlightMode::AltHoldFlightMode(IFlightMode* stabilizeFM, IVirtualPilot* vi
 
 void AltHoldFlightMode::run()
 {
-	this->baseFlightMode->run();
+	executeBaseFlightMode();
 
 
 
@@ -25,6 +25,11 @@ void AltHoldFlightMode::run()
 void AltHoldFlightMode::reset()
 {
 
+}
+
+
+void AltHoldFlightMode::prepare()
+{
 }
 
 

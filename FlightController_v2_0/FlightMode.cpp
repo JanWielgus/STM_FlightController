@@ -47,3 +47,13 @@ void FlightMode::executeBaseFlightMode()
 		baseFlightMode->run();
 }
 
+
+void FlightMode::resetVirtualStickValues()
+{
+	// Set all stick values to 0
+	virtualSticks.throttle = 0;
+	virtualSticks.rotate = 0;
+	virtualSticks.TB = 0;
+	virtualSticks.LR = 0;
+}
+
