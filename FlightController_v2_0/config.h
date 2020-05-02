@@ -83,8 +83,6 @@ namespace config
 		uint8_t AltHoldMaxAddedThrottle = 150;
 		uint16_t AltHoldMaxTotalFinal = 720;
 		uint16_t AltHoldMinTotalFinal = 20;
-		uint8_t AltHoldStickDeadZone = 90; // value from the stick center which cause altitude change
-		uint8_t PosHoldStickDeadZone = 60; // value from the stick center which cause position change
 	} const flModeConfig; // flight mode config
 	*/
 
