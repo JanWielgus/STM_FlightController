@@ -62,6 +62,8 @@ namespace TaskerFunction
 {
 	FC_Extrapolation* compassExtrapolator = new FC_LinearExtrapolation();
 	FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
+	FC_EVA_Filter baroFilter(0.3);
+	float temp_pressure;
 
 	FC_EVA_Filter throttleFilter(0.5);
 	FC_EVA_Filter rotateFilter(0.5);
@@ -122,9 +124,15 @@ namespace TaskerFunction
 	{
 		// normal pressure is just assigned to the globar reading variable
 		reading.pressure = baro.getPressure();
+		
+		// temp
+		temp_pressure = baro.getSmoothPressure();
 
 		// smooth pressure is extrapolated
-		baroExtrapolator->addNewMeasuredValue(baro.getSmoothPressure(), tasker.getCurrentTime());
+		
+		//baroExtrapolator->addNewMeasuredValue(baro.getSmoothPressure(), tasker.getCurrentTime());
+		//baroFilter.updateFilter(baro.getSmoothPressure());
+		//Serial.println(baro.getPressure());
 	}
 
 
@@ -139,7 +147,11 @@ namespace TaskerFunction
 
 
 		// extrapolate baro reading to meet the program main frequency (250Hz)
-		reading.smoothPressure = baroExtrapolator->getEstimation(curTime);
+		//reading.smoothPressure = baroExtrapolator->getEstimation(curTime);
+
+		// tests on pressure (EXTRAPOLATOR IS NOT WORKIGN)
+		reading.smoothPressure = baroFilter.updateFilter(temp_pressure);
+		//Serial.println(baroFilter.getLastValue());
 
 
 		// filter received sticks values
@@ -271,6 +283,10 @@ namespace TaskerFunction
 
 			case FlightModeType::STABILIZE:
 				virtualPilot.setFlightMode(FlightModeType::STABILIZE);
+				break;
+
+			case FlightModeType::ALT_HOLD:
+				virtualPilot.setFlightMode(FlightModeType::ALT_HOLD);
 				break;
 
 			default:
