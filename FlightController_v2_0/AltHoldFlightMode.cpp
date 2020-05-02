@@ -22,12 +22,15 @@ void AltHoldFlightMode::run()
 }
 
 
+// called when exit from this flight mode
 void AltHoldFlightMode::reset()
 {
 
 }
 
 
+// called when entering to this flight mode
+// can be called several times during working
 void AltHoldFlightMode::prepare()
 {
 }
