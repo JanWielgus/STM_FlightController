@@ -23,19 +23,23 @@ VirtualPilot::~VirtualPilot()
 
 void VirtualPilot::runVirtualPilot()
 {
+	// Run current flight mode code and get the result virtual sticks values
 	currentFlightMode->run();
 	virtualSticksType* curStick = currentFlightMode->getVirtualSticks();
 
-	// when drone is disarmed motors will not spin
+
+	// when drone is disarmed motors will not spin (unarmed flight mode)
 	// when disconnected from the pilot, motors will stop (check if config::DisableMotorsWhenConnectionIsLost is true)
 
+	// there is unarmed flight mode which is activated when drone is unarmed
+	// in this flight mode all sticks are always set to 0
+	// during flight mode changing it arm and disarm motors as needed
 
 
-	// !!!
+
 	// How to use
 	// 
 	// VirtualPilot use current flight mode virtualSticks as pid outputs
-	// If needed create in config the scale values to multiply by
 
 
 	Storage::motors.setOnTL(curStick->throttle + curStick->TB + curStick->LR - curStick->rotate); // BR
