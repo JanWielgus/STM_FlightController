@@ -5,6 +5,8 @@
 #include "AltHoldFlightMode.h"
 #include "StabilizeFlightMode.h"
 #include "SharedDataTypes.h"
+#include "Storage.h"
+#include "config.h"
 
 
 AltHoldFlightMode::AltHoldFlightMode(IFlightMode* stabilizeFM, IVirtualPilot* virtualPilot)
@@ -25,7 +27,11 @@ void AltHoldFlightMode::run()
 // called when exit from this flight mode
 void AltHoldFlightMode::reset()
 {
+	// Reset virtual sticks
+	resetVirtualStickValues();
 
+	// Reset pid controller
+	Storage::altHoldPID.resetController();
 }
 
 
