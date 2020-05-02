@@ -21,23 +21,23 @@ void StabilizeFlightMode::run()
 	virtualSticks.throttle = Storage::sticksFiltered.throttle;
 
 	// rot, TB and LR are set by PID controllers
-	if (virtualSticks.throttle > config::ZeroActionThrottle) // if throttle is high enough
+	if (Storage::sticksFiltered.throttle > config::ZeroActionThrottle) // if throttle is high enough
 	{
 		updateLevelingStuff();
 		updateHeadingStuff();
 	}
-
-
+	else // if less than zero action throttle
+	{
+		resetVirtualStickValues();
+		setHeadingToHoldToCurrentReading();
+	}
 }
 
 
 void StabilizeFlightMode::reset()
 {
 	// Reset virtual sticks
-	virtualSticks.throttle = 0;
-	virtualSticks.rotate = 0;
-	virtualSticks.TB = 0;
-	virtualSticks.LR = 0;
+	resetVirtualStickValues();
 
 	// Reset leveling controllers
 	Storage::levelXpid.resetController();
@@ -52,7 +52,7 @@ void StabilizeFlightMode::reset()
 void StabilizeFlightMode::prepare()
 {
 	// Update headingToHold to the current heading
-	headingToHold = Storage::reading.heading;
+	setHeadingToHoldToCurrentReading();
 }
 
 
@@ -107,4 +107,10 @@ void StabilizeFlightMode::correctHeadingError()
 		headingError -= 360;
 	else if (headingError < -180)
 		headingError += 360;
+}
+
+
+void StabilizeFlightMode::setHeadingToHoldToCurrentReading()
+{
+	headingToHold = Storage::reading.heading;
 }
