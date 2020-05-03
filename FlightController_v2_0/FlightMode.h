@@ -39,6 +39,7 @@ public:
 
 	// protected components
 protected:
+	IFlightMode* const baseFlightMode;  // ! To initialize inside derivative class (using constructor of this class)
 	virtualSticksType virtualSticks;	// Eack flight mode has own virtual stick values
 										// Each next fligh mode decide if want to override previous sticks value
 										// VirtualPilot just use values from the last flight mode
@@ -48,7 +49,6 @@ protected:
 
 
 private:
-	IFlightMode* const baseFlightMode;  // ! To initialize inside derivative class (using constructor of this class)
 	const FlightModeType type;
 };
 

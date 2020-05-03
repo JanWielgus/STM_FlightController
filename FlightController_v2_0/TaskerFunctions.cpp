@@ -62,6 +62,7 @@ namespace TaskerFunction
 {
 	FC_Extrapolation* compassExtrapolator = new FC_LinearExtrapolation();
 	FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
+	FC_EVA_Filter baroFilter(0.3);
 
 	FC_EVA_Filter throttleFilter(0.5);
 	FC_EVA_Filter rotateFilter(0.5);
@@ -124,7 +125,10 @@ namespace TaskerFunction
 		reading.pressure = baro.getPressure();
 
 		// smooth pressure is extrapolated
-		baroExtrapolator->addNewMeasuredValue(baro.getSmoothPressure(), tasker.getCurrentTime());
+		
+		//baroExtrapolator->addNewMeasuredValue(baro.getSmoothPressure(), tasker.getCurrentTime());
+		//baroFilter.updateFilter(baro.getSmoothPressure());
+		//Serial.println(baro.getPressure());
 	}
 
 
@@ -139,7 +143,11 @@ namespace TaskerFunction
 
 
 		// extrapolate baro reading to meet the program main frequency (250Hz)
-		reading.smoothPressure = baroExtrapolator->getEstimation(curTime);
+		//reading.smoothPressure = baroExtrapolator->getEstimation(curTime);
+
+		// tests on pressure (EXTRAPOLATOR IS NOT WORKIGN)
+		reading.smoothPressure = baroFilter.updateFilter(baro.getSmoothPressure());
+		//Serial.println(baroFilter.getLastValue());
 
 
 		// filter received sticks values
@@ -157,36 +165,10 @@ namespace TaskerFunction
 
 
 
-	//// !!!!!
-	//// THIS PART HAVE TO BE REMOVED (ONLY VIRTUAL PILOT USE FLIGHT MODES)
-	//void Stabilize::execute()
-	//{
-
-	//	/* OVERRIDE THAT CODE WITH THE NEW FLIGHT MODES
-
-	//	fModes::runVirtualPilot();
-
-
-	//	// when pilot is disarmed motors will not spin
-	//	// when disconnected form the pilot, motors will stop (not enabled)
-
-	//	motors.setOnTL(fModes::vSticks.throttle + pidXval + pidYval - pidYawVal); // BR
-	//	motors.setOnTR(fModes::vSticks.throttle + pidXval - pidYval + pidYawVal); // BL
-	//	motors.setOnBR((int16_t)(fModes::vSticks.throttle * 1.5f) - pidXval - pidYval - pidYawVal); // TL (damaged)
-	//	motors.setOnBL(fModes::vSticks.throttle - pidXval + pidYval + pidYawVal); // TR
-	//	motors.forceMotorsExecution();
-
-	//	*/
-	//}
-
-
-
-
 
 
 
 	/*
-
 	!!!!!!!!!!!!!
 
 	THIS HAVE TO BE IMPLEMENTED IN THE NEW FLIGHT MODE CLASSES
@@ -226,9 +208,6 @@ namespace TaskerFunction
 				flModeConfig.AltHoldMaxTotalFinal);
 		}
 	}
-
-
-
 	*/
 
 
@@ -241,7 +220,7 @@ namespace TaskerFunction
 		SendData::tilt_TB = (int8_t)reading.angle.x;
 		SendData::tilt_LR = (int8_t)reading.angle.y;
 		SendData::heading = (int16_t)reading.heading;
-		SendData::altitude = (int16_t)(baro.getSmoothPressure() - 90000); // TEMP ! (change for altitude)
+		SendData::altitude = (int16_t)(reading.smoothPressure - 90000); // TEMP ! (change for altitude)
 		SendData::receivingConnectionStability = comm.getConnectionStability();
 
 
@@ -272,6 +251,12 @@ namespace TaskerFunction
 			case FlightModeType::STABILIZE:
 				virtualPilot.setFlightMode(FlightModeType::STABILIZE);
 				break;
+
+			case FlightModeType::ALT_HOLD:
+				virtualPilot.setFlightMode(FlightModeType::ALT_HOLD);
+				break;
+
+			// TODO: other flight modes when will be implemented
 
 			default:
 				virtualPilot.setFlightMode(FlightModeType::UNARMED);

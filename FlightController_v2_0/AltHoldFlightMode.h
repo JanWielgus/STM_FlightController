@@ -24,7 +24,12 @@ public:
 
 private:
 	float pressureToHold = 0;
+	int16_t altHoldBaseThrottle = 0; // should be throttle value when altitude do not change
+	float pressureError;
 
+
+private:
+	void integratePressureToHold();
 };
 
 #endif
