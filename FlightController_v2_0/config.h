@@ -74,17 +74,14 @@ namespace config
 		
 	} calibVal;
 
-
-	/*
-// flight modes config values
+// Flight modes config
 	struct
 	{
-		//const uint16_t ZeroG_throttle = 500; // throttle value when motors power compensate the gravity force
-		uint8_t AltHoldMaxAddedThrottle = 150;
-		uint16_t AltHoldMaxTotalFinal = 720;
-		uint16_t AltHoldMinTotalFinal = 20;
-	} const flModeConfig; // flight mode config
-	*/
+		uint16_t altHoldBaseThrottle = 580; // throttle value, when motors should compensate gravity
+		uint8_t altHoldThrottleCenterOffset = 100; // when throttle will be between (500-offset, 500+offset) range, pressure to hold will not be integrated
+		uint16_t altHoldMinThrottle = 350;
+		uint16_t altHoldMaxThrottle = 780;
+	} const flightModeConfig;
 
 
 // PID default values

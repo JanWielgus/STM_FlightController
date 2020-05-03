@@ -18,10 +18,25 @@ AltHoldFlightMode::AltHoldFlightMode(IFlightMode* stabilizeFM, IVirtualPilot* vi
 void AltHoldFlightMode::run()
 {
 	executeBaseFlightMode();
+
+	// copy sticks values that do not change in this flight mode
+	// only throttle changes
+	virtualSticksType* baseSticks = baseFlightMode->getVirtualSticks();
+	virtualSticks.rotate = baseSticks->rotate;
+	virtualSticks.TB = baseSticks->TB;
+	virtualSticks.LR = baseSticks->LR;
 	
 
-	// TODO: make altitude holding
-	// ...
+	// Calculate the pilot change in altitude
+	integratePressureToHold();
+
+	// Calculate the error and final throttle value
+	pressureError = reading.smoothPressure - pressureToHold;
+	virtualSticks.throttle = Storage::altHoldPID.updateController(pressureError);
+	virtualSticks.throttle += altHoldBaseThrottle;
+	virtualSticks.throttle = constrain(virtualSticks.throttle,
+										config::flightModeConfig.altHoldMinThrottle,
+										config::flightModeConfig.altHoldMaxThrottle);
 }
 
 
@@ -44,9 +59,10 @@ void AltHoldFlightMode::reset()
 void AltHoldFlightMode::prepare()
 {
 	// TODO: Try to figure out better way of calculating base throttle for alt hold
-	// For now it is just the last throttle value given by the pilot
+	// For now it is const value set in config
 	if (altHoldBaseThrottle == 0) // if not yet set
-		altHoldBaseThrottle = baseFlightMode->getVirtualSticks()->throttle;
+		//altHoldBaseThrottle = baseFlightMode->getVirtualSticks()->throttle;
+		this->altHoldBaseThrottle = config::flightModeConfig.altHoldBaseThrottle;
 }
 
 
@@ -59,10 +75,26 @@ float AltHoldFlightMode::getPressureToHold()
 
 void AltHoldFlightMode::integratePressureToHold()
 {
-	// Integrate only if connection is stable
-	if (Storage::comm.getConnectionStability() > 20)
+	// Break if connection is not stable
+	if (Storage::comm.getConnectionStability() < 20)
+		return;
+
+
+	float toIntegrate = (float)(baseFlightMode->getVirtualSticks()->throttle - 500);
+	// if value throttle is moved from center (500) by more than offset
+	if (abs(toIntegrate) > config::flightModeConfig.altHoldThrottleCenterOffset)
 	{
-		float toIntegrate = (float)(baseFlightMode->getVirtualSticks()->throttle - altHoldBaseThrottle) / 50.f; // 6 pressure value change is about 0.5 meter
+		// Make the value to start from 0
+		if (toIntegrate > 0)
+			toIntegrate -= config::flightModeConfig.altHoldThrottleCenterOffset;
+		else
+			toIntegrate += config::flightModeConfig.altHoldThrottleCenterOffset;
+
+		// Divide the value to slower down changes
+		// 6 pressure value change is about 0.5 meter
+		toIntegrate /= 50.f;
+
+		// integrate
 		pressureToHold -= toIntegrate * config::MainDeltaTimeInSeconds;
 	}
 }
