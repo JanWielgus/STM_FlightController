@@ -63,7 +63,6 @@ namespace TaskerFunction
 	FC_Extrapolation* compassExtrapolator = new FC_LinearExtrapolation();
 	FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
 	FC_EVA_Filter baroFilter(0.3);
-	float temp_pressure;
 
 	FC_EVA_Filter throttleFilter(0.5);
 	FC_EVA_Filter rotateFilter(0.5);
@@ -124,9 +123,6 @@ namespace TaskerFunction
 	{
 		// normal pressure is just assigned to the globar reading variable
 		reading.pressure = baro.getPressure();
-		
-		// temp
-		temp_pressure = baro.getSmoothPressure();
 
 		// smooth pressure is extrapolated
 		
@@ -150,7 +146,7 @@ namespace TaskerFunction
 		//reading.smoothPressure = baroExtrapolator->getEstimation(curTime);
 
 		// tests on pressure (EXTRAPOLATOR IS NOT WORKIGN)
-		reading.smoothPressure = baroFilter.updateFilter(temp_pressure);
+		reading.smoothPressure = baroFilter.updateFilter(baro.getSmoothPressure());
 		//Serial.println(baroFilter.getLastValue());
 
 
