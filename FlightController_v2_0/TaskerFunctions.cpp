@@ -169,36 +169,10 @@ namespace TaskerFunction
 
 
 
-	//// !!!!!
-	//// THIS PART HAVE TO BE REMOVED (ONLY VIRTUAL PILOT USE FLIGHT MODES)
-	//void Stabilize::execute()
-	//{
-
-	//	/* OVERRIDE THAT CODE WITH THE NEW FLIGHT MODES
-
-	//	fModes::runVirtualPilot();
-
-
-	//	// when pilot is disarmed motors will not spin
-	//	// when disconnected form the pilot, motors will stop (not enabled)
-
-	//	motors.setOnTL(fModes::vSticks.throttle + pidXval + pidYval - pidYawVal); // BR
-	//	motors.setOnTR(fModes::vSticks.throttle + pidXval - pidYval + pidYawVal); // BL
-	//	motors.setOnBR((int16_t)(fModes::vSticks.throttle * 1.5f) - pidXval - pidYval - pidYawVal); // TL (damaged)
-	//	motors.setOnBL(fModes::vSticks.throttle - pidXval + pidYval + pidYawVal); // TR
-	//	motors.forceMotorsExecution();
-
-	//	*/
-	//}
-
-
-
-
 
 
 
 	/*
-
 	!!!!!!!!!!!!!
 
 	THIS HAVE TO BE IMPLEMENTED IN THE NEW FLIGHT MODE CLASSES
@@ -238,9 +212,6 @@ namespace TaskerFunction
 				flModeConfig.AltHoldMaxTotalFinal);
 		}
 	}
-
-
-
 	*/
 
 
