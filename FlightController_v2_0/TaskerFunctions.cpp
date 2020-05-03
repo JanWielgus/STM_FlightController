@@ -260,6 +260,8 @@ namespace TaskerFunction
 				virtualPilot.setFlightMode(FlightModeType::ALT_HOLD);
 				break;
 
+			// TODO: other flight modes when will be implemented
+
 			default:
 				virtualPilot.setFlightMode(FlightModeType::UNARMED);
 			}
