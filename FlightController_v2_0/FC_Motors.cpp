@@ -59,9 +59,9 @@ void FC_Motors::setOnTL(int16_t val)
 {
 	if (motorsState)
 	{
-		TL_power = val / 10;
+		val = constrain(val, 0, 1000);
+		TL_power = val;
 		val += MotorsDispVal;
-		val = constrain(val, MotorMin, MotorMax);
 		TIMER3_BASE->CCR1 = val; // TL
 	}
 	else
@@ -76,9 +76,9 @@ void FC_Motors::setOnTR(int16_t val)
 {
 	if (motorsState)
 	{
-		TR_power = val / 10;
+		val = constrain(val, 0, 1000);
+		TR_power = val;
 		val += MotorsDispVal;
-		val = constrain(val, MotorMin, MotorMax);
 		TIMER3_BASE->CCR3 = val; // TR
 	}
 	else
@@ -93,9 +93,9 @@ void FC_Motors::setOnBL(int16_t val)
 {
 	if (motorsState)
 	{
-		BL_power = val / 10;
+		val = constrain(val, 0, 1000);
+		BL_power = val;
 		val += MotorsDispVal;
-		val = constrain(val, MotorMin, MotorMax);
 		TIMER3_BASE->CCR2 = val; // BL
 	}
 	else
@@ -110,9 +110,9 @@ void FC_Motors::setOnBR(int16_t val)
 {
 	if (motorsState)
 	{
-		BR_power = val / 10;
+		val = constrain(val, 0, 1000);
+		BR_power = val;
 		val += MotorsDispVal;
-		val = constrain(val, MotorMin, MotorMax);
 		TIMER3_BASE->CCR4 = val; // BR
 	}
 	else
@@ -131,5 +131,5 @@ void FC_Motors::forceMotorsExecution()
 
 uint8_t FC_Motors::getAveragePower()
 {
-	return ((uint16_t)TR_power + TL_power + BR_power + BL_power) / 4;
+	return (TR_power + TL_power + BR_power + BL_power) / 40;
 }

@@ -27,7 +27,7 @@ namespace config
 
 	const uint8_t MaxCommPacketBytes = 100; // communication buffer size
 
-	const uint8_t ZeroActionThrottle = 20;
+	const uint8_t ZeroActionMotorPower = 5; // if average motor power is below that value, some stuff could be frozeb, like stabilize PID controllers
 
 
 	// Failsafe

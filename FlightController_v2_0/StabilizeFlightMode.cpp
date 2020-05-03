@@ -21,14 +21,17 @@ void StabilizeFlightMode::run()
 	virtualSticks.throttle = Storage::sticksFiltered.throttle;
 
 	// rot, TB and LR are set by PID controllers
-	if (Storage::sticksFiltered.throttle > config::ZeroActionThrottle) // if throttle is high enough
+	if (Storage::motors.getAveragePower() > config::ZeroActionMotorPower) // if average motors power is sufficient
 	{
 		updateLevelingStuff();
 		updateHeadingStuff();
 	}
 	else // if less than zero action throttle
 	{
-		resetVirtualStickValues();
+		// Do not reset throttle, because it have to increase motors power
+		virtualSticks.rotate = 0;
+		virtualSticks.TB = 0;
+		virtualSticks.LR = 0;
 		setHeadingToHoldToCurrentReading();
 	}
 }
