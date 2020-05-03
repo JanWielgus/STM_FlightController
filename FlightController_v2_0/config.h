@@ -11,6 +11,7 @@
 
 #include <FC_MPU6050Lib.h>
 #include <FC_HMC5883L_Lib.h>
+#include "SharedDataTypes.h"
 
 
 namespace config
@@ -65,8 +66,6 @@ namespace config
 		
 		// hmc5883l
 		// Default calibration values
-// 		FC_HMC5883L_Lib::vector3Int compassMin = {-503, -505, -1440};
-// 		FC_HMC5883L_Lib::vector3Int compassMax = {504, 463, -330};
 		FC_HMC5883L_Lib::vector3Int compassMin = {-507, -170, -1010};
 		FC_HMC5883L_Lib::vector3Int compassMax = {370, 725, 152};
 		
@@ -85,19 +84,11 @@ namespace config
 
 
 // PID default values
-	struct pidSet
-	{
-		float p;
-		float i;
-		uint8_t imax;
-		float d;
-	};
-
 	struct
 	{
-		const pidSet leveling = { 2.14f, 2.5f, 110, 0.64f };
-		const pidSet yaw = { 3.8f, 1.2f, 90, 0.8f };
-		const pidSet altHold = { 0, 0, 0, 0 };
+		const pidPack leveling = { 2.14f, 2.5f, 110, 0.64f };
+		const pidPack yaw = { 3.8f, 1.2f, 90, 0.8f };
+		const pidPack altHold = { 0, 0, 0, 0 };
 	}defPID;
 
 

@@ -50,6 +50,15 @@ struct readingsType
 };
 
 
+struct pidPack
+{
+    float p;
+    float i;
+    uint16_t imax;
+    float d;
+};
+
+
 struct pidCommPack
 {
     floatByte P;
