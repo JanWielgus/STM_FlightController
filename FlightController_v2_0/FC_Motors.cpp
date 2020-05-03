@@ -59,12 +59,16 @@ void FC_Motors::setOnTL(int16_t val)
 {
 	if (motorsState)
 	{
+		TL_power = val / 10;
 		val += MotorsDispVal;
 		val = constrain(val, MotorMin, MotorMax);
 		TIMER3_BASE->CCR1 = val; // TL
 	}
 	else
+	{
 		TIMER3_BASE->CCR1 = MotorIdle;
+		TL_power = 0;
+	}
 }
 
 
@@ -72,12 +76,16 @@ void FC_Motors::setOnTR(int16_t val)
 {
 	if (motorsState)
 	{
+		TR_power = val / 10;
 		val += MotorsDispVal;
 		val = constrain(val, MotorMin, MotorMax);
 		TIMER3_BASE->CCR3 = val; // TR
 	}
 	else
+	{
 		TIMER3_BASE->CCR3 = MotorIdle;
+		TR_power = 0;
+	}
 }
 
 
@@ -85,12 +93,16 @@ void FC_Motors::setOnBL(int16_t val)
 {
 	if (motorsState)
 	{
+		BL_power = val / 10;
 		val += MotorsDispVal;
 		val = constrain(val, MotorMin, MotorMax);
 		TIMER3_BASE->CCR2 = val; // BL
 	}
 	else
+	{
 		TIMER3_BASE->CCR2 = MotorIdle;
+		BL_power = 0;
+	}
 }
 
 
@@ -98,16 +110,26 @@ void FC_Motors::setOnBR(int16_t val)
 {
 	if (motorsState)
 	{
+		BR_power = val / 10;
 		val += MotorsDispVal;
 		val = constrain(val, MotorMin, MotorMax);
-		TIMER3_BASE->CCR4 = val;
+		TIMER3_BASE->CCR4 = val; // BR
 	}
 	else
-		TIMER3_BASE->CCR4 = MotorIdle; // BR
+	{
+		TIMER3_BASE->CCR4 = MotorIdle;
+		BR_power = 0;
+	}
 }
 
 
 void FC_Motors::forceMotorsExecution()
 {
 	TIMER3_BASE->CNT = 5000; // This will reset Timer3 and cause creating pulses
+}
+
+
+uint8_t FC_Motors::getAveragePower()
+{
+	return ((uint16_t)TR_power + TL_power + BR_power + BL_power) / 4;
 }

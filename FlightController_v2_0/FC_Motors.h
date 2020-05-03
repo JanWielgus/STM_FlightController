@@ -30,6 +30,8 @@ class FC_Motors
 	void setOnBR(int16_t val); // 0:1000 Back right motor
 	void setOnBL(int16_t val); // 0:1000 Back left motor
 	void forceMotorsExecution(); // reset Timer and generate pulses; if is not used cause 200Hz pulse
+
+	uint8_t getAveragePower(); // return average power on all motors (0 - idle, 100 - all motors at max power)
 	
 	// static does no matter because there will be only once instance of that class
 	static const bool IDLE = 0;
@@ -43,6 +45,11 @@ class FC_Motors
 	
  private:
 	bool motorsState; // enabled (true) or disabled (false)
+
+	uint8_t TR_power = 0; // value between 0 and 100 (100 is maximum power)
+	uint8_t TL_power = 0;
+	uint8_t BR_power = 0;
+	uint8_t BL_power = 0;
 };
 
 
