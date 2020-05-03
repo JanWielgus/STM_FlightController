@@ -31,7 +31,7 @@ void AltHoldFlightMode::run()
 	integratePressureToHold();
 
 	// Calculate the error and final throttle value
-	pressureError = reading.smoothPressure - pressureToHold;
+	pressureError = Storage::reading.smoothPressure - pressureToHold;
 	virtualSticks.throttle = Storage::altHoldPID.updateController(pressureError);
 	virtualSticks.throttle += altHoldBaseThrottle;
 	virtualSticks.throttle = constrain(virtualSticks.throttle,
