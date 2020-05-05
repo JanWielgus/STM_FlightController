@@ -146,7 +146,7 @@ void setup()
 		Serial.println();
 		delay(2000);
 	}*/
-	mpu.setAccelerometerCalibrationValues(-2, 52, -214);
+	mpu.setAccelerometerCalibrationValues(76, 45, -259);
 	
 	
 	/*
