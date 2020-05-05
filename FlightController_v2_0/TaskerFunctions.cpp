@@ -60,9 +60,10 @@ void addTaskerFunctionsToTasker()
 
 namespace TaskerFunction
 {
-	FC_Extrapolation* compassExtrapolator = new FC_LinearExtrapolation();
-	FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
+	//FC_Extrapolation* compassExtrapolator = new FC_LinearExtrapolation();
+	//FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
 	FC_EVA_Filter baroFilter(0.3);
+	FC_EVA_Filter compassFilter(0.4);
 
 	FC_EVA_Filter throttleFilter(0.5);
 	FC_EVA_Filter rotateFilter(0.5);
@@ -115,7 +116,7 @@ namespace TaskerFunction
 		compass.readCompassData(reading.angle.x, reading.angle.y);
 
 		// Add new compass heading measurement for the current time
-		compassExtrapolator->addNewMeasuredValue(compass.getHeading(), tasker.getCurrentTime());
+		//compassExtrapolator->addNewMeasuredValue(compass.getHeading(), tasker.getCurrentTime());
 	}
 
 
@@ -139,7 +140,8 @@ namespace TaskerFunction
 
 
 		// extrapolate compass reading
-		reading.compassHeading = compassExtrapolator->getEstimation(curTime);
+		//reading.compassHeading = compassExtrapolator->getEstimation(curTime);
+		reading.compassHeading = compassFilter.updateFilter(compass.getHeading());
 
 
 		// extrapolate baro reading to meet the program main frequency (250Hz)
