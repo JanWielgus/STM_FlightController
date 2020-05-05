@@ -32,9 +32,10 @@ void AltHoldFlightMode::run()
 
 	// Calculate the error and final throttle value
 	pressureError = Storage::reading.smoothPressure - pressureToHold;
-	virtualSticks.throttle = Storage::altHoldPID.updateController(pressureError);
-	virtualSticks.throttle += altHoldBaseThrottle;
-	virtualSticks.throttle = constrain(virtualSticks.throttle,
+	pressureError *= 5;
+	int16_t tempThrottle = Storage::altHoldPID.updateController(pressureError);
+	tempThrottle += altHoldBaseThrottle;
+	virtualSticks.throttle = constrain(tempThrottle,
 										config::flightModeConfig.altHoldMinThrottle,
 										config::flightModeConfig.altHoldMaxThrottle);
 }
@@ -63,6 +64,10 @@ void AltHoldFlightMode::prepare()
 	if (altHoldBaseThrottle == 0) // if not yet set
 		//altHoldBaseThrottle = baseFlightMode->getVirtualSticks()->throttle;
 		this->altHoldBaseThrottle = config::flightModeConfig.altHoldBaseThrottle;
+
+
+	// Set initial pressure to hold
+	pressureToHold = Storage::reading.smoothPressure;
 }
 
 
