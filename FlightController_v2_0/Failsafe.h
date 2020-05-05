@@ -17,7 +17,9 @@ class Failsafe : public FC_Task
 
 	// failsafe actions
 	void cutoffMotorsIfExceededAngle();
-	void suppressMotorsAndDisarmWhenLostSignal(); // in 0.5 second gradually suppress motors and in the end disarm
+	void DisarmMotorsWhenLostSignal(); // in 0.5 second gradually suppress motors and in the end disarm
+
+	void cutOffMotors(); // immediately disarm morors if executed
 };
 
 #endif

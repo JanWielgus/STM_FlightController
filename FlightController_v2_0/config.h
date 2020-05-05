@@ -36,9 +36,8 @@ namespace config
 		bool CutOffMotorsIfAngleExceeded = true; // When connection stability drops below 1 motors will be cut-off
 		uint8_t CutOffAngle = 60; // Angle from which motors are immediately disabled
 
-		bool SuppressMotorsAndDisarmWhenLostSignal = true; // in 0.5 second gradually suppress motors and in the end disarm
+		bool DisarmMotorsWhenLostSignal = true; // in 0.5 second gradually suppress motors and in the end disarm
 		uint8_t ConnectionStabilityBorder = 15; // below that value and if flag above is true suppress will take place
-		float suppressMultiplier = 0.7; // if failsafe in 20Hz and 0.5 suppress will take about 0.5 second to disarm
 
 	} const failsafeSettings;
 
@@ -76,7 +75,7 @@ namespace config
 // Flight modes config
 	struct
 	{
-		uint16_t altHoldBaseThrottle = 580; // throttle value, when motors should compensate gravity
+		uint16_t altHoldBaseThrottle = 600; // throttle value, when motors should compensate gravity
 		uint8_t altHoldThrottleCenterOffset = 100; // when throttle will be between (500-offset, 500+offset) range, pressure to hold will not be integrated
 		uint16_t altHoldMinThrottle = 350;
 		uint16_t altHoldMaxThrottle = 780;
@@ -86,7 +85,8 @@ namespace config
 // PID default values
 	struct
 	{
-		const pidPack leveling = { 2.14f, 2.5f, 110, 0.64f };
+		//const pidPack leveling = { 2.14f, 2.5f, 110, 0.64f };
+		const pidPack leveling = { 1.75f, 2.47f, 110, 0.54f };
 		const pidPack yaw = { 3.8f, 1.2f, 90, 0.8f };
 		const pidPack altHold = { 0, 0, 0, 0 };
 	}defPID;
