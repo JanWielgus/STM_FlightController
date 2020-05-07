@@ -121,6 +121,7 @@ void setup()
 	
 	mpu.setCalculationsFrequency(250);
 	mpu.setGyroFusionMultiplier(0.999); // CHANGED TO TEST
+	//mpu.setGyroFusionMultiplier(0.997);
 	
 	
 
@@ -146,7 +147,8 @@ void setup()
 		Serial.println();
 		delay(2000);
 	}*/
-	mpu.setAccelerometerCalibrationValues(76, 45, -259);
+	//mpu.setAccelerometerCalibrationValues(76, 45, -259);
+	mpu.setAccelerometerCalibrationValues(155, 82, -251);
 	
 	
 	/*
@@ -164,7 +166,8 @@ void setup()
 		Serial.println();
 		delay(2000);
 	}*/
-	mpu.setGyroCalibrationValues(-102, -163, 6);
+	//mpu.setGyroCalibrationValues(-102, -163, 6);
+	mpu.setGyroCalibrationValues(-107, -152, 1);
 	
 	debug.println(" PASSED");
 	
@@ -207,7 +210,7 @@ void setup()
 
 	/*
 	digitalWrite(config::pin.blueDiode, HIGH);
-	compass.calibrateCompass(40);
+	compass.calibrateCompass(60);
 	digitalWrite(config::pin.blueDiode, LOW);
 	while (true)
 	{
