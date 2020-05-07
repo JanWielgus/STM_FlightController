@@ -7,23 +7,44 @@
 */
 
 
-#include <FC_Tasker.h>
-#include <MyPID.h>
 #include <FC_Communication_Base.h>
+#include <FC_CommunicationHandler.h>
+#include "CommSendDataPackets.h"
+#include "CommRecDataPackets.h"
+#include "Interfaces.h"
+#include <FC_Task.h>
+#include <FC_ObjectTasker.h>
+#include <FC_Extrapolation.h>
+#include <FC_LinearExtrapolation.h>
+#include <MyPID.h>
 #include <FC_MPU6050Lib.h>
 #include <FC_HMC5883L_Lib.h>
 #include <FC_MS5611_Lib.h>
 #include <FC_EVA_Filter.h>
-#include <FC_Motors.h>
 #include <Wire.h>
 #include <FC_CustomDataTypes.h>
 #include <FC_TaskPlanner.h>
 #include <FC_AverageFilter.h>
+#include <FC_SinkingQueue.h>
+#include <FC_GrowingArray.h>
 #include "Storage.h"
-#include "FlightModes.h"
+//#include "FlightModes.h" // THIS FILE IS NO LONGER USED !!!
+#include "FC_Motors.h"
 #include "MeasureTime.h"
 #include "TaskerFunctions.h"
 #include "DebugSystem.h"
+#include "config.h"
+#include "VirtualPilot.h"
+#include "FlightMode.h"
+#include "StabilizeFlightMode.h"
+#include "AltHoldFlightMode.h"
+#include "PosHoldFlightMode.h"
+#include "UnarmedFlightMode.h"
+#include "SharedDataTypes.h"
+#include "Failsafe.h"
+
+
+using namespace Storage;
 
 
 
@@ -31,7 +52,7 @@
 void setup()
 {
 	// Communication serial
-	Serial1.begin(BAUD_19200);
+	Serial2.begin(BAUD_115200);
 	
 	// Debugging
 	debug.begin(BAUD_115200);
@@ -41,11 +62,13 @@ void setup()
 	debug.printHeader("Program has just started!");
 	
 	
+
 	// on-board, blue and red diode
-	pinMode(LED_BUILTIN, OUTPUT);
+	pinMode(config::pin.LedBuiltIn, OUTPUT);
 	pinMode(config::pin.redDiode, OUTPUT);
 	pinMode(config::pin.blueDiode, OUTPUT);
 	
+
 	
 	// TEMPORARY !!!  set 
 	pinMode(config::pin.m0pin, OUTPUT);
@@ -53,6 +76,16 @@ void setup()
 	pinMode(config::pin.aux, INPUT);
 	digitalWrite(config::pin.m0pin, HIGH);
 	digitalWrite(config::pin.m1pin, LOW);
+
+
+
+	// Set the startup flight mode
+	while (!virtualPilot.setFlightMode(FlightModeType::UNARMED))
+	{
+		debug.printHeader("Base flight mode NOT SET");
+		delay(500);
+	}
+
 	
 	
 	// set motors to zero power
@@ -63,8 +96,14 @@ void setup()
 	motors.setMotorState(false); // disable motors
 
 
+
 	// Add functions to the Tasker tasks
 	addTaskerFunctionsToTasker();
+
+	// Makes that time has not influence connection stability value
+	// Use after adding tasks to tasker
+	//comm.adaptConStabFilterToInterval();
+	comm.setConStabFilterIntensity(0.95f); // set filter intensity manually
 
 
 	
@@ -82,36 +121,53 @@ void setup()
 	
 	mpu.setCalculationsFrequency(250);
 	mpu.setGyroFusionMultiplier(0.999); // CHANGED TO TEST
+	//mpu.setGyroFusionMultiplier(0.997);
 	
 	
+
 	
 	///////////////
 	// TEMPORARY //
 	///////////////
+	//delay(1500);
 	debug.print("Started calibrations... ");
 	
 	/*
-	mpu.calibrateAccelerometer(1000); // 
-	Serial.print("Acc done. X: ");
-	Serial.print(mpu.getAccelerometerCalibrationValues().x);
-	Serial.print(" Y: ");
-	Serial.print(mpu.getAccelerometerCalibrationValues().y);
-	Serial.print(" Z: ");
-	Serial.print(mpu.getAccelerometerCalibrationValues().z);
-	Serial.println();*/
-	mpu.setAccelerometerCalibrationValues(78, -3, -243);
+	digitalWrite(config::pin.blueDiode, HIGH);
+	mpu.calibrateAccelerometer(2000);
+	digitalWrite(config::pin.blueDiode, LOW);
+	while (true)
+	{
+		Serial.print("Acc done. X: ");
+		Serial.print(mpu.getAccelerometerCalibrationValues().x);
+		Serial.print(" Y: ");
+		Serial.print(mpu.getAccelerometerCalibrationValues().y);
+		Serial.print(" Z: ");
+		Serial.print(mpu.getAccelerometerCalibrationValues().z);
+		Serial.println();
+		delay(2000);
+	}*/
+	//mpu.setAccelerometerCalibrationValues(76, 45, -259);
+	mpu.setAccelerometerCalibrationValues(155, 82, -251);
 	
 	
 	/*
-	mpu.calibrateGyro(4000);
-	Serial.print("Gyro done. X: ");
-	Serial.print(mpu.getGyroCalibrationValues().x);
-	Serial.print(" Y: ");
-	Serial.print(mpu.getGyroCalibrationValues().y);
-	Serial.print(" Z: ");
-	Serial.print(mpu.getGyroCalibrationValues().z);
-	Serial.println();*/
-	mpu.setGyroCalibrationValues(-108, -156, 0);
+	digitalWrite(config::pin.blueDiode, HIGH);
+	mpu.calibrateGyro(6000);
+	digitalWrite(config::pin.blueDiode, LOW);
+	while (true)
+	{
+		Serial.print("Gyro done. X: ");
+		Serial.print(mpu.getGyroCalibrationValues().x);
+		Serial.print(" Y: ");
+		Serial.print(mpu.getGyroCalibrationValues().y);
+		Serial.print(" Z: ");
+		Serial.print(mpu.getGyroCalibrationValues().z);
+		Serial.println();
+		delay(2000);
+	}*/
+	//mpu.setGyroCalibrationValues(-102, -163, 6);
+	mpu.setGyroCalibrationValues(-107, -152, 1);
 	
 	debug.println(" PASSED");
 	
@@ -122,7 +178,7 @@ void setup()
 	Serial.println("mpu initialized");
 	
 	// HMC5003L
-	compass.enableHMC_on_MPU(false); // delete this parameter. There is no need because wire have to be initialized before mpu starts
+	compass.enableHMC_on_MPU(false); // enable HMC on MPU without Wire.begin() inside
 	while (!compass.initialize(false))
 	{
 		// If gets stuck here, there is an error
@@ -136,7 +192,7 @@ void setup()
 
 
 	// MS5611
-	while (!baro.initialize())
+	while (!baro.initialize(false)) // initialize baro without Wire.begin()
 	{
 		// If gets stuck here, there is an error
 		Serial.println("cannot initialize baro");
@@ -151,17 +207,52 @@ void setup()
 	// and the whole process is repeated
 	//mpu.setAccelerometerCalibrationValues(....);
 	//setGyroCalibrationMethod here <----
+
+	/*
+	digitalWrite(config::pin.blueDiode, HIGH);
+	compass.calibrateCompass(60);
+	digitalWrite(config::pin.blueDiode, LOW);
+	while (true)
+	{
+		FC_HMC5883L_Lib::vector3Int mins;
+		FC_HMC5883L_Lib::vector3Int maxs;
+		compass.getCalibrationValues(&mins, &maxs);
+		Serial.print("Compass done. MIN: X: ");
+		Serial.print(mins.x);
+		Serial.print(" Y: ");
+		Serial.print(mins.y);
+		Serial.print(" Z: ");
+		Serial.print(mins.z);
+		Serial.print("  MAX: X: ");
+		Serial.print(maxs.x);
+		Serial.print(" Y: ");
+		Serial.print(maxs.y);
+		Serial.print(" Z: ");
+		Serial.print(maxs.z);
+		Serial.println();
+		delay(2000);
+	}*/
 	compass.setCalibrationValues(config::calibVal.compassMin, config::calibVal.compassMax);
-	//compass.calibrateCompass(15);
 	
+
 	
 	mpu.setFastClock(); // 400 kHz
+
+
 	
 	// set initial Z axis value
 	mpu.read6AxisMotion();
-	angle = mpu.getFusedXYAngles();
-	compass.readCompassData(angle.x, angle.y);
+	reading.angle = mpu.getFusedXYAngles();
+	compass.readCompassData(reading.angle.x, reading.angle.y);
 	mpu.setInitialZAxisValue(compass.getHeading());
+
+
+	// set up PID derivative low-pass filters
+	Storage::levelXpid.setDerivativeLowPassFilterParams(6);
+	Storage::levelYpid.setDerivativeLowPassFilterParams(6);
+	Storage::yawPID.setDerivativeLowPassFilterParams(6);
+	Storage::altHoldPID.setDerivativeLowPassFilterParams(6);
+
 	
 	Serial.println("setup done");
 }
@@ -171,7 +262,9 @@ void setup()
 
 void loop()
 {
-	tasker.runTasker();
-	baro.runBarometer(); // this method uses planned tasks which need to be checked as fast as possible
+	// This is the only two things inside the loop()
+	// Every other function/method/task have to use one of this objects
+	tasker.run();
+	taskPlanner.runPlanner();
 }
 

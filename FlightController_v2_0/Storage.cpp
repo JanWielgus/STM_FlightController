@@ -1,50 +1,51 @@
 #include "Storage.h"
 #include "config.h"
 
+#include "VirtualPilot.h"
+#include "FlightMode.h"
+#include "UnarmedFlightMode.h"
+#include "StabilizeFlightMode.h"
+#include "AltHoldFlightMode.h"
+#include "PosHoldFlightMode.h"
+
 using namespace config;
 
 
-// Objects
-FC_SimpleTasker tasker;
-FC_MainCommunication com(&Serial1, 45);
-FC_MPU6050Lib mpu;
-FC_HMC5883L_Lib compass;
-// Barometer object is created inside the library
-FC_Motors motors;
-DebugSystem debug(&Serial);
+namespace Storage
+{
+	// Objects
+	FC_ObjectTasker tasker(MaxAmtOfTaskerTasks);
+	FC_TaskPlanner taskPlanner(MaxAmtOfTaskPlannerTasks);
+	FC_CommunicationHandler comm(&Serial2, MaxCommPacketBytes);
+	FC_MPU6050Lib mpu;
+	FC_HMC5883L_Lib compass;
+	FC_MS5611_Lib baro(&taskPlanner);
+	FC_Motors motors;
+	DebugSystem debug(&Serial);
 
 
-// PID objects
-static const float calculationsDeltaTime = 0.004f; //  = 1/250
-MyPID levelXpid(calculationsDeltaTime, defPID.leveling.p, defPID.leveling.i, defPID.leveling.d, defPID.leveling.imax);
-MyPID levelYpid(calculationsDeltaTime, defPID.leveling.p, defPID.leveling.i, defPID.leveling.d, defPID.leveling.imax);
-MyPID yawPID(calculationsDeltaTime, defPID.yaw.p, defPID.yaw.i, defPID.yaw.d, defPID.yaw.imax);
-MyPID altHoldPID(calculationsDeltaTime, defPID.altHold.p, defPID.altHold.i, defPID.altHold.d, defPID.altHold.imax);
+	// PID objects
+	MyPID levelXpid(MainDeltaTimeInSeconds, defPID.leveling.p, defPID.leveling.i, defPID.leveling.d, defPID.leveling.imax);
+	MyPID levelYpid(MainDeltaTimeInSeconds, defPID.leveling.p, defPID.leveling.i, defPID.leveling.d, defPID.leveling.imax);
+	MyPID yawPID(MainDeltaTimeInSeconds, defPID.yaw.p, defPID.yaw.i, defPID.yaw.d, defPID.yaw.imax);
+	MyPID altHoldPID(MainDeltaTimeInSeconds, defPID.altHold.p, defPID.altHold.i, defPID.altHold.d, defPID.altHold.imax);
 
 
-
-// Variables
-FC_MPU6050Lib::vector3Float angle = { 0, 0, 0 }; // X and Y angles
-float heading = 0;
-float headingToHold = 0; // calculated value based on the pilot rotate stick to hold by the drone
-float pressureToHold;
+	// VirtualPilot
+	IVirtualPilot& virtualPilot = *(new VirtualPilot(&tasker));
 
 
-// Extrapolation variables
-int16_t previousTBvalue = 0;
-int16_t previousLRvalue = 0;
-float extrapolatedTBstick = 0;
-float extrapolatedLRstick = 0;
-FC_EVA_Filter tbFilter(0.4);
-FC_EVA_Filter lrFilter(0.4);
+	// Used flight modes
+	IFlightMode& unarmedFlightMode = *(new UnarmedFlightMode(&virtualPilot));
+	IFlightMode& stabilizeFlightMode = *(new StabilizeFlightMode(&virtualPilot));
+	IFlightMode& altHoldFlightMode = *(new AltHoldFlightMode(&stabilizeFlightMode, &virtualPilot));
+	IFlightMode& posHoldFlightMode = *(new PosHoldFlightMode(&altHoldFlightMode, &virtualPilot));
 
 
-// Flight modes
-// PID controllers results
-int16_t pidXval;
-int16_t pidYval;
-int16_t pidYawVal;
-int16_t pidAltHoldVal;
+	// Global sensor readings
+	readingsType reading;
+	virtualSticksType sticksFiltered; // filtered steering sticks values
 
-uint16_t altHoldBaseThrottle; // throttle value in which drone should keep its own altitude
+}
+
 

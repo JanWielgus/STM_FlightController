@@ -13,6 +13,19 @@
 #ifndef FLIGHTMODES_H_
 #define FLIGHTMODES_H_
 
+
+
+
+/* FLIGHT MODES REBUILDING - THIS CODE IS ONLY TO LOOK HOW IT WAS IMPLEMENTED
+AND IT IS NO LONGER USED !!!
+
+
+
+
+
+
+
+
 #include "Storage.h"
 #include "config.h"
 
@@ -163,6 +176,12 @@ namespace fModes
 	
 	
 }
+
+
+
+*/
+
+
 
 
 

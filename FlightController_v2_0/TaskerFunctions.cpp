@@ -1,40 +1,90 @@
 #include "TaskerFunctions.h"
 #include "Storage.h"
 #include "config.h"
-#include "FlightModes.h"
+#include <FC_Extrapolation.h>
+#include <FC_LinearExtrapolation.h>
+#include "Failsafe.h"
+
+/*
+using Storage::levelXpid;
+using Storage::levelYpid;
+using Storage::yawPID;
+using Storage::altHoldPID;
+using Storage::motors;
+using Storage::com;
+using Storage::flags;*/
+
+using namespace Storage;
 
 
 
 void addTaskerFunctionsToTasker()
 {
 	using namespace TaskerFunction;
+	using Storage::tasker;
 
-	tasker.addFunction(stabilize, 4000L, 31);                  // 250Hz (duration tested only with leveling)
-	tasker.addFunction(updateControlDiode, 1000000L, 2);       // 1Hz (tested duration)
-	tasker.addFunction(readXY_angles, 4000L, 639);             // 250Hz (tested duration)
-	tasker.addFunction(readCompass, 13340L, 492);              // 75Hz  (tested duration)
-	//tasker.addFunction(updateMainCommunication, 20000L, 229);  // 50Hz (tested duration)
-	tasker.addFunction(updateSending, 22000L, 1);              // ~45Hz
-	tasker.addFunction(updateReceiving, 7142L, 1);             // 140Hz      (! UPDATE the body if frequency chanded !!!)
-	tasker.addFunction(checkCalibrations, 700000L, 7);         // 1.4Hz
-	tasker.addFunction(updatePressureAndAltHold, 9090, 1);     // 110Hz
-	//tasker.scheduleTasks();
+
+	// Maximum tasker tasks amt is set in config::MaxAmtOfTaskerTasks
+
+
+	// General
+	tasker.addTask(new UpdateControlDiode, 1000000L, 2);							// 1Hz
+
+	// Steering
+	tasker.addTask(new ReadXY_angles, config::MainInterval, 639);				// 250Hz
+	tasker.addTask(new ReadCompass, 13340L, 492);								// 75Hz
+	baro.registerNewBaroReadingFunction(newBaroReadingEvent);
+	tasker.addTask(new ProcessSlowerReadings, config::MainInterval, 0);			// 250Hz
+	tasker.addTask(new RunVirtualPilot, config::MainInterval, 0);	// 250Hz
+	tasker.addTask(new Failsafe, 50000L, 0);									// 20Hz
+
+
+	// Communication
+	tasker.addTask(&comm, 4545L, 0); // 220Hz ( !!! To solve. During communication some data is lost)
+	tasker.addTask(new UpdateSending, 22000L, 0);								// ~45Hz
+
+	// add receive data packets
+	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_steering, 35); // pointer, queue size
+	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_basicBackground, 8);
+	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_fullBackground, 8);
+	comm.addRaceiveDataPacketPointer(&ReceiveData::DP_PID_params, 3);
+
+	// received packet events
+	ReceiveData::DP_steering.setPacketEvent(new SteeringReceivedUpdate);
+	ReceiveData::DP_basicBackground.setPacketEvent(new BasicBackgroundReceivedUpdate);
+	ReceiveData::DP_fullBackground.setPacketEvent(new FullBackgroundReceivedUpdate);
+	ReceiveData::DP_PID_params.setPacketEvent(new PID_paramsReceivedUpdate);
 }
 
 
 
 namespace TaskerFunction
 {
-	void updateControlDiode()
+	//FC_Extrapolation* compassExtrapolator = new FC_LinearExtrapolation();
+	//FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
+	FC_EVA_Filter baroFilter(0.3);
+	FC_EVA_Filter compassFilter(0.4);
+
+	FC_EVA_Filter throttleFilter(0.5);
+	FC_EVA_Filter rotateFilter(0.5);
+	FC_EVA_Filter TB_fiter(0.58);
+	FC_EVA_Filter LR_filter(0.58);
+
+
+	void UpdateControlDiode::execute()
 	{
-		static bool ledState = LOW;
-		digitalWrite(LED_BUILTIN, ledState);
+		// Blink built-in diode
+		digitalWrite(config::pin.LedBuiltIn, ledState);
 		ledState = !ledState;
+
+		// Update communication indication diode
+		digitalWrite(config::pin.redDiode, (comm.getConnectionStability() >= 75) ? HIGH : LOW);
 	}
 
-
-
-	void checkCalibrations()
+	/* DO IT DIFFERENTLY
+		Make separate procedure where calibraiton will be performed
+		Calibration will be triggered in receive update task which is called after receiving specific packet type
+	void CheckCalibrations::execute()
 	{
 		//...
 		// accelerometer calibration
@@ -45,79 +95,85 @@ namespace TaskerFunction
 		// eg. set fused angle inside the MPU class after accelermeter calibration (may have to write a proper method)
 		// eg. set initial Z axis in the MPU after calibrating the compass
 		// ...
-	}
+	}*/
 
 
-
-	void readXY_angles()
+	void ReadXY_angles::execute()
 	{
-
 		mpu.read6AxisMotion();
-		angle = mpu.getFusedXYAngles();
-		//heading = mpu.getZAngle(compass.getHeading()); // Temporary (something bad is happening with the compass)
-		heading = mpu.getZAngle();
-	}
-
-
-
-	void readCompass()
-	{
-		compass.readCompassData(angle.x, angle.y);
-	}
-
-
-
-	void stabilize()
-	{
-		// Cut-off all motors if the angle is too high
-		using namespace config;
-		if (angle.x > CutOffAngle || angle.x < -CutOffAngle ||
-			angle.y > CutOffAngle || angle.y < -CutOffAngle)
-			motors.setMotorState(false);
-
-
-	
-
-
-		// Extrapolate sticks
-		// Extrapolate TB and LR stick values
-		if (flags.needToExtrapolateStickVlaues)
-		{
-			extrapolatedTBstick += (float(com.received.steer.TB - previousTBvalue) * 0.2);
-			extrapolatedLRstick += (float(com.received.steer.LR - previousLRvalue) * 0.2);
-		}
+		reading.angle = mpu.getFusedXYAngles();
+		
+		if (config::booleans.UseCompassInZAxisAngleCalculation)
+			// Return compass heading extrapolation for the current time
+			reading.heading = mpu.getZAngle(reading.compassHeading);
 		else
-		{
-			extrapolatedTBstick = (float)com.received.steer.TB;
-			extrapolatedLRstick = (float)com.received.steer.LR;
-		}
-		// next run should extrapolate sticks values unless communication will reset this flag
-		extrapolatedTBstick = tbFilter.updateFilter(extrapolatedTBstick);
-		extrapolatedLRstick = lrFilter.updateFilter(extrapolatedLRstick);
-		flags.needToExtrapolateStickVlaues = true;
-		//Serial.print(com.received.steer.LR);
-		//Serial.print(" ");
-		//Serial.println(extrapolatedLRstick);
-
-
-
-
-
-
-
-		fModes::runVirtualPilot();
-
-
-		// when pilot is disarmed motors will not spin
-		// when disconnected form the pilot, motors will stop (not enabled)
-
-		motors.setOnTL(fModes::vSticks.throttle + pidXval + pidYval - pidYawVal); // BR
-		motors.setOnTR(fModes::vSticks.throttle + pidXval - pidYval + pidYawVal); // BL
-		motors.setOnBR((int16_t)(fModes::vSticks.throttle * 1.5f) - pidXval - pidYval - pidYawVal); // TL (damaged)
-		motors.setOnBL(fModes::vSticks.throttle - pidXval + pidYval + pidYawVal); // TR
-		motors.forceMotorsExecution();
+			reading.heading = mpu.getZAngle();
 	}
 
+
+	void ReadCompass::execute()
+	{
+		compass.readCompassData(reading.angle.x, reading.angle.y);
+
+		// Add new compass heading measurement for the current time
+		//compassExtrapolator->addNewMeasuredValue(compass.getHeading(), tasker.getCurrentTime());
+	}
+
+
+	void newBaroReadingEvent()
+	{
+		// normal pressure is just assigned to the globar reading variable
+		reading.pressure = baro.getPressure();
+
+		// smooth pressure is extrapolated
+		
+		//baroExtrapolator->addNewMeasuredValue(baro.getSmoothPressure(), tasker.getCurrentTime());
+		//baroFilter.updateFilter(baro.getSmoothPressure());
+		//Serial.println(baro.getPressure());
+	}
+
+
+	void ProcessSlowerReadings::execute()
+	{
+		// Get current time from tasker (to speed up)
+		uint32_t curTime = tasker.getCurrentTime();
+
+
+		// extrapolate compass reading
+		//reading.compassHeading = compassExtrapolator->getEstimation(curTime);
+		reading.compassHeading = compassFilter.updateFilter(compass.getHeading());
+
+
+		// extrapolate baro reading to meet the program main frequency (250Hz)
+		//reading.smoothPressure = baroExtrapolator->getEstimation(curTime);
+
+		// tests on pressure (EXTRAPOLATOR IS NOT WORKIGN)
+		reading.smoothPressure = baroFilter.updateFilter(baro.getSmoothPressure());
+		//Serial.println(baroFilter.getLastValue());
+
+
+		// filter received sticks values
+		Storage::sticksFiltered.throttle = throttleFilter.updateFilter(ReceiveData::throttle);
+		Storage::sticksFiltered.rotate = rotateFilter.updateFilter(ReceiveData::rot_stick);
+		Storage::sticksFiltered.TB = TB_fiter.updateFilter(ReceiveData::TB_stick);
+		Storage::sticksFiltered.LR = LR_filter.updateFilter(ReceiveData::LR_stick);
+	}
+
+
+	void RunVirtualPilot::execute()
+	{
+		Storage::virtualPilot.runVirtualPilot();
+	}
+
+
+
+
+
+
+	/*
+	!!!!!!!!!!!!!
+
+	THIS HAVE TO BE IMPLEMENTED IN THE NEW FLIGHT MODE CLASSES
 
 
 	void updatePressureAndAltHold()
@@ -142,169 +198,130 @@ namespace TaskerFunction
 
 
 			float altError = baro.getSmoothPressure() - pressureToHold;
-			pidAltHoldVal = altHoldPID.updateController(altError);
+			lastPID_AltHold_value = altHoldPID.updateController(altError);
 
 			// keep pid value in a border
-			pidAltHoldVal = constrain(pidAltHoldVal, -flModeConfig.AltHoldMaxAddedThrottle, flModeConfig.AltHoldMaxAddedThrottle);
+			lastPID_AltHold_value = constrain(lastPID_AltHold_value, -flModeConfig.AltHoldMaxAddedThrottle, flModeConfig.AltHoldMaxAddedThrottle);
 
 			// apply pid results to the virtual throttle stick
-			int16_t throttleStickSigned = altHoldBaseThrottle + pidAltHoldVal;
+			int16_t throttleStickSigned = altHoldBaseThrottle + lastPID_AltHold_value;
 			fModes::vSticks.throttle = constrain(throttleStickSigned,
 				flModeConfig.AltHoldMinTotalFinal,
 				flModeConfig.AltHoldMaxTotalFinal);
 		}
 	}
+	*/
 
 
 
-	void updateSending()
+
+
+	void UpdateSending::execute()
 	{
 		// Pack all data to the toSend variables
-		com.toSend.tilt_TB = (int8_t)angle.x;
-		com.toSend.tilt_LR = (int8_t)angle.y;
-		com.toSend.altitude = (int16_t)(baro.getSmoothPressure() - 90000);
+		SendData::tilt_TB = (int8_t)reading.angle.x;
+		SendData::tilt_LR = (int8_t)reading.angle.y;
+		SendData::heading = (int16_t)reading.heading;
+		SendData::altitude = (int16_t)(reading.smoothPressure - 90000 - 8530); // TEMP ! (change for altitude)
+		SendData::receivingConnectionStability = comm.getConnectionStability();
 
 
-		// Send proper data packet: TYPE1-full, TYPE2-basic
-		//com.packAndSendData(com.sendPacketTypes.TYPE2_ID, com.sendPacketTypes.TYPE2_SIZE); // basic
-		com.packAndSendData(com.sendPacketTypes.TYPE1_ID, com.sendPacketTypes.TYPE1_SIZE); // full
-
-
-
-
-		/* /////////////////////////
-		Serial.print("H: ");
-		Serial.print(heading);
-		Serial.println();
-		*/
-
-		/*
-		//Serial.println((uint16_t)com.received.steer.throttle);
-		Serial.print(com.connectionStability());
-		Serial.print("\t");
-		Serial.print(angle.x);
-		Serial.print("\t");
-		Serial.print(angle.y);
-		Serial.println();
-		*/
-
-		//Serial.println(com.toSend.tilt_TB);
-
-		//Serial.println(MesasureTime::duration());
-		//Serial.println(heading);
+		//comm.sendDataPacket(&SendData::DP_basic);
+		comm.sendDataPacket(&SendData::DP_full);
 	}
 
 
-
-	void updateReceiving()
+	void SteeringReceivedUpdate::execute()
 	{
-
-		// update temporary previous stick values for extrapolation
-		// those values will be stored if new one will come
-		int16_t tempPreviousTBvalue = com.received.steer.TB;
-		int16_t tempprevioudLRvalue = com.received.steer.LR;
-
-
-
-		// If at least one data packet was received
-		if (com.receiveAndUnpackData())
-		{
-			static bool lastArmingState = 0;
-
-			// check if pilot changed armed state from 0 to 1
-			if (lastArmingState == 0 && com.received.arming == 1)
-			{
-				lastArmingState = 1;
-				levelXpid.resetController();
-				levelYpid.resetController();
-				yawPID.resetController();
-
-				//    RESET ALL PID CONTROLLERS  !!!
-				// and do all code when arming
-
-				motors.setMotorState(true);
-			}
-
-
-			if (com.received.arming == 0)
-			{
-				lastArmingState = 0;
-				motors.setMotorState(false);
-			}
-
-
-			// set the extrapolation flag if new stick values was received
-			if (com.wasReceived(com.receivedPacketTypes.TYPE4_ID))
-			{
-				// store previous stick values because new ones was received
-				previousTBvalue = tempPreviousTBvalue;
-				previousLRvalue = tempprevioudLRvalue;
-				flags.needToExtrapolateStickVlaues = false;
-			}
-
-
-			// if any PID params was received
-			if (com.wasReceived(com.receivedPacketTypes.TYPE3_ID))
-			{
-				switch (com.received.PIDcontrollerID)
-				{
-				case 0: // leveling
-					// x
-					levelXpid.set_kP(com.received.PIDvalues.P);
-					levelXpid.set_kI(com.received.PIDvalues.I);
-					levelXpid.set_Imax(com.received.PIDvalues.I_max);
-					levelXpid.set_kD(com.received.PIDvalues.D);
-					// y
-					levelYpid.set_kP(com.received.PIDvalues.P);
-					levelYpid.set_kI(com.received.PIDvalues.I);
-					levelYpid.set_Imax(com.received.PIDvalues.I_max);
-					levelYpid.set_kD(com.received.PIDvalues.D);
-					break;
-
-
-				case 1: // yaw
-					yawPID.set_kP(com.received.PIDvalues.P);
-					yawPID.set_kI(com.received.PIDvalues.I);
-					yawPID.set_Imax(com.received.PIDvalues.I_max);
-					yawPID.set_kD(com.received.PIDvalues.D);
-					break;
-
-
-				case 2: // altHold
-					altHoldPID.set_kP(com.received.PIDvalues.P);
-					altHoldPID.set_kI(com.received.PIDvalues.I);
-					altHoldPID.set_Imax(com.received.PIDvalues.I_max);
-					altHoldPID.set_kD(com.received.PIDvalues.D);
-
-
-
-					// other cases.....
-					// ...
-					// ...
-				}
-			}
-		}
-
-
-		// Integrate yaw stick value only if connection is stable
-		if (com.connectionStability() > 1)
-		{
-			//headingToHold += ((float)com.received.steer.rotate * 0.04f); // if 25Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
-			//headingToHold += ((float)(com.received.steer.rotate/2) * 0.0125f); // if 80Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
-			headingToHold += ((float)(com.received.steer.rotate / 2) * 0.0071f); // if 140Hz  !!!!!!!!!!!!!!!!!!!!!!!!!  ONLY
-		}
-
-
-		/*
-		// WHEN LOST THE SIGNAL, then disable motors
-		if (com.connectionStability() == 0)
-		{
-			motors.setMotorState(false);
-		}*/
-
-
-		// light up the red diode
-		digitalWrite(config::pin.redDiode, (com.connectionStability() >= 1) ? HIGH : LOW);
+		// stuff after receiving steering values
+		// ...
 	}
+
+
+	void BasicBackgroundReceivedUpdate::execute()
+	{
+		// Update flight mode
+		// If flight mode has changed
+		if (virtualPilot.getCurrentFlightModeType() != ReceiveData::flightMode)
+		{
+			switch (ReceiveData::flightMode)
+			{
+			case FlightModeType::UNARMED:
+				virtualPilot.setFlightMode(FlightModeType::UNARMED);
+				break;
+
+			case FlightModeType::STABILIZE:
+				virtualPilot.setFlightMode(FlightModeType::STABILIZE);
+				break;
+
+			case FlightModeType::ALT_HOLD:
+				virtualPilot.setFlightMode(FlightModeType::ALT_HOLD);
+				break;
+
+			// TODO: other flight modes when will be implemented
+
+			default:
+				virtualPilot.setFlightMode(FlightModeType::UNARMED);
+			}
+		}
+
+
+		// other stuff
+		// ...
+	}
+
+
+	void FullBackgroundReceivedUpdate::execute()
+	{
+		// call basic update
+		BasicBackgroundReceivedUpdate::execute();
+
+		// and addidional
+		// ...
+
+	}
+
+
+	void PID_paramsReceivedUpdate::execute()
+	{
+		// !!!
+		// 
+		// I think, that should be made in a different way
+		// For example there only calibration values are updated inside config
+		// They are stored in EEPROM and other funciton sets proper values
+
+
+		switch (ReceiveData::tunedControllerID)
+		{
+		case 0: // leveling
+			// x
+			levelXpid.set_kP(ReceiveData::tunedPID_values.P);
+			levelXpid.set_kI(ReceiveData::tunedPID_values.I);
+			levelXpid.set_Imax(ReceiveData::tunedPID_values.I_max);
+			levelXpid.set_kD(ReceiveData::tunedPID_values.D);
+			// y
+			levelYpid.set_kP(ReceiveData::tunedPID_values.P);
+			levelYpid.set_kI(ReceiveData::tunedPID_values.I);
+			levelYpid.set_Imax(ReceiveData::tunedPID_values.I_max);
+			levelYpid.set_kD(ReceiveData::tunedPID_values.D);
+			break;
+
+
+		case 1: // yaw
+			yawPID.set_kP(ReceiveData::tunedPID_values.P);
+			yawPID.set_kI(ReceiveData::tunedPID_values.I);
+			yawPID.set_Imax(ReceiveData::tunedPID_values.I_max);
+			yawPID.set_kD(ReceiveData::tunedPID_values.D);
+			break;
+
+
+		case 2: // altHold
+			altHoldPID.set_kP(ReceiveData::tunedPID_values.P);
+			altHoldPID.set_kI(ReceiveData::tunedPID_values.I);
+			altHoldPID.set_Imax(ReceiveData::tunedPID_values.I_max);
+			altHoldPID.set_kD(ReceiveData::tunedPID_values.D);
+		}
+	}
+
 }
 
