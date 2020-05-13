@@ -73,13 +73,17 @@ namespace TaskerFunction
 
 	void Update75Hz::execute()
 	{
-		readCompass();
+		// Read raw data from compass
+		Storage::rawHMC5883L.readRaw();
 	}
 
 	void UpdateMainInterval::execute()
 	{
-		readMPU6050();
+		// Read raw data from accelerometer and gyrscope
+		Storage::rawMPU6050.readRawData();
+
 		processSlowerReadings();
+
 		Storage::virtualPilot.runVirtualPilot();
 	}
 
@@ -100,30 +104,6 @@ namespace TaskerFunction
 
 		// Update communication indication diode
 		digitalWrite(config::pin.redDiode, (comm.getConnectionStability() >= 75) ? HIGH : LOW);
-	}
-
-
-	void readMPU6050()
-	{
-		///////////////////////////////////////
-		
-
-		// Read there data from MPU6050
-
-
-		/////////
-	}
-
-
-	void readCompass()
-	{
-		///////////////////////////////////////
-
-
-		// Read there data from HMC5883L
-
-
-		/////////
 	}
 
 

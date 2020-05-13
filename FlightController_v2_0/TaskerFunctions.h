@@ -37,8 +37,6 @@ namespace TaskerFunction
 	
 	// Tasks split into several methods
 	void updateControlDiode();
-	void readMPU6050();
-	void readCompass();
 	void processSlowerReadings();
 	void newBaroReadingEvent(); // Function called by the baro instance
 
