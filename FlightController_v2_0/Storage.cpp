@@ -17,8 +17,8 @@ namespace Storage
 	FC_ObjectTasker tasker(MaxAmtOfTaskerTasks);
 	FC_TaskPlanner taskPlanner(MaxAmtOfTaskPlannerTasks);
 	FC_CommunicationHandler comm(&Serial2, MaxCommPacketBytes);
-	FC_MPU6050Lib mpu;
-	FC_HMC5883L_Lib compass;
+	// MPU6050
+	// HMC5883L
 	FC_MS5611_Lib baro(&taskPlanner);
 	FC_Motors motors;
 	DebugSystem debug(&Serial);

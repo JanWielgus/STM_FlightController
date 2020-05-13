@@ -17,8 +17,6 @@
 #include <FC_Extrapolation.h>
 #include <FC_LinearExtrapolation.h>
 #include <MyPID.h>
-#include <FC_MPU6050Lib.h>
-#include <FC_HMC5883L_Lib.h>
 #include <FC_MS5611_Lib.h>
 #include <FC_EVA_Filter.h>
 #include <Wire.h>
@@ -109,17 +107,15 @@ void setup()
 	debug.printHeader("Tasker done!");
 	
 	// MPU6050
-	while (!mpu.initialize()) // While mpu is not initialized
-	{
-		// If gets stuck here, there is an error
-		debug.printWarning("cannot initialize mpu");
-		// DETECT MPU ERROR HERE
-		delay(200);
-	}
 	
-	mpu.setCalculationsFrequency(250);
-	mpu.setGyroFusionMultiplier(0.999); // CHANGED TO TEST
-	//mpu.setGyroFusionMultiplier(0.997);
+	//////////////////////////////
+	///////////////////////////
+	///////////////////////////
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	///////////////////////
+	///////////////////////////////////
+	/////
+
 	
 	
 

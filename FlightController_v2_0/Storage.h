@@ -18,8 +18,6 @@
 #include <FC_TaskPlanner.h>
 #include <MyPID.h>
 #include <FC_Communication_Base.h>
-#include <FC_MPU6050Lib.h>
-#include <FC_HMC5883L_Lib.h>
 #include <FC_MS5611_Lib.h>
 #include <FC_EVA_Filter.h>
 #include "FC_Motors.h"
@@ -48,8 +46,8 @@ namespace Storage
     extern FC_ObjectTasker tasker;
     extern FC_TaskPlanner taskPlanner;
     extern FC_CommunicationHandler comm;
-    extern FC_MPU6050Lib mpu;
-    extern FC_HMC5883L_Lib compass;
+    // MPU6050
+    // HMC5883L
     extern FC_MS5611_Lib baro;
     extern FC_Motors motors;
     extern DebugSystem debug;

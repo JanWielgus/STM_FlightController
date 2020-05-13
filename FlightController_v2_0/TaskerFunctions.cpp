@@ -56,10 +56,8 @@ void addTaskerFunctionsToTasker()
 
 namespace TaskerFunction
 {
-	//FC_Extrapolation* compassExtrapolator = new FC_LinearExtrapolation();
 	//FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
 	FC_EVA_Filter baroFilter(0.3);
-	FC_EVA_Filter compassFilter(0.4);
 
 	FC_EVA_Filter throttleFilter(0.5);
 	FC_EVA_Filter rotateFilter(0.5);
@@ -107,23 +105,25 @@ namespace TaskerFunction
 
 	void readMPU6050()
 	{
-		mpu.read6AxisMotion();
-		reading.angle = mpu.getFusedXYAngles();
+		///////////////////////////////////////
+		
 
-		if (config::booleans.UseCompassInZAxisAngleCalculation)
-			// Return compass heading extrapolation for the current time
-			reading.heading = mpu.getZAngle(reading.compassHeading);
-		else
-			reading.heading = mpu.getZAngle();
+		// Read there data from MPU6050
+
+
+		/////////
 	}
 
 
 	void readCompass()
 	{
-		compass.readCompassData(reading.angle.x, reading.angle.y);
+		///////////////////////////////////////
 
-		// Add new compass heading measurement for the current time
-		//compassExtrapolator->addNewMeasuredValue(compass.getHeading(), tasker.getCurrentTime());
+
+		// Read there data from HMC5883L
+
+
+		/////////
 	}
 
 
@@ -131,11 +131,6 @@ namespace TaskerFunction
 	{
 		// Get current time from tasker (to speed up)
 		uint32_t curTime = tasker.getCurrentTime();
-
-
-		// extrapolate compass reading
-		//reading.compassHeading = compassExtrapolator->getEstimation(curTime);
-		reading.compassHeading = compassFilter.updateFilter(compass.getHeading());
 
 
 		// extrapolate baro reading to meet the program main frequency (250Hz)
@@ -193,8 +188,8 @@ namespace TaskerFunction
 	void UpdateSending::execute()
 	{
 		// Pack all data to the toSend variables
-		SendData::tilt_TB = (int8_t)reading.angle.x;
-		SendData::tilt_LR = (int8_t)reading.angle.y;
+		SendData::tilt_TB = (int8_t)reading.pitch;
+		SendData::tilt_LR = (int8_t)reading.roll;
 		SendData::heading = (int16_t)reading.heading;
 		SendData::altitude = (int16_t)(reading.smoothPressure - 90000 - 8530); // TEMP ! (change for altitude)
 		SendData::receivingConnectionStability = comm.getConnectionStability();
