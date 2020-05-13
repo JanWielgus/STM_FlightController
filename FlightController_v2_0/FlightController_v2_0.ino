@@ -17,6 +17,7 @@
 #include <FC_Extrapolation.h>
 #include <FC_LinearExtrapolation.h>
 #include <MyPID.h>
+#include "MPU6050_Raw.h"
 #include <FC_MS5611_Lib.h>
 #include <FC_EVA_Filter.h>
 #include <Wire.h>
