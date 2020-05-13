@@ -7,7 +7,6 @@
 */
 
 
-
 #include <FC_Communication_Base.h>
 #include <FC_CommunicationHandler.h>
 #include "CommSendDataPackets.h"
