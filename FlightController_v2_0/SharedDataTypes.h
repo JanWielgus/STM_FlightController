@@ -68,6 +68,22 @@ struct pidCommPack
 };
 
 
+struct vector3Int16
+{
+    int16_t x;
+    int16_t y;
+    int16_t z;
+};
+
+
+struct vector3Float
+{
+    float x;
+    float y;
+    float z;
+};
+
+
 
 
 // Only for STM32 (maybe not necessary)
