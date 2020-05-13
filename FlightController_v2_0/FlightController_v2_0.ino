@@ -28,9 +28,7 @@
 #include <FC_SinkingQueue.h>
 #include <FC_GrowingArray.h>
 #include "Storage.h"
-//#include "FlightModes.h" // THIS FILE IS NO LONGER USED !!!
 #include "FC_Motors.h"
-#include "MeasureTime.h"
 #include "TaskerFunctions.h"
 #include "DebugSystem.h"
 #include "config.h"
