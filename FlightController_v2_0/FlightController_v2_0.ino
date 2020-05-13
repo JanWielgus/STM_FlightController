@@ -7,6 +7,7 @@
 */
 
 
+
 #include <FC_Communication_Base.h>
 #include <FC_CommunicationHandler.h>
 #include "CommSendDataPackets.h"
@@ -18,6 +19,7 @@
 #include <FC_LinearExtrapolation.h>
 #include <MyPID.h>
 #include "MPU6050_Raw.h"
+#include "HMC5883L_Raw.h"
 #include <FC_MS5611_Lib.h>
 #include <FC_EVA_Filter.h>
 #include <Wire.h>
@@ -134,15 +136,15 @@ void setup()
 	while (true)
 	{
 		Serial.print("Acc done. X: ");
-		Serial.print(mpu.getAccelerometerCalibrationValues().x);
+		Serial.print(mpu.getAccOffsetValues().x);
 		Serial.print(" Y: ");
-		Serial.print(mpu.getAccelerometerCalibrationValues().y);
+		Serial.print(mpu.getAccOffsetValues().y);
 		Serial.print(" Z: ");
-		Serial.print(mpu.getAccelerometerCalibrationValues().z);
+		Serial.print(mpu.getAccOffsetValues().z);
 		Serial.println();
 		delay(2000);
 	}*/
-	//mpu.setAccelerometerCalibrationValues(76, 45, -259);
+	//mpu.setAccOffset(76, 45, -259);
 	mpu.setAccelerometerCalibrationValues(155, 82, -251);
 	
 	
@@ -200,7 +202,7 @@ void setup()
 	// Default calibration values
 	// When pilot needs other values at the beginning, it just send them (or request calibration)
 	// and the whole process is repeated
-	//mpu.setAccelerometerCalibrationValues(....);
+	//mpu.setAccOffset(....);
 	//setGyroCalibrationMethod here <----
 
 	/*
