@@ -4,7 +4,7 @@
 #define _MPU6050_RAW_h
 
 #include "arduino.h"
-#include "Wire.h"
+#include <Wire.h>
 
 #include "SharedDataTypes.h" // vector3Int16
 
@@ -22,10 +22,10 @@ public:
 	int16_t getTemperature();
 	void calibrateAccelerometer(uint16_t samplesToAverage = 250);
 	void calibrateGyroscope(uint16_t samplesToAverage = 2000);
-	const vector3Int16& getAccelerometerCalibrationValues();
-	const vector3Int16& getGyroscopeCalibrationValues();
-	void setAccelerometerCalibrationValues(int16_t offX, int16_t offY, int16_t offZ);
-	void setGyroscopeCalibrationValues(int16_t offX, int16_t offY, int16_t offZ);
+	const vector3Int16& getAccOffsetValues();
+	const vector3Int16& getGyroOffsetValues();
+	void setAccOffset(int16_t offX, int16_t offY, int16_t offZ);
+	void setGyroOffset(int16_t offX, int16_t offY, int16_t offZ);
 	void enableCompassBypass();
 
 
@@ -38,8 +38,8 @@ private:
 	int16_t temperature;
 
 	// Calibration values
-	vector3Int16 accCalibValues;
-	vector3Int16 gyroCalibValues;
+	vector3Int16 accOffset;
+	vector3Int16 gyroOffset;
 
 	// Normalize multipliters
 	const float accNormalizeMultiplier = 0.0002441406f; // = 1 / 4096

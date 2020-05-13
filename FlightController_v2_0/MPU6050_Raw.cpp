@@ -9,8 +9,8 @@ MPU6050_Raw::MPU6050_Raw()
 	rawAcceleration = { 0, 0, 0 };
 	rawRotation = { 0, 0, 0 };
 	temperature = 0;
-	accCalibValues = { 0, 0, 0 };
-	gyroCalibValues = { 0, 0, 0 };
+	accOffset = { 0, 0, 0 };
+	gyroOffset = { 0, 0, 0 };
 }
 
 
@@ -69,12 +69,12 @@ void MPU6050_Raw::readRawData()
 
 
 	// Use calibration data
-	rawAcceleration.x -= accCalibValues.x;
-	rawAcceleration.y -= accCalibValues.y;
-	rawAcceleration.z -= accCalibValues.z;
-	rawRotation.x -= gyroCalibValues.x;
-	rawRotation.y -= gyroCalibValues.y;
-	rawRotation.z -= gyroCalibValues.z;
+	rawAcceleration.x -= accOffset.x;
+	rawAcceleration.y -= accOffset.y;
+	rawAcceleration.z -= accOffset.z;
+	rawRotation.x -= gyroOffset.x;
+	rawRotation.y -= gyroOffset.y;
+	rawRotation.z -= gyroOffset.z;
 
 
 	// Temperature                    / 340
@@ -135,9 +135,9 @@ void MPU6050_Raw::calibrateAccelerometer(uint16_t samplesToAverage)
 		delay(4);
 	}
 
-	accCalibValues.x += ((double)sumX / samplesToAverage) + 0.5f;
-	accCalibValues.y += ((double)sumY / samplesToAverage) + 0.5f;
-	accCalibValues.z += ((double)sumZ / samplesToAverage) + 0.5f;
+	accOffset.x += ((double)sumX / samplesToAverage) + 0.5f;
+	accOffset.y += ((double)sumY / samplesToAverage) + 0.5f;
+	accOffset.z += ((double)sumZ / samplesToAverage) + 0.5f;
 }
 
 
@@ -158,37 +158,37 @@ void MPU6050_Raw::calibrateGyroscope(uint16_t samplesToAverage)
 		delay(4);
 	}
 
-	gyroCalibValues.x += ((double)sumX / samplesToAverage) + 0.5f;
-	gyroCalibValues.y += ((double)sumY / samplesToAverage) + 0.5f;
-	gyroCalibValues.z += ((double)sumZ / samplesToAverage) + 0.5f;
+	gyroOffset.x += ((double)sumX / samplesToAverage) + 0.5f;
+	gyroOffset.y += ((double)sumY / samplesToAverage) + 0.5f;
+	gyroOffset.z += ((double)sumZ / samplesToAverage) + 0.5f;
 }
 
 
-const vector3Int16& MPU6050_Raw::getAccelerometerCalibrationValues()
+const vector3Int16& MPU6050_Raw::getAccOffsetValues()
 {
-	return accCalibValues;
+	return accOffset;
 }
 
 
-const vector3Int16& MPU6050_Raw::getGyroscopeCalibrationValues()
+const vector3Int16& MPU6050_Raw::getGyroOffsetValues()
 {
-	return gyroCalibValues;
+	return gyroOffset;
 }
 
 
-void MPU6050_Raw::setAccelerometerCalibrationValues(int16_t offX, int16_t offY, int16_t offZ)
+void MPU6050_Raw::setAccOffset(int16_t offX, int16_t offY, int16_t offZ)
 {
-	accCalibValues.x = offX;
-	accCalibValues.y = offY;
-	accCalibValues.z = offZ;
+	accOffset.x = offX;
+	accOffset.y = offY;
+	accOffset.z = offZ;
 }
 
 
-void MPU6050_Raw::setGyroscopeCalibrationValues(int16_t offX, int16_t offY, int16_t offZ)
+void MPU6050_Raw::setGyroOffset(int16_t offX, int16_t offY, int16_t offZ)
 {
-	gyroCalibValues.x = offX;
-	gyroCalibValues.y = offY;
-	gyroCalibValues.z = offZ;
+	gyroOffset.x = offX;
+	gyroOffset.y = offY;
+	gyroOffset.z = offZ;
 }
 
 
