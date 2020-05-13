@@ -46,7 +46,7 @@ namespace config
 
 	struct
 	{
-		bool UseCompassInZAxisAngleCalculation = false; // Last time there was something wrong with the compass reading
+		bool replaceItWithProperFlag;
 
 
 	} const booleans;
