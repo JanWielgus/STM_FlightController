@@ -50,7 +50,7 @@ using namespace Storage;
 void setup()
 {
 	// Communication serial
-	Serial2.begin(BAUD_115200);
+	Serial2.begin(BAUD_57600);
 	
 	// Debugging
 	debug.begin(BAUD_115200);
