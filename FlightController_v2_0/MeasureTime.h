@@ -10,10 +10,25 @@ private:
 	static uint32_t duration;
 
 public:
-	static void start();
-	static void end();
-	static uint16_t getDuration();
+	static void start()
+	{
+		startTime = micros();
+	}
+
+	static void end()
+	{
+		duration = micros() - startTime;
+	}
+
+	static uint16_t getDuration()
+	{
+		return duration;
+	}
+
 };
+
+uint32_t MeasureTime::startTime = 0;
+uint32_t MeasureTime::duration = 0;
 
 #endif /* MEASURETIME_H_ */
 
