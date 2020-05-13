@@ -26,12 +26,22 @@ public:
 class IFlightMode
 {
 public:
+	virtual ~IFlightMode() {}
 	virtual void run() = 0;
 	virtual void reset() = 0;
 	virtual void prepare() = 0;
 	virtual virtualSticksType* getVirtualSticks() = 0;
 	virtual bool checkIfRelated(const IFlightMode* toCheck) = 0;
 	virtual FlightModeType getType() = 0;
+};
+
+
+
+class INormalized3AxisDataAdapter
+{
+public:
+	virtual ~INormalized3AxisDataAdapter() {}
+	virtual vector3Int16& getNormalizedData() = 0;
 };
 
 
