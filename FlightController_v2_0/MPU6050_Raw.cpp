@@ -164,13 +164,13 @@ void MPU6050_Raw::calibrateGyroscope(uint16_t samplesToAverage)
 }
 
 
-const vector3Int16& MPU6050_Raw::getAccOffsetValues()
+const vector3Int16& MPU6050_Raw::getAccOffset()
 {
 	return accOffset;
 }
 
 
-const vector3Int16& MPU6050_Raw::getGyroOffsetValues()
+const vector3Int16& MPU6050_Raw::getGyroOffset()
 {
 	return gyroOffset;
 }

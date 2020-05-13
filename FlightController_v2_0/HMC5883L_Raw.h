@@ -18,8 +18,8 @@ public:
 	vector3Int16& getRaw();
 	vector3Int16& getNormalized();
 	void calibrate(uint16_t duration = 30); // in seconds
-	const vector3Int16& getOffset();
-	void setOffset(int16_t offX, int16_t offY, int16_t offZ);
+	const vector3Int16& getCompassOffset();
+	void setCompassOffset(int16_t offX, int16_t offY, int16_t offZ);
 
 
 

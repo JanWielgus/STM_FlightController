@@ -22,8 +22,8 @@ public:
 	int16_t getTemperature();
 	void calibrateAccelerometer(uint16_t samplesToAverage = 250);
 	void calibrateGyroscope(uint16_t samplesToAverage = 2000);
-	const vector3Int16& getAccOffsetValues();
-	const vector3Int16& getGyroOffsetValues();
+	const vector3Int16& getAccOffset();
+	const vector3Int16& getGyroOffset();
 	void setAccOffset(int16_t offX, int16_t offY, int16_t offZ);
 	void setGyroOffset(int16_t offX, int16_t offY, int16_t offZ);
 	void enableCompassBypass();

@@ -114,13 +114,13 @@ void HMC5883L_Raw::calibrate(uint16_t duration)
 }
 
 
-const vector3Int16& HMC5883L_Raw::getOffset()
+const vector3Int16& HMC5883L_Raw::getCompassOffset()
 {
 	return offset;
 }
 
 
-void HMC5883L_Raw::setOffset(int16_t offX, int16_t offY, int16_t offZ)
+void HMC5883L_Raw::setCompassOffset(int16_t offX, int16_t offY, int16_t offZ)
 {
 	offset.x = offX;
 	offset.y = offY;
