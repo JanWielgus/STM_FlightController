@@ -27,16 +27,12 @@ void addTaskerFunctionsToTasker()
 	// Maximum tasker tasks amt is set in config::MaxAmtOfTaskerTasks
 
 
-	// General
-	tasker.addTask(new UpdateControlDiode, 1000000L, 2);							// 1Hz
+	tasker.addTask(new Update1Hz, 1000000L, 2);
+	tasker.addTask(new Update75Hz, 13340L, 492);
+	tasker.addTask(new UpdateMainInterval, config::MainInterval, 639);
+	tasker.addTask(new Failsafe, 50000L, 0); // 20Hz
 
-	// Steering
-	tasker.addTask(new ReadXY_angles, config::MainInterval, 639);				// 250Hz
-	tasker.addTask(new ReadCompass, 13340L, 492);								// 75Hz
 	baro.registerNewBaroReadingFunction(newBaroReadingEvent);
-	tasker.addTask(new ProcessSlowerReadings, config::MainInterval, 0);			// 250Hz
-	tasker.addTask(new RunVirtualPilot, config::MainInterval, 0);	// 250Hz
-	tasker.addTask(new Failsafe, 50000L, 0);									// 20Hz
 
 
 	// Communication
@@ -71,8 +67,35 @@ namespace TaskerFunction
 	FC_EVA_Filter LR_filter(0.58);
 
 
-	void UpdateControlDiode::execute()
+
+	void Update1Hz::execute()
 	{
+		updateControlDiode();
+	}
+
+	void Update75Hz::execute()
+	{
+		readCompass();
+	}
+
+	void UpdateMainInterval::execute()
+	{
+		readMPU6050();
+		processSlowerReadings();
+		Storage::virtualPilot.runVirtualPilot();
+	}
+
+
+
+
+	
+	
+
+
+	void updateControlDiode()
+	{
+		static bool ledState = LOW;
+
 		// Blink built-in diode
 		digitalWrite(config::pin.LedBuiltIn, ledState);
 		ledState = !ledState;
@@ -81,28 +104,12 @@ namespace TaskerFunction
 		digitalWrite(config::pin.redDiode, (comm.getConnectionStability() >= 75) ? HIGH : LOW);
 	}
 
-	/* DO IT DIFFERENTLY
-		Make separate procedure where calibraiton will be performed
-		Calibration will be triggered in receive update task which is called after receiving specific packet type
-	void CheckCalibrations::execute()
-	{
-		//...
-		// accelerometer calibration
-		// gyroscope calibration
-		// compass calibration
 
-		// remember about reseting and setting proper variables after calibration,
-		// eg. set fused angle inside the MPU class after accelermeter calibration (may have to write a proper method)
-		// eg. set initial Z axis in the MPU after calibrating the compass
-		// ...
-	}*/
-
-
-	void ReadXY_angles::execute()
+	void readMPU6050()
 	{
 		mpu.read6AxisMotion();
 		reading.angle = mpu.getFusedXYAngles();
-		
+
 		if (config::booleans.UseCompassInZAxisAngleCalculation)
 			// Return compass heading extrapolation for the current time
 			reading.heading = mpu.getZAngle(reading.compassHeading);
@@ -111,7 +118,7 @@ namespace TaskerFunction
 	}
 
 
-	void ReadCompass::execute()
+	void readCompass()
 	{
 		compass.readCompassData(reading.angle.x, reading.angle.y);
 
@@ -120,20 +127,7 @@ namespace TaskerFunction
 	}
 
 
-	void newBaroReadingEvent()
-	{
-		// normal pressure is just assigned to the globar reading variable
-		reading.pressure = baro.getPressure();
-
-		// smooth pressure is extrapolated
-		
-		//baroExtrapolator->addNewMeasuredValue(baro.getSmoothPressure(), tasker.getCurrentTime());
-		//baroFilter.updateFilter(baro.getSmoothPressure());
-		//Serial.println(baro.getPressure());
-	}
-
-
-	void ProcessSlowerReadings::execute()
+	void processSlowerReadings()
 	{
 		// Get current time from tasker (to speed up)
 		uint32_t curTime = tasker.getCurrentTime();
@@ -160,57 +154,37 @@ namespace TaskerFunction
 	}
 
 
-	void RunVirtualPilot::execute()
+	void newBaroReadingEvent()
 	{
-		Storage::virtualPilot.runVirtualPilot();
+		// normal pressure is just assigned to the globar reading variable
+		reading.pressure = baro.getPressure();
+
+		// smooth pressure is extrapolated
+
+		//baroExtrapolator->addNewMeasuredValue(baro.getSmoothPressure(), tasker.getCurrentTime());
+		//baroFilter.updateFilter(baro.getSmoothPressure());
+		//Serial.println(baro.getPressure());
 	}
 
 
 
 
 
-
-	/*
-	!!!!!!!!!!!!!
-
-	THIS HAVE TO BE IMPLEMENTED IN THE NEW FLIGHT MODE CLASSES
-
-
-	void updatePressureAndAltHold()
+	/* MAKE IT DIFFERENTLY
+		Make separate procedure where calibraiton will be performed
+		Calibration will be triggered in receive update task which is called after receiving specific packet type
+	void CheckCalibrations::execute()
 	{
-		using namespace config;
+		//...
+		// accelerometer calibration
+		// gyroscope calibration
+		// compass calibration
 
-		// If altHold flight mode is enabled (this flag is set in the flight modes header file
-		if (flags.needToUpdateAltHoldPID)
-		{
-			// calculate pressureToHold
-			int16_t rawAltHoldThrottle = com.received.steer.throttle - altHoldBaseThrottle;
-			// integrate the stick value only if 
-			if (com.connectionStability() > 1)
-			{
-				// if raw throttle stick is out of the dead zone, integrate pressureToHold
-				// !!  1/100Hz ~= 0.009   !!!  ONLY IF 110Hz  !!!
-				if (rawAltHoldThrottle > flModeConfig.AltHoldStickDeadZone)
-					pressureToHold -= ((float)(rawAltHoldThrottle - flModeConfig.AltHoldStickDeadZone) / 50.0f) * 0.009f;
-				else if (rawAltHoldThrottle < -flModeConfig.AltHoldStickDeadZone)
-					pressureToHold -= ((float)(rawAltHoldThrottle + flModeConfig.AltHoldStickDeadZone) / 50.0f) * 0.009f;
-			}
-
-
-			float altError = baro.getSmoothPressure() - pressureToHold;
-			lastPID_AltHold_value = altHoldPID.updateController(altError);
-
-			// keep pid value in a border
-			lastPID_AltHold_value = constrain(lastPID_AltHold_value, -flModeConfig.AltHoldMaxAddedThrottle, flModeConfig.AltHoldMaxAddedThrottle);
-
-			// apply pid results to the virtual throttle stick
-			int16_t throttleStickSigned = altHoldBaseThrottle + lastPID_AltHold_value;
-			fModes::vSticks.throttle = constrain(throttleStickSigned,
-				flModeConfig.AltHoldMinTotalFinal,
-				flModeConfig.AltHoldMaxTotalFinal);
-		}
-	}
-	*/
+		// remember about reseting and setting proper variables after calibration,
+		// eg. set fused angle inside the MPU class after accelermeter calibration (may have to write a proper method)
+		// eg. set initial Z axis in the MPU after calibrating the compass
+		// ...
+	}*/
 
 
 
@@ -229,6 +203,14 @@ namespace TaskerFunction
 		//comm.sendDataPacket(&SendData::DP_basic);
 		comm.sendDataPacket(&SendData::DP_full);
 	}
+
+
+
+
+
+
+
+// Communication events
 
 
 	void SteeringReceivedUpdate::execute()
