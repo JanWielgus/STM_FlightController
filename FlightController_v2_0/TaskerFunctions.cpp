@@ -28,8 +28,8 @@ void addTaskerFunctionsToTasker()
 
 
 	tasker.addTask(new Update1Hz, 1000000L, 2);
-	tasker.addTask(new Update75Hz, 13340L, 492);
-	tasker.addTask(new UpdateMainInterval, config::MainInterval, 639);
+	tasker.addTask(new Update75Hz, 13340L, 233);
+	tasker.addTask(new UpdateMainInterval, config::MainInterval, 1000); // duration: less than 1000us in Stabilize
 	tasker.addTask(new Failsafe, 50000L, 0); // 20Hz
 
 	baro.registerNewBaroReadingFunction(newBaroReadingEvent);
