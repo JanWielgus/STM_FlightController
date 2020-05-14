@@ -41,7 +41,7 @@ class INormalized3AxisDataAdapter
 {
 public:
 	virtual ~INormalized3AxisDataAdapter() {}
-	virtual vector3Int16& getNormalizedData() = 0;
+	virtual vector3Float& getNormalizedData() = 0;
 };
 
 

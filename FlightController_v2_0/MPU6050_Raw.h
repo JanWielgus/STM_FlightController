@@ -17,8 +17,8 @@ public:
 	void readRawData();
 	vector3Int16& getRawAcceleration();
 	vector3Int16& getRawRotation();
-	vector3Int16& getNormalizedAcceleration();
-	vector3Int16& getNormalizedRotation();
+	vector3Float& getNormalizedAcceleration();
+	vector3Float& getNormalizedRotation();
 	int16_t getTemperature();
 	void calibrateAccelerometer(uint16_t samplesToAverage = 250);
 	void calibrateGyroscope(uint16_t samplesToAverage = 2000);
@@ -33,8 +33,8 @@ private:
 	// Raw readings
 	vector3Int16 rawAcceleration;
 	vector3Int16 rawRotation;
-	vector3Int16 normAcceleration; // updated in getter
-	vector3Int16 normRotation; // updated in getter
+	vector3Float normAcceleration; // updated in getter
+	vector3Float normRotation; // updated in getter
 	int16_t temperature;
 
 	// Calibration values

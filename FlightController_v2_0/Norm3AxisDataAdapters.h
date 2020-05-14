@@ -9,19 +9,19 @@
 
 class NormAccelerometerAdapter : public INormalized3AxisDataAdapter
 {
-	vector3Int16& getNormalizedData() override;
+	vector3Float& getNormalizedData() override;
 };
 
 
 class NormGyroscopeAdapter : public INormalized3AxisDataAdapter
 {
-	vector3Int16& getNormalizedData() override;
+	vector3Float& getNormalizedData() override;
 };
 
 
 class NormMagnetometerAdapter : public INormalized3AxisDataAdapter
 {
-	vector3Int16& getNormalizedData() override;
+	vector3Float& getNormalizedData() override;
 };
 
 

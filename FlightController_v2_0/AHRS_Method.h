@@ -19,9 +19,9 @@ public:
 	virtual vector3Float* update() = 0;
 
 protected:
-	int16_t ax, ay, az;
-	int16_t gx, gy, gz;
-	int16_t mx, my, mz;
+	float ax, ay, az;
+	float gx, gy, gz;
+	float mx, my, mz;
 	vector3Float angles; // x-pitch, y-roll, z-yaw
 };
 

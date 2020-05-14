@@ -3,21 +3,21 @@
 
 
 
-vector3Int16& NormAccelerometerAdapter::getNormalizedData()
+vector3Float& NormAccelerometerAdapter::getNormalizedData()
 {
-	return Storage::rawMPU6050.getRawAcceleration();
+	return Storage::rawMPU6050.getNormalizedAcceleration();
 }
 
 
 
-vector3Int16& NormGyroscopeAdapter::getNormalizedData()
+vector3Float& NormGyroscopeAdapter::getNormalizedData()
 {
-	return Storage::rawMPU6050.getRawRotation();
+	return Storage::rawMPU6050.getNormalizedRotation();
 }
 
 
 
-vector3Int16& NormMagnetometerAdapter::getNormalizedData()
+vector3Float& NormMagnetometerAdapter::getNormalizedData()
 {
-	return Storage::rawHMC5883L.getRaw();
+	return Storage::rawHMC5883L.getNormalized();
 }

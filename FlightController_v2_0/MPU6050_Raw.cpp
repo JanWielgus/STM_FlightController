@@ -94,20 +94,20 @@ vector3Int16& MPU6050_Raw::getRawRotation()
 }
 
 
-vector3Int16& MPU6050_Raw::getNormalizedAcceleration()
+vector3Float& MPU6050_Raw::getNormalizedAcceleration()
 {
-	normAcceleration.x = rawAcceleration.x * accNormalizeMultiplier;
-	normAcceleration.y = rawAcceleration.y * accNormalizeMultiplier;
-	normAcceleration.z = rawAcceleration.z * accNormalizeMultiplier;
+	normAcceleration.x = (float)rawAcceleration.x * accNormalizeMultiplier;
+	normAcceleration.y = (float)rawAcceleration.y * accNormalizeMultiplier;
+	normAcceleration.z = (float)rawAcceleration.z * accNormalizeMultiplier;
 	return normAcceleration;
 }
 
 
-vector3Int16& MPU6050_Raw::getNormalizedRotation()
+vector3Float& MPU6050_Raw::getNormalizedRotation()
 {
-	normRotation.x = rawRotation.x * gyroNormalizeMultiplier;
-	normRotation.y = rawRotation.y * gyroNormalizeMultiplier;
-	normRotation.z = rawRotation.z * gyroNormalizeMultiplier;
+	normRotation.x = (float)rawRotation.x * gyroNormalizeMultiplier;
+	normRotation.y = (float)rawRotation.y * gyroNormalizeMultiplier;
+	normRotation.z = (float)rawRotation.z * gyroNormalizeMultiplier;
 	return normRotation;
 }
 

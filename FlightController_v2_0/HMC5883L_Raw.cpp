@@ -62,11 +62,11 @@ vector3Int16& HMC5883L_Raw::getRaw()
 }
 
 
-vector3Int16& HMC5883L_Raw::getNormalized()
+vector3Float& HMC5883L_Raw::getNormalized()
 {
-	normData.x = rawData.x * compassNormalizeMultiplier;
-	normData.y = rawData.y * compassNormalizeMultiplier;
-	normData.z = rawData.z * compassNormalizeMultiplier;
+	normData.y = (float)rawData.y * compassNormalizeMultiplier;
+	normData.z = (float)rawData.z * compassNormalizeMultiplier;
+	normData.x = (float)rawData.x * compassNormalizeMultiplier;
 	return normData;
 }
 
