@@ -4,6 +4,13 @@
 
 #include "MPU6050_Raw.h"
 
+// Help funcitons for enabling compass bypass on MPU6050
+uint8_t readRegister8(uint8_t address, uint8_t reg);
+void writeRegister8(uint8_t address, uint8_t reg, uint8_t value);
+void writeRegisterBit(uint8_t address, uint8_t reg, uint8_t pos, bool state);
+
+
+
 MPU6050_Raw::MPU6050_Raw()
 {
 	rawAcceleration = { 0, 0, 0 };

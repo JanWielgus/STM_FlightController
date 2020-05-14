@@ -9,8 +9,6 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#include <FC_MPU6050Lib.h>
-#include <FC_HMC5883L_Lib.h>
 #include "SharedDataTypes.h"
 
 
@@ -46,7 +44,7 @@ namespace config
 
 	struct
 	{
-		bool replaceItWithProperFlag;
+		bool replaceItWithProperFlag=true;
 
 
 	} const booleans;
@@ -61,7 +59,6 @@ namespace config
 		float gyroLowPassFilterCutOffFreq = 6;
 
 		// mpu6050
-		//FC_MPU6050Lib::vector3Int accelerometer;
 		
 		// GYRO CALIBRATION VALUES
 		
