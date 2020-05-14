@@ -165,7 +165,7 @@ void setup()
 	debug.print("Started calibrations... ");
 	
 	/*
-	//delay(1500);
+	delay(3000);
 	digitalWrite(config::pin.blueDiode, HIGH);
 	rawMPU6050.calibrateAccelerometer(2000);
 	digitalWrite(config::pin.blueDiode, LOW);
@@ -184,7 +184,7 @@ void setup()
 	
 	
 	/*
-	//delay(1500);
+	delay(3000);
 	digitalWrite(config::pin.blueDiode, HIGH);
 	rawMPU6050.calibrateGyroscope(6000);
 	digitalWrite(config::pin.blueDiode, LOW);
@@ -199,12 +199,12 @@ void setup()
 		Serial.println();
 		delay(2000);
 	}/*/
-	rawMPU6050.setGyroOffset(-145, 110, -1); // <<<<<<<<<<<<< TO SET
+	rawMPU6050.setGyroOffset(-157, 104, 0); // <<<<<<<<<<<<< TO SET
 
 
 
 	/*
-	//delay(1500);
+	delay(3000);
 	digitalWrite(config::pin.blueDiode, HIGH);
 	rawHMC5883L.calibrate(60);
 	digitalWrite(config::pin.blueDiode, LOW);
