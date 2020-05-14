@@ -56,7 +56,7 @@ namespace config
 	struct 
 	{
 		float accLowPassFilterCutOffFreq = 5;
-		float gyroLowPassFilterCutOffFreq = 6;
+		float gyroLowPassFilterCutOffFreq = 10;
 
 		// mpu6050
 		
