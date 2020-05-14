@@ -180,7 +180,7 @@ void setup()
 		Serial.println();
 		delay(2000);
 	}/*/
-	rawMPU6050.setAccOffset(0, 0, 0); // <<<<<<<<<<<<< TO SET
+	rawMPU6050.setAccOffset(142, 82, -227); // <<<<<<<<<<<<< TO SET
 	
 	
 	/*
@@ -199,7 +199,7 @@ void setup()
 		Serial.println();
 		delay(2000);
 	}/*/
-	rawMPU6050.setGyroOffset(0, 0, 0); // <<<<<<<<<<<<< TO SET
+	rawMPU6050.setGyroOffset(-145, 110, -1); // <<<<<<<<<<<<< TO SET
 
 
 
@@ -219,7 +219,7 @@ void setup()
 		Serial.println();
 		delay(2000);
 	}/*/
-	rawHMC5883L.setCompassOffset(0, 0, 0); // <<<<<<<<<<<<< TO SET
+	rawHMC5883L.setCompassOffset(-192, -802, 1425); // <<<<<<<<<<<<< TO SET
 
 
 	debug.println(" PASSED");
