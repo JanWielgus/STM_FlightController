@@ -203,9 +203,18 @@ vector3Float* MadgwickAHRS::update()
 
 
 	// Compute angles
+
+	// in radians
 	angles.y = atan2f(q0 * q1 + q2 * q3, 0.5f - q1 * q1 - q2 * q2);
 	angles.x = asinf(-2.0f * (q1 * q3 - q0 * q2));
 	angles.z = atan2f(q1 * q2 + q0 * q3, 0.5f - q2 * q2 - q3 * q3);
+
+	// convert to degrees
+	angles.x *= 57.29578f;
+	angles.y *= 57.29578f;
+	angles.z *= 57.29578f;
+	angles.z += 180;
+
 	return &angles;
 }
 
@@ -299,9 +308,18 @@ vector3Float* MadgwickIMU::update()
 
 
 	// Compute angles
+
+	// in radians
 	angles.y = atan2f(q0 * q1 + q2 * q3, 0.5f - q1 * q1 - q2 * q2);
 	angles.x = asinf(-2.0f * (q1 * q3 - q0 * q2));
 	angles.z = atan2f(q1 * q2 + q0 * q3, 0.5f - q2 * q2 - q3 * q3);
+
+	// convert to degrees
+	angles.x *= 57.29578f;
+	angles.y *= 57.29578f;
+	angles.z *= 57.29578f;
+	angles.z += 180;
+
 	return &angles;
 }
 
