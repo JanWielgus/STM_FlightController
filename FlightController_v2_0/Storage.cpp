@@ -23,8 +23,9 @@ namespace Storage
 	FC_Motors motors;
 	DebugSystem debug(&Serial);
 
-	MadgwickAHRS madgwickAHRS(config::MainFrequency); // created statically, to offload heap for dynamic allocation
-	AHRS ahrs(&madgwickAHRS, new NormAccelerometerAdapter,
+	//MadgwickAHRS madgwickAHRS(config::MainFrequency); // created statically, to offload heap for dynamic allocation
+	MadgwickIMU madgwickIMU(config::MainFrequency);
+	AHRS ahrs(&madgwickIMU, new NormAccelerometerAdapter,
 		new NormGyroscopeAdapter, new NormMagnetometerAdapter);
 
 
