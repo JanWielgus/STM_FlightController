@@ -27,8 +27,5 @@ public:
 
 };
 
-uint32_t MeasureTime::startTime = 0;
-uint32_t MeasureTime::duration = 0;
-
 #endif /* MEASURETIME_H_ */
 
