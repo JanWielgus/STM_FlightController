@@ -22,7 +22,9 @@ namespace Storage
 	FC_MS5611_Lib baro(&taskPlanner);
 	FC_Motors motors;
 	DebugSystem debug(&Serial);
-	AHRS ahrs(new MadgwickAHRS(config::MainFrequeny), new NormAccelerometerAdapter,
+
+	MadgwickAHRS madgwickAHRS(config::MainFrequency); // created statically, to offload heap for dynamic allocation
+	AHRS ahrs(&madgwickAHRS, new NormAccelerometerAdapter,
 		new NormGyroscopeAdapter, new NormMagnetometerAdapter);
 
 
