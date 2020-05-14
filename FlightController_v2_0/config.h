@@ -16,8 +16,8 @@ namespace config
 {
 // Numerical constants
 
-	const uint8_t MainFrequeny = 250; // [Hz]
-	const float MainDeltaTimeInSeconds = 1.0f / (float)MainFrequeny; //  = 1/250  (250Hz)
+	const uint8_t MainFrequency = 250; // [Hz]
+	const float MainDeltaTimeInSeconds = 1.0f / (float)MainFrequency; //  = 1/250  (250Hz)
 	const uint16_t MainInterval = (uint16_t)(MainDeltaTimeInSeconds * 1000000.0); // [micro seconds] interval of main tasks
 
 	const uint8_t MaxAmtOfTaskerTasks = 25; // tasks array size inside tasker
