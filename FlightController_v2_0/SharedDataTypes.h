@@ -12,7 +12,6 @@
 #ifndef CUSTOMDATATYPES_H_
 #define CUSTOMDATATYPES_H_
 
-#include <FC_MPU6050Lib.h>
 #include <FC_CustomDataTypes.h>
 
 
@@ -42,9 +41,9 @@ struct virtualSticksType
 
 struct readingsType
 {
-    FC_MPU6050Lib::vector3Float angle = { 0, 0, 0 }; // X and Y angles, 250Hz
-    float compassHeading; // extrapolated (250Hz)
-    float heading = 0; // 250Hz (fused or only gyro)
+    float pitch;
+    float roll;
+    float heading = 0;
     float pressure = 0; // not extrapolated value (about 110 Hz)
     float smoothPressure = 0; // 250Hz
 };
@@ -65,6 +64,22 @@ struct pidCommPack
     floatByte I;
     floatByte D;
     uint16Byte I_max;
+};
+
+
+struct vector3Int16
+{
+    int16_t x;
+    int16_t y;
+    int16_t z;
+};
+
+
+struct vector3Float
+{
+    float x;
+    float y;
+    float z;
 };
 
 

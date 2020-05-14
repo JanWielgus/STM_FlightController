@@ -17,11 +17,17 @@ namespace Storage
 	FC_ObjectTasker tasker(MaxAmtOfTaskerTasks);
 	FC_TaskPlanner taskPlanner(MaxAmtOfTaskPlannerTasks);
 	FC_CommunicationHandler comm(&Serial2, MaxCommPacketBytes);
-	FC_MPU6050Lib mpu;
-	FC_HMC5883L_Lib compass;
+	MPU6050_Raw rawMPU6050;
+	HMC5883L_Raw rawHMC5883L;
 	FC_MS5611_Lib baro(&taskPlanner);
 	FC_Motors motors;
 	DebugSystem debug(&Serial);
+
+	// Select full AHRS or just IMU version
+	//MadgwickAHRS madgwickAHRS(config::MainFrequency); // created statically, to offload heap for dynamic allocation
+	MadgwickIMU madgwickIMU(config::MainFrequency);
+	AHRS ahrs(&madgwickIMU, new NormAccelerometerAdapter,
+		new NormGyroscopeAdapter, new NormMagnetometerAdapter);
 
 
 	// PID objects

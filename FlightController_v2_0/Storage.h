@@ -18,8 +18,8 @@
 #include <FC_TaskPlanner.h>
 #include <MyPID.h>
 #include <FC_Communication_Base.h>
-#include <FC_MPU6050Lib.h>
-#include <FC_HMC5883L_Lib.h>
+#include "MPU6050_Raw.h"
+#include "HMC5883L_Raw.h"
 #include <FC_MS5611_Lib.h>
 #include <FC_EVA_Filter.h>
 #include "FC_Motors.h"
@@ -29,6 +29,9 @@
 #include <FC_CommunicationHandler.h>
 #include "CommRecDataPackets.h"
 #include "CommSendDataPackets.h"
+#include "AHRS.h"
+#include "AHRS_Method.h"
+#include "Norm3AxisDataAdapters.h"
 
 
 
@@ -48,11 +51,12 @@ namespace Storage
     extern FC_ObjectTasker tasker;
     extern FC_TaskPlanner taskPlanner;
     extern FC_CommunicationHandler comm;
-    extern FC_MPU6050Lib mpu;
-    extern FC_HMC5883L_Lib compass;
+    extern MPU6050_Raw rawMPU6050;
+    extern HMC5883L_Raw rawHMC5883L;
     extern FC_MS5611_Lib baro;
     extern FC_Motors motors;
     extern DebugSystem debug;
+    extern AHRS ahrs;
 
 
     // PID objects

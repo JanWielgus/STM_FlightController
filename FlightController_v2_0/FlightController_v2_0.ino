@@ -17,8 +17,11 @@
 #include <FC_Extrapolation.h>
 #include <FC_LinearExtrapolation.h>
 #include <MyPID.h>
-#include <FC_MPU6050Lib.h>
-#include <FC_HMC5883L_Lib.h>
+#include "MPU6050_Raw.h"
+#include "HMC5883L_Raw.h"
+#include "Norm3AxisDataAdapters.h"
+#include "AHRS_Method.h"
+#include "AHRS.h"
 #include <FC_MS5611_Lib.h>
 #include <FC_EVA_Filter.h>
 #include <Wire.h>
@@ -102,90 +105,38 @@ void setup()
 	// Use after adding tasks to tasker
 	//comm.adaptConStabFilterToInterval();
 	comm.setConStabFilterIntensity(0.95f); // set filter intensity manually
-
-
 	
 	delay(300);
 	debug.printHeader("Tasker done!");
+
+
+
+
+	Wire.begin();
 	
+
 	// MPU6050
-	while (!mpu.initialize()) // While mpu is not initialized
+	while (!rawMPU6050.initialize())
 	{
 		// If gets stuck here, there is an error
 		debug.printWarning("cannot initialize mpu");
 		// DETECT MPU ERROR HERE
-		delay(200);
+		delay(300);
 	}
-	
-	mpu.setCalculationsFrequency(250);
-	mpu.setGyroFusionMultiplier(0.999); // CHANGED TO TEST
-	//mpu.setGyroFusionMultiplier(0.997);
-	
-	
+	rawMPU6050.enableCompassBypass(); // enable compass on GY-86
 
-	
-	///////////////
-	// TEMPORARY //
-	///////////////
-	//delay(1500);
-	debug.print("Started calibrations... ");
-	
-	/*
-	digitalWrite(config::pin.blueDiode, HIGH);
-	mpu.calibrateAccelerometer(2000);
-	digitalWrite(config::pin.blueDiode, LOW);
-	while (true)
-	{
-		Serial.print("Acc done. X: ");
-		Serial.print(mpu.getAccelerometerCalibrationValues().x);
-		Serial.print(" Y: ");
-		Serial.print(mpu.getAccelerometerCalibrationValues().y);
-		Serial.print(" Z: ");
-		Serial.print(mpu.getAccelerometerCalibrationValues().z);
-		Serial.println();
-		delay(2000);
-	}*/
-	//mpu.setAccelerometerCalibrationValues(76, 45, -259);
-	mpu.setAccelerometerCalibrationValues(155, 82, -251);
-	
-	
-	/*
-	digitalWrite(config::pin.blueDiode, HIGH);
-	mpu.calibrateGyro(6000);
-	digitalWrite(config::pin.blueDiode, LOW);
-	while (true)
-	{
-		Serial.print("Gyro done. X: ");
-		Serial.print(mpu.getGyroCalibrationValues().x);
-		Serial.print(" Y: ");
-		Serial.print(mpu.getGyroCalibrationValues().y);
-		Serial.print(" Z: ");
-		Serial.print(mpu.getGyroCalibrationValues().z);
-		Serial.println();
-		delay(2000);
-	}*/
-	//mpu.setGyroCalibrationValues(-102, -163, 6);
-	mpu.setGyroCalibrationValues(-107, -152, 1);
-	
-	debug.println(" PASSED");
-	
-	///////////////
-	
-	
-	
 	Serial.println("mpu initialized");
-	
+
+
 	// HMC5003L
-	compass.enableHMC_on_MPU(false); // enable HMC on MPU without Wire.begin() inside
-	while (!compass.initialize(false))
+	while (!rawHMC5883L.initialize())
 	{
 		// If gets stuck here, there is an error
 		Serial.println("cannot initialize compass");
 		// DETECT COMPASS ERROR HERE
 		delay(200);
 	}
-	
-	compass.setCompassDeclination(5.0);
+
 	Serial.println("compass initialized");
 
 
@@ -198,51 +149,81 @@ void setup()
 	}
 
 	Serial.println("baro initialized");
-	
-	
-	// Default calibration values
-	// When pilot needs other values at the beginning, it just send them (or request calibration)
-	// and the whole process is repeated
-	//mpu.setAccelerometerCalibrationValues(....);
-	//setGyroCalibrationMethod here <----
 
+
+
+	// Set I2C clock to 400kHz
+	Wire.setClock(400000L);
+
+	
+
+	
+	///////////////
+	// TEMPORARY //
+	///////////////
+	// Uncomment one, to perform calibration
+	debug.print("Started calibrations... ");
+	
 	/*
+	delay(3000);
 	digitalWrite(config::pin.blueDiode, HIGH);
-	compass.calibrateCompass(60);
+	rawMPU6050.calibrateAccelerometer(2000);
 	digitalWrite(config::pin.blueDiode, LOW);
 	while (true)
 	{
-		FC_HMC5883L_Lib::vector3Int mins;
-		FC_HMC5883L_Lib::vector3Int maxs;
-		compass.getCalibrationValues(&mins, &maxs);
-		Serial.print("Compass done. MIN: X: ");
-		Serial.print(mins.x);
+		Serial.print("Acc done. X: ");
+		Serial.print(rawMPU6050.getAccOffset().x);
 		Serial.print(" Y: ");
-		Serial.print(mins.y);
+		Serial.print(rawMPU6050.getAccOffset().y);
 		Serial.print(" Z: ");
-		Serial.print(mins.z);
-		Serial.print("  MAX: X: ");
-		Serial.print(maxs.x);
-		Serial.print(" Y: ");
-		Serial.print(maxs.y);
-		Serial.print(" Z: ");
-		Serial.print(maxs.z);
+		Serial.print(rawMPU6050.getAccOffset().z);
 		Serial.println();
 		delay(2000);
-	}*/
-	compass.setCalibrationValues(config::calibVal.compassMin, config::calibVal.compassMax);
+	}/*/
+	rawMPU6050.setAccOffset(142, 82, -227); // <<<<<<<<<<<<< TO SET
 	
-
 	
-	mpu.setFastClock(); // 400 kHz
+	/*
+	delay(3000);
+	digitalWrite(config::pin.blueDiode, HIGH);
+	rawMPU6050.calibrateGyroscope(6000);
+	digitalWrite(config::pin.blueDiode, LOW);
+	while (true)
+	{
+		Serial.print("Gyro done. X: ");
+		Serial.print(rawMPU6050.getGyroOffset().x);
+		Serial.print(" Y: ");
+		Serial.print(rawMPU6050.getGyroOffset().y);
+		Serial.print(" Z: ");
+		Serial.print(rawMPU6050.getGyroOffset().z);
+		Serial.println();
+		delay(2000);
+	}/*/
+	rawMPU6050.setGyroOffset(-157, 104, 0); // <<<<<<<<<<<<< TO SET
 
 
-	
-	// set initial Z axis value
-	mpu.read6AxisMotion();
-	reading.angle = mpu.getFusedXYAngles();
-	compass.readCompassData(reading.angle.x, reading.angle.y);
-	mpu.setInitialZAxisValue(compass.getHeading());
+
+	/*
+	delay(3000);
+	digitalWrite(config::pin.blueDiode, HIGH);
+	rawHMC5883L.calibrate(90);
+	digitalWrite(config::pin.blueDiode, LOW);
+	while (true)
+	{
+		Serial.print("Compass done. X: ");
+		Serial.print(rawHMC5883L.getCompassOffset().x);
+		Serial.print(" Y: ");
+		Serial.print(rawHMC5883L.getCompassOffset().y);
+		Serial.print(" Z: ");
+		Serial.print(rawHMC5883L.getCompassOffset().z);
+		Serial.println();
+		delay(2000);
+	}/*/
+	rawHMC5883L.setCompassOffset(-1061, -1181, -882); // <<<<<<<<<<<<< TO SET
+
+
+	debug.println(" PASSED");
+
 
 
 	// set up PID derivative low-pass filters

@@ -28,8 +28,8 @@ void addTaskerFunctionsToTasker()
 
 
 	tasker.addTask(new Update1Hz, 1000000L, 2);
-	tasker.addTask(new Update75Hz, 13340L, 492);
-	tasker.addTask(new UpdateMainInterval, config::MainInterval, 639);
+	tasker.addTask(new Update75Hz, 13340L, 233);
+	tasker.addTask(new UpdateMainInterval, config::MainInterval, 1000); // duration: less than 1000us in Stabilize
 	tasker.addTask(new Failsafe, 50000L, 0); // 20Hz
 
 	baro.registerNewBaroReadingFunction(newBaroReadingEvent);
@@ -56,10 +56,8 @@ void addTaskerFunctionsToTasker()
 
 namespace TaskerFunction
 {
-	//FC_Extrapolation* compassExtrapolator = new FC_LinearExtrapolation();
 	//FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
 	FC_EVA_Filter baroFilter(0.3);
-	FC_EVA_Filter compassFilter(0.4);
 
 	FC_EVA_Filter throttleFilter(0.5);
 	FC_EVA_Filter rotateFilter(0.5);
@@ -75,13 +73,19 @@ namespace TaskerFunction
 
 	void Update75Hz::execute()
 	{
-		readCompass();
+		// Read raw data from compass
+		Storage::rawHMC5883L.readRaw();
 	}
 
 	void UpdateMainInterval::execute()
 	{
-		readMPU6050();
+		// Read raw data from accelerometer and gyrscope
+		Storage::rawMPU6050.readRawData();
+
 		processSlowerReadings();
+
+		ahrs.execute();
+
 		Storage::virtualPilot.runVirtualPilot();
 	}
 
@@ -105,37 +109,10 @@ namespace TaskerFunction
 	}
 
 
-	void readMPU6050()
-	{
-		mpu.read6AxisMotion();
-		reading.angle = mpu.getFusedXYAngles();
-
-		if (config::booleans.UseCompassInZAxisAngleCalculation)
-			// Return compass heading extrapolation for the current time
-			reading.heading = mpu.getZAngle(reading.compassHeading);
-		else
-			reading.heading = mpu.getZAngle();
-	}
-
-
-	void readCompass()
-	{
-		compass.readCompassData(reading.angle.x, reading.angle.y);
-
-		// Add new compass heading measurement for the current time
-		//compassExtrapolator->addNewMeasuredValue(compass.getHeading(), tasker.getCurrentTime());
-	}
-
-
 	void processSlowerReadings()
 	{
 		// Get current time from tasker (to speed up)
 		uint32_t curTime = tasker.getCurrentTime();
-
-
-		// extrapolate compass reading
-		//reading.compassHeading = compassExtrapolator->getEstimation(curTime);
-		reading.compassHeading = compassFilter.updateFilter(compass.getHeading());
 
 
 		// extrapolate baro reading to meet the program main frequency (250Hz)
@@ -148,9 +125,9 @@ namespace TaskerFunction
 
 		// filter received sticks values
 		Storage::sticksFiltered.throttle = throttleFilter.updateFilter(ReceiveData::throttle);
-		Storage::sticksFiltered.rotate = rotateFilter.updateFilter(ReceiveData::rot_stick);
-		Storage::sticksFiltered.TB = TB_fiter.updateFilter(ReceiveData::TB_stick);
-		Storage::sticksFiltered.LR = LR_filter.updateFilter(ReceiveData::LR_stick);
+		Storage::sticksFiltered.rotate = rotateFilter.updateFilter((int16_t)ReceiveData::rot_stick);
+		Storage::sticksFiltered.TB = TB_fiter.updateFilter((int16_t)ReceiveData::TB_stick);
+		Storage::sticksFiltered.LR = LR_filter.updateFilter((int16_t)ReceiveData::LR_stick);
 	}
 
 
@@ -193,8 +170,8 @@ namespace TaskerFunction
 	void UpdateSending::execute()
 	{
 		// Pack all data to the toSend variables
-		SendData::tilt_TB = (int8_t)reading.angle.x;
-		SendData::tilt_LR = (int8_t)reading.angle.y;
+		SendData::tilt_TB = (int8_t)reading.pitch;
+		SendData::tilt_LR = (int8_t)reading.roll;
 		SendData::heading = (int16_t)reading.heading;
 		SendData::altitude = (int16_t)(reading.smoothPressure - 90000 - 8530); // TEMP ! (change for altitude)
 		SendData::receivingConnectionStability = comm.getConnectionStability();

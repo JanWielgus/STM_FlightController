@@ -9,8 +9,6 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#include <FC_MPU6050Lib.h>
-#include <FC_HMC5883L_Lib.h>
 #include "SharedDataTypes.h"
 
 
@@ -18,8 +16,8 @@ namespace config
 {
 // Numerical constants
 
-	const uint8_t MainFrequeny = 250; // [Hz]
-	const float MainDeltaTimeInSeconds = 1.0f / (float)MainFrequeny; //  = 1/250  (250Hz)
+	const uint8_t MainFrequency = 250; // [Hz]
+	const float MainDeltaTimeInSeconds = 1.0f / (float)MainFrequency; //  = 1/250  (250Hz)
 	const uint16_t MainInterval = (uint16_t)(MainDeltaTimeInSeconds * 1000000.0); // [micro seconds] interval of main tasks
 
 	const uint8_t MaxAmtOfTaskerTasks = 25; // tasks array size inside tasker
@@ -46,7 +44,7 @@ namespace config
 
 	struct
 	{
-		bool UseCompassInZAxisAngleCalculation = false; // Last time there was something wrong with the compass reading
+		bool replaceItWithProperFlag=true;
 
 
 	} const booleans;
@@ -57,20 +55,20 @@ namespace config
 // mpu6050
 	struct 
 	{
+		float accLowPassFilterCutOffFreq = 5;
+		float gyroLowPassFilterCutOffFreq = 10;
+
 		// mpu6050
-		//FC_MPU6050Lib::vector3Int accelerometer;
 		
 		// GYRO CALIBRATION VALUES
 		
 		
 		// hmc5883l
 		// Default calibration values
-		FC_HMC5883L_Lib::vector3Int compassMin = {-507, -170, -1010};
-		FC_HMC5883L_Lib::vector3Int compassMax = {370, 725, 152};
 		
 		
 		
-	} calibVal;
+	} sensorCalibration;
 
 // Flight modes config
 	struct

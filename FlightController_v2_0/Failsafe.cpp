@@ -20,8 +20,8 @@ void Failsafe::execute()
 void Failsafe::cutoffMotorsIfExceededAngle()
 {
 	//Cut-off all motors if the angle is too high
-	if (abs(Storage::reading.angle.x) > config::failsafeSettings.CutOffAngle ||
-		abs(Storage::reading.angle.y) > config::failsafeSettings.CutOffAngle)
+	if (abs(Storage::reading.pitch) > config::failsafeSettings.CutOffAngle ||
+		abs(Storage::reading.roll) > config::failsafeSettings.CutOffAngle)
 		cutOffMotors();
 }
 
