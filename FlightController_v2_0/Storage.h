@@ -29,6 +29,9 @@
 #include <FC_CommunicationHandler.h>
 #include "CommRecDataPackets.h"
 #include "CommSendDataPackets.h"
+#include "AHRS.h"
+#include "AHRS_Method.h"
+#include "Norm3AxisDataAdapters.h"
 
 
 
@@ -53,6 +56,7 @@ namespace Storage
     extern FC_MS5611_Lib baro;
     extern FC_Motors motors;
     extern DebugSystem debug;
+    extern AHRS ahrs;
 
 
     // PID objects

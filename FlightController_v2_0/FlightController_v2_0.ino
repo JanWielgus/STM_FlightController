@@ -21,6 +21,7 @@
 #include "HMC5883L_Raw.h"
 #include "Norm3AxisDataAdapters.h"
 #include "AHRS_Method.h"
+#include "AHRS.h"
 #include <FC_MS5611_Lib.h>
 #include <FC_EVA_Filter.h>
 #include <Wire.h>

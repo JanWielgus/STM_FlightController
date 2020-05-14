@@ -22,6 +22,8 @@ namespace Storage
 	FC_MS5611_Lib baro(&taskPlanner);
 	FC_Motors motors;
 	DebugSystem debug(&Serial);
+	AHRS ahrs(new MadgwickAHRS(config::MainFrequeny), new NormAccelerometerAdapter,
+		new NormGyroscopeAdapter, new NormMagnetometerAdapter);
 
 
 	// PID objects

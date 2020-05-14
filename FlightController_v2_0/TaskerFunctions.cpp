@@ -84,6 +84,8 @@ namespace TaskerFunction
 
 		processSlowerReadings();
 
+		ahrs.execute();
+
 		Storage::virtualPilot.runVirtualPilot();
 	}
 
@@ -123,9 +125,9 @@ namespace TaskerFunction
 
 		// filter received sticks values
 		Storage::sticksFiltered.throttle = throttleFilter.updateFilter(ReceiveData::throttle);
-		Storage::sticksFiltered.rotate = rotateFilter.updateFilter(ReceiveData::rot_stick);
-		Storage::sticksFiltered.TB = TB_fiter.updateFilter(ReceiveData::TB_stick);
-		Storage::sticksFiltered.LR = LR_filter.updateFilter(ReceiveData::LR_stick);
+		Storage::sticksFiltered.rotate = rotateFilter.updateFilter((int16_t)ReceiveData::rot_stick);
+		Storage::sticksFiltered.TB = TB_fiter.updateFilter((int16_t)ReceiveData::TB_stick);
+		Storage::sticksFiltered.LR = LR_filter.updateFilter((int16_t)ReceiveData::LR_stick);
 	}
 
 
