@@ -57,6 +57,9 @@ namespace config
 // mpu6050
 	struct 
 	{
+		float accLowPassFilterCutOffFreq = 5;
+		float gyroLowPassFilterCutOffFreq = 6;
+
 		// mpu6050
 		//FC_MPU6050Lib::vector3Int accelerometer;
 		
@@ -68,7 +71,7 @@ namespace config
 		
 		
 		
-	} calibVal;
+	} sensorCalibration;
 
 // Flight modes config
 	struct
