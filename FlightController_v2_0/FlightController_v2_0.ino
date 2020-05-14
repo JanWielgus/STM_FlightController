@@ -206,7 +206,7 @@ void setup()
 	/*
 	delay(3000);
 	digitalWrite(config::pin.blueDiode, HIGH);
-	rawHMC5883L.calibrate(60);
+	rawHMC5883L.calibrate(90);
 	digitalWrite(config::pin.blueDiode, LOW);
 	while (true)
 	{
@@ -219,7 +219,7 @@ void setup()
 		Serial.println();
 		delay(2000);
 	}/*/
-	rawHMC5883L.setCompassOffset(-192, -802, 1425); // <<<<<<<<<<<<< TO SET
+	rawHMC5883L.setCompassOffset(-1061, -1181, -882); // <<<<<<<<<<<<< TO SET
 
 
 	debug.println(" PASSED");
