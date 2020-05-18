@@ -68,6 +68,9 @@ void setup()
 	pinMode(config::pin.LedBuiltIn, OUTPUT);
 	pinMode(config::pin.redDiode, OUTPUT);
 	pinMode(config::pin.blueDiode, OUTPUT);
+
+	// buzzer
+	pinMode(config::pin.buzzer, OUTPUT);
 	
 
 	
@@ -180,7 +183,7 @@ void setup()
 		Serial.println();
 		delay(2000);
 	}/*/
-	rawMPU6050.setAccOffset(142, 82, -227); // <<<<<<<<<<<<< TO SET
+	rawMPU6050.setAccOffset(248, -19, -224); // <<<<<<<<<<<<< TO SET
 	
 	
 	/*
@@ -199,7 +202,7 @@ void setup()
 		Serial.println();
 		delay(2000);
 	}/*/
-	rawMPU6050.setGyroOffset(-157, 104, 0); // <<<<<<<<<<<<< TO SET
+	rawMPU6050.setGyroOffset(-144, 111, -5); // <<<<<<<<<<<<< TO SET
 
 
 
@@ -219,7 +222,7 @@ void setup()
 		Serial.println();
 		delay(2000);
 	}/*/
-	rawHMC5883L.setCompassOffset(-1061, -1181, -882); // <<<<<<<<<<<<< TO SET
+	rawHMC5883L.setCompassOffset(-843, 436, 456); // <<<<<<<<<<<<< TO SET
 
 
 	debug.println(" PASSED");
@@ -232,6 +235,10 @@ void setup()
 	Storage::yawPID.setDerivativeLowPassFilterParams(6);
 	Storage::altHoldPID.setDerivativeLowPassFilterParams(6);
 
+	
+	digitalWrite(config::pin.buzzer, HIGH);
+	delay(50);
+	digitalWrite(config::pin.buzzer, LOW);
 	
 	Serial.println("setup done");
 }

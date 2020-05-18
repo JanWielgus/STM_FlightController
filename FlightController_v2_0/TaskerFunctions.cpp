@@ -280,6 +280,12 @@ namespace TaskerFunction
 			altHoldPID.set_Imax(ReceiveData::tunedPID_values.I_max);
 			altHoldPID.set_kD(ReceiveData::tunedPID_values.D);
 		}
+
+		
+		// make a beep
+		digitalWrite(config::pin.buzzer, HIGH);
+		delay(50);
+		digitalWrite(config::pin.buzzer, LOW);
 	}
 
 }

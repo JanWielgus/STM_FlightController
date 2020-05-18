@@ -84,7 +84,7 @@ namespace config
 	struct
 	{
 		//const pidPack leveling = { 2.14f, 2.5f, 110, 0.64f };
-		const pidPack leveling = { 1.75f, 2.47f, 110, 0.54f };
+		const pidPack leveling = { 1.75f, 1.5f, 70, 0.54f };
 		const pidPack yaw = { 3.8f, 1.2f, 90, 0.8f };
 		const pidPack altHold = { 0, 0, 0, 0 };
 	}defPID;
@@ -114,6 +114,8 @@ namespace config
 
 
 		uint8_t LedBuiltIn = LED_BUILTIN;
+
+		uint8_t buzzer = PA11;
 
 	} const pin;
 }
