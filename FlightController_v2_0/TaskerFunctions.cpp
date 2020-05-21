@@ -36,7 +36,7 @@ void addTaskerFunctionsToTasker()
 
 
 	// Communication
-	tasker.addTask(&comm, 4545L, 0); // 220Hz ( !!! To solve. During communication some data is lost)
+	tasker.addTask(&comm, 4100L, 0); // 220Hz ( !!! To solve. During communication some data is lost)
 	tasker.addTask(new UpdateSending, 22000L, 0);								// ~45Hz
 
 	// add receive data packets
@@ -75,6 +75,12 @@ namespace TaskerFunction
 	{
 		// Read raw data from compass
 		Storage::rawHMC5883L.readRaw();
+		
+		//Serial.print(Storage::reading.pitch);
+		//Serial.print('\t');
+		//Serial.println(Storage::reading.roll);
+		//Serial.print('\t');
+		//Serial.println(Storage::reading.heading);
 	}
 
 	void UpdateMainInterval::execute()
