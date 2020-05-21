@@ -41,10 +41,10 @@ void VirtualPilot::runVirtualPilot()
 	// 
 	// VirtualPilot use current flight mode virtualSticks as pid outputs
 
-	Storage::motors.setOnTL(curStick->throttle - curStick->TB + curStick->LR - curStick->rotate);
-	Storage::motors.setOnTR(curStick->throttle - curStick->TB - curStick->LR + curStick->rotate);
-	Storage::motors.setOnBR(curStick->throttle + curStick->TB - curStick->LR - curStick->rotate);
-	Storage::motors.setOnBL(curStick->throttle + curStick->TB + curStick->LR + curStick->rotate);
+	Storage::motors.setOnTL(curStick->throttle - curStick->TB + curStick->LR + curStick->rotate);
+	Storage::motors.setOnTR(curStick->throttle - curStick->TB - curStick->LR - curStick->rotate);
+	Storage::motors.setOnBR(curStick->throttle + curStick->TB - curStick->LR + curStick->rotate);
+	Storage::motors.setOnBL(curStick->throttle + curStick->TB + curStick->LR - curStick->rotate);
 	Storage::motors.forceMotorsExecution();
 }
 
