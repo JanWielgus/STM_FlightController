@@ -68,9 +68,9 @@ float StabilizeFlightMode::getHeadingToHold()
 
 void StabilizeFlightMode::updateLevelingStuff()
 {
-	// Update virtual sticks values using PID controllers
-	virtualSticks.TB = Storage::levelXpid.updateController(Storage::reading.pitch + (Storage::sticksFiltered.TB / 10.f)) + 0.5f;
-	virtualSticks.LR = Storage::levelYpid.updateController(Storage::reading.roll - (Storage::sticksFiltered.LR / 10.f)) + 0.5f;
+	// Update virtual sticks values using PID controllers			setPoint				measured value				to average
+	virtualSticks.TB = Storage::levelXpid.updateController(Storage::sticksFiltered.TB / 10.f, Storage::reading.pitch) + 0.5f;
+	virtualSticks.LR = Storage::levelYpid.updateController(Storage::sticksFiltered.LR / 10.f, Storage::reading.roll) + 0.5f;
 
 	// Keep values in borders
 	virtualSticks.TB = constrain(virtualSticks.TB, -500, 500);
