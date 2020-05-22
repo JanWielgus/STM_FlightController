@@ -83,9 +83,8 @@ namespace config
 // PID default values
 	struct
 	{
-		//const pidPack leveling = { 2.14f, 2.5f, 110, 0.64f };
-		const pidPack leveling = { 1.75f, 1.5f, 70, 0.54f };
-		const pidPack yaw = { 3.8f, 1.2f, 90, 0.8f };
+		const pidPack leveling = { 1.69f, 0.7f, 100, 0.5f };
+		const pidPack yaw = { 2.24f, 1.11f, 85, 0.97f };
 		const pidPack altHold = { 0, 0, 0, 0 };
 	}defPID;
 
