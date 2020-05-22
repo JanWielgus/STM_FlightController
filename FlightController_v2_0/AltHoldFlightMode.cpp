@@ -31,7 +31,7 @@ void AltHoldFlightMode::run()
 	integratePressureToHold();
 
 	// Calculate the error and final throttle value
-	pressureError = Storage::reading.smoothPressure - pressureToHold;
+	pressureError = Storage::reading.pressure - pressureToHold;
 	pressureError *= 5;
 	int16_t tempThrottle = Storage::altHoldPID.updateController(pressureError);
 	tempThrottle += altHoldBaseThrottle;
@@ -67,7 +67,7 @@ void AltHoldFlightMode::prepare()
 
 
 	// Set initial pressure to hold
-	pressureToHold = Storage::reading.smoothPressure;
+	pressureToHold = Storage::reading.pressure;
 }
 
 
