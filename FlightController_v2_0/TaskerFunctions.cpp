@@ -4,6 +4,7 @@
 #include <FC_Extrapolation.h>
 #include <FC_LinearExtrapolation.h>
 #include "Failsafe.h"
+#include <LowPassFilter.h>
 
 /*
 using Storage::levelXpid;
@@ -56,9 +57,12 @@ void addTaskerFunctionsToTasker()
 
 namespace TaskerFunction
 {
-	//FC_Extrapolation* baroExtrapolator = new FC_LinearExtrapolation();
-	FC_EVA_Filter baroFilter(0.3);
+	// pressure filters
+	LowPassFilter pressureLowPassFilter(1.3, 0.009329f); // average frequency: 107.2 Hz
+	float pressureLPF_lowFreq = 0; // low-frequency (about 107Hz) pressure after low-pass filter
+	FC_EVA_Filter pressureEVAFilter(0.3);
 
+	// stick filters
 	FC_EVA_Filter throttleFilter(0.5);
 	FC_EVA_Filter rotateFilter(0.5);
 	FC_EVA_Filter TB_fiter(0.58);
@@ -121,13 +125,8 @@ namespace TaskerFunction
 		uint32_t curTime = tasker.getCurrentTime();
 
 
-		// extrapolate baro reading to meet the program main frequency (250Hz)
-		//reading.smoothPressure = baroExtrapolator->getEstimation(curTime);
-
-		// tests on pressure (EXTRAPOLATOR IS NOT WORKIGN)
-		reading.smoothPressure = baroFilter.updateFilter(baro.getSmoothPressure());
-		//Serial.println(baroFilter.getLastValue());
-
+		// update pressure
+		reading.pressure = pressureEVAFilter.updateFilter(pressureLPF_lowFreq);
 
 		// filter received sticks values
 		Storage::sticksFiltered.throttle = throttleFilter.updateFilter(ReceiveData::throttle);
@@ -137,16 +136,11 @@ namespace TaskerFunction
 	}
 
 
+	// average interval: 9329 us, average frequency: 107.2 Hz
 	void newBaroReadingEvent()
 	{
-		// normal pressure is just assigned to the globar reading variable
-		reading.pressure = baro.getPressure();
-
-		// smooth pressure is extrapolated
-
-		//baroExtrapolator->addNewMeasuredValue(baro.getSmoothPressure(), tasker.getCurrentTime());
-		//baroFilter.updateFilter(baro.getSmoothPressure());
-		//Serial.println(baro.getPressure());
+		// update filter on 107Hz pressure value (250Hz reading calculated in processSlowerReadings() method)
+		pressureLPF_lowFreq = pressureLowPassFilter.update(baro.getPressure());
 	}
 
 
@@ -179,7 +173,7 @@ namespace TaskerFunction
 		SendData::tilt_TB = (int8_t)reading.pitch;
 		SendData::tilt_LR = (int8_t)reading.roll;
 		SendData::heading = (int16_t)reading.heading;
-		SendData::altitude = (int16_t)(reading.smoothPressure - 90000 - 8530); // TEMP ! (change for altitude)
+		SendData::altitude = (int16_t)(reading.pressure - 90000 - 8530); // TEMP ! (change for altitude)
 		SendData::receivingConnectionStability = comm.getConnectionStability();
 
 
