@@ -36,12 +36,12 @@ AHRS::AHRS(AHRS_Method* ahrsMethod, INormalized3AxisDataAdapter* accelerometer, 
 void AHRS::execute()
 {
 	update3AxisLPFonVector(&accLowPassFilter, acc->getNormalizedData(), &accNormFiltered);
-	update3AxisLPFonVector(&gyroLowPassFilter, gyro->getNormalizedData(), &gyroNormFiltered);
+	//update3AxisLPFonVector(&gyroLowPassFilter, gyro->getNormalizedData(), &gyroNormFiltered);
 
 	if (mag != nullptr)
-		ahrsMethod->setData(accNormFiltered, gyroNormFiltered, mag->getNormalizedData());
+		ahrsMethod->setData(accNormFiltered, gyro->getNormalizedData(), mag->getNormalizedData());
 	else
-		ahrsMethod->setData(accNormFiltered, gyroNormFiltered);
+		ahrsMethod->setData(accNormFiltered, gyro->getNormalizedData());
 	
 	// Run main calculations
 	ahrsReturnVector = ahrsMethod->update();
@@ -55,6 +55,11 @@ void AHRS::execute()
 	Storage::reading.pitch = pitch;
 	Storage::reading.roll = roll;
 	Storage::reading.heading = heading;
+
+	/*
+	Serial.print(pitch);
+	Serial.print('\t');
+	Serial.println(roll);*/
 }
 
 
