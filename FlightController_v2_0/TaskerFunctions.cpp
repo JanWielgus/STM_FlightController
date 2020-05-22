@@ -36,7 +36,7 @@ void addTaskerFunctionsToTasker()
 
 
 	// Communication
-	tasker.addTask(&comm, 4100L, 0); // 220Hz ( !!! To solve. During communication some data is lost)
+	tasker.addTask(&comm, 4200L, 0); // (stale)220Hz ( !!! To solve. During communication some data is lost)
 	tasker.addTask(new UpdateSending, 22000L, 0);								// ~45Hz
 
 	// add receive data packets
