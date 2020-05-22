@@ -24,8 +24,8 @@ namespace Storage
 	DebugSystem debug(&Serial);
 
 	// Select full AHRS or just IMU version
-	//MadgwickAHRS madgwickAHRS(config::MainFrequency); // created statically, to offload heap for dynamic allocation
-	MadgwickIMU madgwickIMU(config::MainFrequency);
+	//MadgwickAHRS madgwickAHRS(config::MainFrequency, 0.05); // created statically, to offload heap for dynamic allocation
+	MadgwickIMU madgwickIMU(config::MainFrequency, 0.05);
 	AHRS ahrs(&madgwickIMU, new NormAccelerometerAdapter,
 		new NormGyroscopeAdapter, new NormMagnetometerAdapter);
 
