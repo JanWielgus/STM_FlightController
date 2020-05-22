@@ -44,8 +44,7 @@ struct readingsType
     float pitch;
     float roll;
     float heading = 0;
-    float pressure = 0; // not extrapolated value (about 110 Hz)
-    float smoothPressure = 0; // 250Hz
+    float pressure = 0;
 };
 
 
