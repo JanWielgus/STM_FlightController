@@ -56,7 +56,7 @@ namespace config
 	struct 
 	{
 		float accLowPassFilterCutOffFreq = 5;
-		float gyroLowPassFilterCutOffFreq = 10;
+		float gyroLowPassFilterCutOffFreq = 10; // currently not used
 
 		// mpu6050
 		
@@ -73,7 +73,7 @@ namespace config
 // Flight modes config
 	struct
 	{
-		uint16_t altHoldBaseThrottle = 600; // throttle value, when motors should compensate gravity
+		uint16_t altHoldBaseThrottle = 470; // throttle value, when motors should compensate gravity
 		uint8_t altHoldThrottleCenterOffset = 100; // when throttle will be between (500-offset, 500+offset) range, pressure to hold will not be integrated
 		uint16_t altHoldMinThrottle = 350;
 		uint16_t altHoldMaxThrottle = 780;
