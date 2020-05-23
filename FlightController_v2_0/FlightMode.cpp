@@ -35,7 +35,7 @@ FlightModeType FlightMode::getType()
 }
 
 
-virtualSticksType* FlightMode::getVirtualSticks()
+virtualSticksType* FlightMode::getVirtualSticksPtr()
 {
 	return &this->virtualSticks;
 }
