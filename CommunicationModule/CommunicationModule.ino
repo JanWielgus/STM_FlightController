@@ -26,6 +26,13 @@ void setup()
     Serial.begin(57600);
     delay(1000);
 
+    // setup low-level serial comm
+    Storage::serialComm.begin();
+
+    // setup low-level wifi comm
+    Storage::WiFiComm.begin();
+    Storage::WiFiComm.setTargetIPAddrAlwaysToLastSender();
+
     pinMode(LED_BUILTIN, OUTPUT);
 
     // Add all takser functions

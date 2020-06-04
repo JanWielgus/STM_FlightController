@@ -6,7 +6,7 @@ namespace config
 {
 	const uint8_t MaxAmtOfTaskerTasks = 15; // tasks array size inside tasker
 
-	const uint8_t MaxCommPacketBytes = 100; // communication buffer size
+	const uint8_t MaxCommPacketSize = 100; // communication buffer size
 
 
 
