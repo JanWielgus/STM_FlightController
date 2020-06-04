@@ -31,13 +31,11 @@ void setup()
     // Add all takser functions
     addTaskerFunctionsToTasker();
 
-    // Connect with wifi asynchronically
-    Storage::wifiComm.connectWithWifiAsync(&Storage::taskPlanner);
+
 }
 
 
 void loop()
 {
     Storage::tasker.run();
-    Storage::taskPlanner.runPlanner();
 }
