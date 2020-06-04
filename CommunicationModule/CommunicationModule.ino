@@ -5,9 +5,7 @@
 
 
 #include "TaskerFunctions.h"
-#include "WiFiCommunication.h"
 #include <ITransferable.h>
-#include <FC_Communication_Base.h>
 #include <DataPacketBase.h>
 #include <FC_TaskPlanner.h>
 #include <FC_Task.h>
@@ -18,6 +16,8 @@
 #include <FC_GrowingArray.h>
 #include <FC_CustomDataTypes.h>
 #include <FC_EVA_Filter.h>
+#include "FC_ESP8266_WiFiComm.h"
+#include <FC_SerialCommBase.h>
 
 
 
