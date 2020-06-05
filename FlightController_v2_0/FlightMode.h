@@ -31,7 +31,7 @@ public:
 	virtual void run() override = 0;
 	virtual void reset() override = 0;
 	virtual void prepare() override = 0;
-	virtualSticksType* getVirtualSticks() override; // return virtual sticks values as structure
+	virtualSticksType* getVirtualSticksPtr() override; // return static virtual sticks values as structure
 
 	bool checkIfRelated(const IFlightMode* toCheck) override;
 	FlightModeType getType() override;
@@ -40,9 +40,11 @@ public:
 	// protected components
 protected:
 	IFlightMode* const baseFlightMode;  // ! To initialize inside derivative class (using constructor of this class)
-	virtualSticksType virtualSticks;	// Eack flight mode has own virtual stick values
-										// Each next fligh mode decide if want to override previous sticks value
-										// VirtualPilot just use values from the last flight mode
+	static virtualSticksType virtualSticks;	// There is only onle instance of virtual sticks for all flight modes
+											// Before running any flight mode, virtual pilot puts there received sticks values
+											// All flight modes make calculations only based on this values
+											// (just modify this values and do nothing when not affected by this flight mode)
+											// Flight mode decide whether to execute its own code before its base flight mode or after
 
 	void executeBaseFlightMode();
 	void resetVirtualStickValues();		// Sets all virtual sticks values to 0

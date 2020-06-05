@@ -30,7 +30,7 @@ public:
 	virtual void run() = 0;
 	virtual void reset() = 0;
 	virtual void prepare() = 0;
-	virtual virtualSticksType* getVirtualSticks() = 0;
+	virtual virtualSticksType* getVirtualSticksPtr() = 0;
 	virtual bool checkIfRelated(const IFlightMode* toCheck) = 0;
 	virtual FlightModeType getType() = 0;
 };

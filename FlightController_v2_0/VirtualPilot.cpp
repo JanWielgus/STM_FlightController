@@ -23,9 +23,17 @@ VirtualPilot::~VirtualPilot()
 
 void VirtualPilot::runVirtualPilot()
 {
+	static virtualSticksType* virStckPtr = currentFlightMode->getVirtualSticksPtr(); // virtual sticks are static for all flight modes
+
+	// Fill virtual sticks with received values at the beginning
+	virStckPtr->throttle = Storage::sticksFiltered.throttle;
+	virStckPtr->rotate = Storage::sticksFiltered.rotate;
+	virStckPtr->TB = Storage::sticksFiltered.TB;
+	virStckPtr->LR = Storage::sticksFiltered.LR;
+
+
 	// Run current flight mode code and get the result virtual sticks values
 	currentFlightMode->run();
-	virtualSticksType* curStick = currentFlightMode->getVirtualSticks();
 
 
 	// when drone is disarmed motors will not spin (unarmed flight mode)
@@ -33,7 +41,7 @@ void VirtualPilot::runVirtualPilot()
 
 	// there is unarmed flight mode which is activated when drone is unarmed
 	// in this flight mode all sticks are always set to 0
-	// during flight mode changing it arm and disarm motors as needed
+	// during flight mode changing, it arm and disarm motors as needed
 
 
 
@@ -41,10 +49,10 @@ void VirtualPilot::runVirtualPilot()
 	// 
 	// VirtualPilot use current flight mode virtualSticks as pid outputs
 
-	Storage::motors.setOnTL(curStick->throttle - curStick->TB + curStick->LR + curStick->rotate);
-	Storage::motors.setOnTR(curStick->throttle - curStick->TB - curStick->LR - curStick->rotate);
-	Storage::motors.setOnBR(curStick->throttle + curStick->TB - curStick->LR + curStick->rotate);
-	Storage::motors.setOnBL(curStick->throttle + curStick->TB + curStick->LR - curStick->rotate);
+	Storage::motors.setOnTL(virStckPtr->throttle - virStckPtr->TB + virStckPtr->LR + virStckPtr->rotate);
+	Storage::motors.setOnTR(virStckPtr->throttle - virStckPtr->TB - virStckPtr->LR - virStckPtr->rotate);
+	Storage::motors.setOnBR(virStckPtr->throttle + virStckPtr->TB - virStckPtr->LR + virStckPtr->rotate);
+	Storage::motors.setOnBL(virStckPtr->throttle + virStckPtr->TB + virStckPtr->LR - virStckPtr->rotate);
 	Storage::motors.forceMotorsExecution();
 }
 

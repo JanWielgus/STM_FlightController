@@ -16,10 +16,11 @@ PosHoldFlightMode::PosHoldFlightMode(IFlightMode* altHoldFM, IVirtualPilot* virt
 
 void PosHoldFlightMode::run()
 {
+	// do stuff
+
+
+
 	executeBaseFlightMode();
-
-
-
 }
 
 
