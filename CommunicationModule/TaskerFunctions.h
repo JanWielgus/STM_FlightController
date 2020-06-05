@@ -14,6 +14,12 @@ namespace TaskerFunction
 	{
 		void execute() override;
 	};
+
+
+	class UpdateCommunicationRelaying : public FC_Task
+	{
+		void execute() override;
+	};
 }
 
 

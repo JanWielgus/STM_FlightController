@@ -17,7 +17,7 @@
 #include <FC_Task.h>
 #include <FC_TaskPlanner.h>
 #include <MyPID.h>
-#include <FC_Communication_Base.h>
+#include <FC_SerialCommBase.h>
 #include "MPU6050_Raw.h"
 #include "HMC5883L_Raw.h"
 #include <FC_MS5611_Lib.h>
@@ -50,6 +50,7 @@ namespace Storage
     // Objects
     extern FC_ObjectTasker tasker;
     extern FC_TaskPlanner taskPlanner;
+    extern FC_SerialCommBase lowLevelComm;
     extern FC_CommunicationHandler comm;
     extern MPU6050_Raw rawMPU6050;
     extern HMC5883L_Raw rawHMC5883L;
