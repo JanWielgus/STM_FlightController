@@ -5,6 +5,9 @@
 #include "FlightMode.h"
 
 
+virtualSticksType FlightMode::virtualSticks = { 0, 0, 0, 0 };
+
+
 FlightMode::FlightMode(FlightModeType typeToSet, IFlightMode* baseFlM, IVirtualPilot* virtualPilot)
 	: type(typeToSet), baseFlightMode(baseFlM)
 {
