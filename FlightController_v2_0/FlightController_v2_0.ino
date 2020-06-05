@@ -54,6 +54,8 @@ void setup()
 {
 	// Communication serial
 	Serial2.begin(BAUD_57600);
+
+	lowLevelComm.begin();
 	
 	// Debugging
 	debug.begin(BAUD_115200);
