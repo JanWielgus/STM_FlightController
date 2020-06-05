@@ -30,16 +30,15 @@ namespace TaskerFunction
 
 	void UpdateCommunicationRelaying::execute()
 	{
-		// transfer from wifi to serial
-		if (Storage::WiFiComm.available())
-		{
-			DataBuffer wifiReceivedData = Storage::WiFiComm.receiveNextData();
+		DataBuffer wifiReceivedData = Storage::WiFiComm.receiveNextData();
 
-			if (wifiReceivedData.size > 0)
-				Storage::serialComm.send(wifiReceivedData.buffer, wifiReceivedData.size);
+		// transfer from wifi to serial
+		if (wifiReceivedData.size > 0)
+		{
+			Storage::serialComm.send(wifiReceivedData.buffer, wifiReceivedData.size);
 		}
 
-
+		/*
 		// transfer from serial to wifi
 		if (Storage::serialComm.available())
 		{
@@ -47,7 +46,7 @@ namespace TaskerFunction
 
 			if (serialReceivedData.size > 0)
 				Storage::WiFiComm.send(serialReceivedData.buffer, serialReceivedData.size);
-		}
+		}*/
 	}
 }
 
