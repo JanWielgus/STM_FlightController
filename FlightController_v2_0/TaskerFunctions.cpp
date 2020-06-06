@@ -57,10 +57,8 @@ void addTaskerFunctionsToTasker()
 
 namespace TaskerFunction
 {
-	// pressure filters
-	LowPassFilter pressureLowPassFilter(1.3, 0.009329f); // average frequency: 107.2 Hz
-	float pressureLPF_lowFreq = 0; // low-frequency (about 107Hz) pressure after low-pass filter
-	FC_EVA_Filter pressureEVAFilter(0.3);
+	// pressure filter
+	LowPassFilter pressureLowPassFilter(1.6f, 0.004f); // updated 250Hz
 
 	// stick filters
 	FC_EVA_Filter throttleFilter(0.5);
@@ -126,7 +124,7 @@ namespace TaskerFunction
 
 
 		// update pressure
-		reading.pressure = pressureEVAFilter.updateFilter(pressureLPF_lowFreq);
+		reading.pressure = pressureLowPassFilter.update(baro.getPressure());
 
 		// filter received sticks values
 		Storage::sticksFiltered.throttle = throttleFilter.updateFilter(ReceiveData::throttle);
@@ -136,11 +134,10 @@ namespace TaskerFunction
 	}
 
 
-	// average interval: 9329 us, average frequency: 107.2 Hz
+	// TODO: check frequency of this function
 	void newBaroReadingEvent()
 	{
-		// update filter on 107Hz pressure value (250Hz reading calculated in processSlowerReadings() method)
-		pressureLPF_lowFreq = pressureLowPassFilter.update(baro.getPressure());
+		// nothing happens
 	}
 
 
